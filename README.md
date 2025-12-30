@@ -53,10 +53,30 @@ cd my-new-project
 ```
 
 ### 2. Configurer les variables d'environnement
+
+#### Next.js (Frontend)
+Copiez et configurez les variables dans `nextjs-base/.env.example` :
 ```bash
+cd nextjs-base
 cp .env.example .env.local
-# Éditer .env.local avec vos valeurs
 ```
+
+Variables principales :
+- `NEXT_PUBLIC_SITE_URL` : URL de votre site (localhost en dev)
+- `NEXT_PUBLIC_STRAPI_URL` : URL de votre instance Strapi
+- `STRAPI_API_TOKEN` : Token API de Strapi
+- `PREVIEW_SECRET` : Secret pour le mode preview
+
+#### Strapi (Backend)
+Copiez et configurez les variables dans `strapi-base/.env.example` :
+```bash
+cd strapi-base
+cp .env.example .env
+```
+
+Variables principales :
+- `DATABASE_HOST`, `DATABASE_PORT`, etc. : Configuration base de données
+- `PREVIEW_SECRET` : Même valeur que dans Next.js pour le preview
 
 ### 3. Installer les dépendances
 ```bash
