@@ -6,73 +6,86 @@ import { SectionGeneric } from '@/components/sections/SectionGeneric'
 import { PageCollectionResponse, StrapiBlock, StrapiEntity, Page as PageType } from '@/types/strapi'
 import { notFound, redirect } from 'next/navigation'
 import { locales as SUPPORTED_LOCALES } from '@/lib/locales'
+import { draftMode } from 'next/headers'
 import { unstable_cache } from 'next/cache'
 
 type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 
 export const revalidate = 3600 // Revalidate every hour as fallback
 
-const getPageData = unstable_cache(
-  async (slug: string, locale: string, isDraft: boolean) => {
-    const client = createStrapiClient({ apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', apiToken: process.env.STRAPI_API_TOKEN })
+const fetchPageData = async (slug: string, locale: string, isDraft: boolean) => {
+  const apiToken = isDraft
+    ? (process.env.STRAPI_PREVIEW_TOKEN || process.env.STRAPI_API_TOKEN)
+    : process.env.STRAPI_API_TOKEN
 
-    const pageRes: PageCollectionResponse = await client.findMany('pages', {
-      filters: { slug: { $eq: slug } },
-      fields: ['title', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
-      populate: { 
-        sections: { 
-          fields: ['title', 'content', 'order', 'reverse'],
-          populate: { 
-            image: { 
-              fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
-            } 
+  const client = createStrapiClient({ apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', apiToken })
+
+  const pageRes: PageCollectionResponse = await client.findMany('pages', {
+    filters: { slug: { $eq: slug } },
+    fields: ['title', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
+    populate: { 
+      sections: { 
+        fields: ['title', 'content', 'order', 'reverse'],
+        populate: { 
+          image: { 
+            fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
           } 
-        }, 
-        seoImage: { 
-          fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
-        }, 
-        localizations: { 
-          fields: ['slug', 'locale'] 
         } 
-      },
-      locale,
-      publicationState: isDraft ? 'preview' : 'live',
-    })
+      }, 
+      seoImage: { 
+        fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
+      }, 
+      localizations: { 
+        fields: ['slug', 'locale'] 
+      } 
+    },
+    locale,
+    publicationState: isDraft ? 'preview' : 'live',
+  })
 
-    return pageRes
-  },
+  return pageRes
+}
+
+const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
+  const apiToken = isDraft
+    ? (process.env.STRAPI_PREVIEW_TOKEN || process.env.STRAPI_API_TOKEN)
+    : process.env.STRAPI_API_TOKEN
+
+  const client = createStrapiClient({ apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', apiToken })
+
+  const fallbackRes: PageCollectionResponse = await client.findMany('pages', {
+    filters: { slug: { $eq: slug } },
+    fields: ['title', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
+    populate: { 
+      sections: { 
+        fields: ['title', 'content', 'order', 'reverse'],
+        populate: { 
+          image: { 
+            fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
+          } 
+        } 
+      }, 
+      seoImage: { 
+        fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
+      }, 
+      localizations: { 
+        fields: ['slug', 'locale'] 
+      } 
+    },
+    publicationState: isDraft ? 'preview' : 'live',
+  })
+
+  return fallbackRes
+}
+
+const getPageData = unstable_cache(
+  async (slug: string, locale: string) => fetchPageData(slug, locale, false),
   ['page-data'],
   { revalidate: 3600, tags: ['strapi-pages'] }
 )
 
 const getPageDataFallback = unstable_cache(
-  async (slug: string, isDraft: boolean) => {
-    const client = createStrapiClient({ apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', apiToken: process.env.STRAPI_API_TOKEN })
-
-    const fallbackRes: PageCollectionResponse = await client.findMany('pages', {
-      filters: { slug: { $eq: slug } },
-      fields: ['title', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
-      populate: { 
-        sections: { 
-          fields: ['title', 'content', 'order', 'reverse'],
-          populate: { 
-            image: { 
-              fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
-            } 
-          } 
-        }, 
-        seoImage: { 
-          fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
-        }, 
-        localizations: { 
-          fields: ['slug', 'locale'] 
-        } 
-      },
-      publicationState: isDraft ? 'preview' : 'live',
-    })
-
-    return fallbackRes
-  },
+  async (slug: string) => fetchPageDataFallback(slug, false),
   ['page-data-fallback'],
   { revalidate: 3600, tags: ['strapi-pages'] }
 )
@@ -142,13 +155,19 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   }
 
   const sparams = searchParams ? await Promise.resolve(searchParams) : undefined
+  const { isEnabled } = await draftMode()
   const isDraft = (sparams?.draft === 'true') || false
 
-  const pageRes = await getPageData(slug, locale, isDraft)
+  // Bypass cache when Draft Mode is enabled (preview mode) regardless of draft/published status
+  const pageRes = isEnabled || isDraft
+    ? await fetchPageData(slug, locale, isDraft)
+    : await getPageData(slug, locale)
 
   if (!pageRes.data.length) {
     // Fallback: try without locale (global)
-    const fallbackRes = await getPageDataFallback(slug, isDraft)
+    const fallbackRes = isEnabled || isDraft
+      ? await fetchPageDataFallback(slug, isDraft)
+      : await getPageDataFallback(slug)
 
     if (!fallbackRes.data.length) {
       // Nothing found in any locale → show 404 page

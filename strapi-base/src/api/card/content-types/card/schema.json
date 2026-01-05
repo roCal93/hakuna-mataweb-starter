@@ -12,14 +12,6 @@
   "pluginOptions": {
     "i18n": {
       "localized": true
-    },
-    "preview-button": {
-      "url": "/api/preview",
-      "query": {
-        "secret": "{PREVIEW_SECRET}",
-        "url": "{url}",
-        "status": "{status}"
-      }
     }
   },
   "attributes": {

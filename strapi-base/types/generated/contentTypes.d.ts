@@ -444,14 +444,6 @@ export interface ApiCardCard extends Struct.CollectionTypeSchema {
     i18n: {
       localized: true;
     };
-    'preview-button': {
-      query: {
-        secret: '{PREVIEW_SECRET}';
-        status: '{status}';
-        url: '{url}';
-      };
-      url: '/api/preview';
-    };
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -493,14 +485,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
   pluginOptions: {
     i18n: {
       localized: true;
-    };
-    'preview-button': {
-      query: {
-        secret: '{PREVIEW_SECRET}';
-        status: '{status}';
-        url: '{url}';
-      };
-      url: '/api/preview';
     };
   };
   attributes: {
@@ -568,14 +552,6 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
   pluginOptions: {
     i18n: {
       localized: true;
-    };
-    'preview-button': {
-      query: {
-        secret: '{PREVIEW_SECRET}';
-        status: '{status}';
-        url: '{url}';
-      };
-      url: '/api/preview';
     };
   };
   attributes: {

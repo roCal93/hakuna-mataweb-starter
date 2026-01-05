@@ -56,10 +56,10 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              img-src 'self' data: https:;
+              img-src 'self' data: https: ${strapiOrigin};
               script-src 'self' 'unsafe-inline' 'unsafe-eval';
               style-src 'self' 'unsafe-inline';
-              connect-src 'self' https://*.railway.app https://*.vercel.app;
+              connect-src 'self' ${strapiOrigin} https://*.railway.app https://*.vercel.app;
               font-src 'self' data:;
               frame-ancestors 'self' ${strapiOrigin};
             `.replace(/\s{2,}/g, ' ').trim(),

@@ -5,70 +5,77 @@ import { Layout } from '@/components/layout'
 import { Hero } from '@/components/sections/Hero'
 import { SectionGeneric } from '@/components/sections/SectionGeneric'
 import { PageCollectionResponse } from '@/types/strapi'
+import { draftMode } from 'next/headers'
 import { unstable_cache } from 'next/cache'
 
 export const revalidate = 3600 // Revalidate every hour as fallback
 
-const getHomePageData = unstable_cache(
-  async (locale: string, isDraft: boolean) => {
-    const client = createStrapiClient({ apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', apiToken: process.env.STRAPI_API_TOKEN })
+const fetchHomePageData = async (locale: string, isDraft: boolean) => {
+  const apiToken = isDraft
+    ? (process.env.STRAPI_PREVIEW_TOKEN || process.env.STRAPI_API_TOKEN)
+    : process.env.STRAPI_API_TOKEN
 
-    let res: PageCollectionResponse = await client.findMany('pages', {
+  const client = createStrapiClient({ apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', apiToken })
+
+  let res: PageCollectionResponse = await client.findMany('pages', {
+    filters: { slug: { $eq: 'home' } },
+    fields: ['title', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
+    populate: { 
+      sections: { 
+        populate: '*' 
+      }, 
+      seoImage: { 
+        fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
+      }, 
+      localizations: { 
+        fields: ['slug', 'locale'] 
+      } 
+    },
+    locale,
+    publicationState: isDraft ? 'preview' : 'live',
+  })
+
+  // Fallback to 'fr' if not found
+  if (!res.data || res.data.length === 0) {
+    res = await client.findMany('pages', {
       filters: { slug: { $eq: 'home' } },
       fields: ['title', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
       populate: { 
         sections: { 
           populate: '*' 
-        }, 
-        seoImage: { 
-          fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
-        }, 
-        localizations: { 
-          fields: ['slug', 'locale'] 
         } 
       },
-      locale,
+      locale: 'fr',
       publicationState: isDraft ? 'preview' : 'live',
     })
+  }
 
-    // Fallback to 'fr' if not found
-    if (!res.data || res.data.length === 0) {
-      res = await client.findMany('pages', {
-        filters: { slug: { $eq: 'home' } },
-        fields: ['title', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
-        populate: { 
-          sections: { 
-            populate: '*' 
-          } 
-        },
-        locale: 'fr',
-        publicationState: isDraft ? 'preview' : 'live',
-      })
-    }
+  // If still no data, return fallback
+  if (!res.data || res.data.length === 0) {
+    return {
+      data: [{
+        id: 1,
+        documentId: 'fallback-home',
+        title: 'Bienvenue',
+        slug: 'home',
+        heroContent: [{ type: 'paragraph', children: [{ type: 'text', text: 'Site en construction' }] }],
+        seoTitle: 'Accueil',
+        seoDescription: [{ type: 'paragraph', children: [{ type: 'text', text: 'Page d\'accueil' }] }],
+        noIndex: false,
+        locale: locale,
+        sections: [],
+        seoImage: undefined,
+        localizations: []
+      }],
+      meta: { pagination: { page: 1, pageSize: 1, pageCount: 1, total: 1 } }
+    } as PageCollectionResponse
+  }
 
-    // If still no data, return fallback
-    if (!res.data || res.data.length === 0) {
-      return {
-        data: [{
-          id: 1,
-          documentId: 'fallback-home',
-          title: 'Bienvenue',
-          slug: 'home',
-          heroContent: [{ type: 'paragraph', children: [{ type: 'text', text: 'Site en construction' }] }],
-          seoTitle: 'Accueil',
-          seoDescription: [{ type: 'paragraph', children: [{ type: 'text', text: 'Page d\'accueil' }] }],
-          noIndex: false,
-          locale: locale,
-          sections: [],
-          seoImage: undefined,
-          localizations: []
-        }],
-        meta: { pagination: { page: 1, pageSize: 1, pageCount: 1, total: 1 } }
-      } as PageCollectionResponse
-    }
+  return res
+}
 
-    return res
-  },
+const getHomePageData = unstable_cache(
+  async (locale: string) => fetchHomePageData(locale, false),
   ['home-page'],
   { revalidate: 3600, tags: ['strapi-pages'] }
 )
@@ -110,9 +117,13 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
   const { locale } = await params
 
   const sparams = searchParams ? await Promise.resolve(searchParams) : undefined
+  const { isEnabled } = await draftMode()
   const isDraft = (sparams?.draft === 'true')
 
-  const res = await getHomePageData(locale, isDraft)
+  // Bypass cache when Draft Mode is enabled (preview mode) regardless of draft/published status
+  const res = isEnabled || isDraft
+    ? await fetchHomePageData(locale, isDraft)
+    : await getHomePageData(locale)
 
   const page = res?.data?.[0]
 

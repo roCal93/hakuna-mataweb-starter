@@ -17,22 +17,18 @@ export async function GET(req: Request) {
   // Comportement configurable : soit utiliser Next.js Draft Mode, soit utiliser uniquement le paramètre ?draft=true
   const useDraftMode = process.env.USE_DRAFT_MODE === 'true'
 
-  // Si on utilise Draft Mode, activer/désactiver selon le status
+  // Si on utilise Draft Mode, toujours l'activer en preview (même pour published) pour bypass le cache
   if (useDraftMode) {
     const dm = await draftMode()
-    if (status === 'published') {
-      dm.disable()
-    } else {
-      dm.enable()
-    }
+    dm.enable()
   }
 
   // Rediriger vers l'URL fournie par Strapi (sécurisée par secret)
   const baseUrl = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   const destinationUrl = url ? new URL(url, baseUrl) : new URL('/', baseUrl)
 
-  // Si on n'utilise pas Draft Mode, ajouter explicitement le query param ?draft=true pour les previews non publiés
-  if (!useDraftMode && status !== 'published') {
+  // Ajouter le paramètre ?draft=true pour indiquer aux pages de fetcher le bon statut
+  if (status !== 'published') {
     destinationUrl.searchParams.set('draft', 'true')
   }
 

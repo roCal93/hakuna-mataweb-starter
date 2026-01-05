@@ -39,7 +39,10 @@ export default ({ env }) => {
       config: {
         allowedOrigins: clientUrl,
         async handler(uid, { documentId, locale, status }) {
-          const document = await strapi.documents(uid).findOne({ documentId })
+          const document = await strapi.documents(uid).findOne({ 
+            documentId,
+            locale 
+          })
           const pathname = getPreviewPathname(uid, { locale, document })
 
           if (!pathname) return null
