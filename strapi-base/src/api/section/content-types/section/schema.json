@@ -24,6 +24,15 @@
       },
       "required": false
     },
+    "hideTitle": {
+      "type": "boolean",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": false
+    },
     "content": {
       "type": "blocks",
       "pluginOptions": {

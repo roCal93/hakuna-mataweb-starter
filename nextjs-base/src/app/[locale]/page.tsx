@@ -144,15 +144,17 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
 
   return (
     <Layout locale={locale}>
-      <Hero
-        title={getText(page.title)}
-        subtitle={getText(page.heroContent)}
-      />
+      {!page.hideTitle && (
+        <Hero
+          title={getText(page.title)}
+          subtitle={getText(page.heroContent)}
+        />
+      )}
 
       {page.sections?.map((section, index) => (
         <SectionGeneric
           key={section.id}
-          title={section.title}
+          title={section.hideTitle ? undefined : section.title}
           content={getText(section.content)}
           image={section.image}
           reverse={section.reverse}

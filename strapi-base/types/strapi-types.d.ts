@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-05T12:38:34.930Z
+ * Généré le: 2026-01-05T12:57:46.651Z
  */
 
 // ============================================================================
@@ -142,6 +142,7 @@ export type HeaderCollectionResponse = StrapiCollectionResponse<Header>;
  */
 export interface Page {
   title?: string;
+  hideTitle?: boolean;
   slug: string;
   heroContent?: StrapiBlock[];
   sections?: (Section & StrapiEntity)[];
@@ -160,6 +161,7 @@ export type PageCollectionResponse = StrapiCollectionResponse<Page>;
  */
 export interface Section {
   title?: string;
+  hideTitle?: boolean;
   content: StrapiBlock[];
   image?: StrapiMedia;
   order: number;

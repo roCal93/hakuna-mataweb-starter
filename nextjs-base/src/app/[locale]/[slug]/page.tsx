@@ -196,15 +196,17 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
   return (
     <Layout locale={locale}>
-      <Hero
-        title={page.title}
-        subtitle={page.heroContent ? extractTextFromBlocks(page.heroContent) : undefined}
-      />
+      {!page.hideTitle && (
+        <Hero
+          title={page.title || ''}
+          subtitle={page.heroContent ? extractTextFromBlocks(page.heroContent) : undefined}
+        />
+      )}
 
       {sections.map((section, index) => (
         <SectionGeneric
           key={section.id}
-          title={section.title}
+          title={section.hideTitle ? undefined : section.title}
           content={extractTextFromBlocks(section.content)}
           image={section.image?.url}
           reverse={section.reverse}
