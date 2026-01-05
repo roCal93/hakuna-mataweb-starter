@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-05T12:57:46.651Z
+ * Généré le: 2026-01-05T13:46:02.690Z
  */
 
 // ============================================================================
@@ -166,6 +166,7 @@ export interface Section {
   image?: StrapiMedia;
   order: number;
   reverse?: boolean;
+  cards?: (Card & StrapiEntity)[];
   locale?: string;
   localizations?: (Section & StrapiEntity)[];
 }

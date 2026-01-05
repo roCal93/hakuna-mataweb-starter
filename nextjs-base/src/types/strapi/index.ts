@@ -170,6 +170,7 @@ export interface Section {
   image?: StrapiMedia;
   order: number;
   reverse?: boolean;
+  cards?: (Card & StrapiEntity)[];
   locale?: string;
   localizations?: (Section & StrapiEntity)[];
 }

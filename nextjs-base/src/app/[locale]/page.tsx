@@ -22,7 +22,14 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
     fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
     populate: { 
       sections: { 
-        populate: '*' 
+        populate: {
+          image: true,
+          cards: {
+            populate: {
+              image: true
+            }
+          }
+        }
       }, 
       seoImage: { 
         fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
@@ -42,7 +49,14 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
       fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
       populate: { 
         sections: { 
-          populate: '*' 
+          populate: {
+            image: true,
+            cards: {
+              populate: {
+                image: true
+              }
+            }
+          }
         } 
       },
       locale: 'fr',
@@ -161,6 +175,7 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
           image={section.image}
           reverse={section.reverse}
           priority={index === 0}
+          cards={section.cards}
         />
       ))}
     </Layout>

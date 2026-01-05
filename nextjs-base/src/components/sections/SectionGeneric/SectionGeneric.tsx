@@ -1,7 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import { cleanImageUrl } from '@/lib/strapi'
-import { StrapiMedia, StrapiBlock } from '@/types/strapi'
+import { StrapiMedia, StrapiBlock, Card, StrapiEntity } from '@/types/strapi'
+import { Card as CardComponent } from '@/components/sections/Card'
 
 type SectionGenericProps = {
   title?: string
@@ -9,9 +10,10 @@ type SectionGenericProps = {
   image?: StrapiMedia | string
   reverse?: boolean
   priority?: boolean
+  cards?: (Card & StrapiEntity)[]
 }
 
-export const SectionGeneric = ({ title, content, image, reverse = false, priority = false }: SectionGenericProps) => {
+export const SectionGeneric = ({ title, content, image, reverse = false, priority = false, cards }: SectionGenericProps) => {
   let imageSrc: string | undefined
   let imageData: StrapiMedia | undefined
 
@@ -65,23 +67,41 @@ export const SectionGeneric = ({ title, content, image, reverse = false, priorit
   }
 
   return (
-    <section className={`flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center my-8`}>
-      {finalImageSrc && (
-        <Image 
-          src={finalImageSrc} 
-          alt={imageData?.alternativeText || title || 'Image'} 
-          width={imageData?.width || 800} 
-          height={imageData?.height || 600} 
-          className="w-full md:w-1/2 h-auto object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          priority={priority}
-          unoptimized={true}
-        />
+    <section className="py-12">
+      {title && <h2 className="text-3xl font-bold mb-8 text-center">{title}</h2>}
+      
+      {cards && cards.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cards.map((card) => (
+            <CardComponent
+              key={card.id}
+              title={card.title}
+              description={card.description ? card.description.map(block => 
+                block.children?.map(child => child.text || '').join('') || ''
+              ).join('\n') : ''}
+              image={card.image?.url}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className={`flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center my-8`}>
+          {finalImageSrc && (
+            <Image 
+              src={finalImageSrc} 
+              alt={imageData?.alternativeText || title || 'Image'} 
+              width={imageData?.width || 800} 
+              height={imageData?.height || 600} 
+              className="w-full md:w-1/2 h-auto object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={priority}
+              unoptimized={true}
+            />
+          )}
+          <div className="md:w-1/2 p-4">
+            {renderBlocks(content)}
+          </div>
+        </div>
       )}
-      <div className="md:w-1/2 p-4">
-        {title && <h2 className="text-2xl font-bold mb-2">{title}</h2>}
-        {renderBlocks(content)}
-      </div>
     </section>
   )
 }

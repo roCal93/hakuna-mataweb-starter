@@ -607,6 +607,12 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
+    cards: Schema.Attribute.Relation<'oneToMany', 'api::card.card'> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     content: Schema.Attribute.Blocks &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
