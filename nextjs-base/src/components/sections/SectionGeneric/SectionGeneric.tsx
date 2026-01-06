@@ -20,10 +20,11 @@ type DynamicBlock =
 type SectionGenericProps = {
   title?: string
   blocks: DynamicBlock[]
-  spacing?: 'none' | 'small' | 'medium' | 'large'
+  spacingTop?: 'none' | 'small' | 'medium' | 'large'
+  spacingBottom?: 'none' | 'small' | 'medium' | 'large'
 }
 
-export const SectionGeneric = ({ title, blocks, spacing = 'medium' }: SectionGenericProps) => {
+export const SectionGeneric = ({ title, blocks, spacingTop = 'medium', spacingBottom = 'medium' }: SectionGenericProps) => {
   const renderBlock = (block: DynamicBlock, index: number) => {
     switch (block.__component) {
       case 'blocks.text-block':
@@ -97,18 +98,21 @@ export const SectionGeneric = ({ title, blocks, spacing = 'medium' }: SectionGen
     }
   }
 
-  const getSpacingClass = (spacing: 'none' | 'small' | 'medium' | 'large') => {
+  const getSpacingClass = (spacing: 'none' | 'small' | 'medium' | 'large', direction: 'top' | 'bottom') => {
+    const prefix = direction === 'top' ? 'mt' : 'mb'
     switch (spacing) {
       case 'none': return ''
-      case 'small': return 'my-6'
-      case 'medium': return 'my-12'
-      case 'large': return 'my-24'
-      default: return 'my-12'
+      case 'small': return `${prefix}-6`
+      case 'medium': return `${prefix}-12`
+      case 'large': return `${prefix}-24`
+      default: return `${prefix}-12`
     }
   }
 
+  const spacingClasses = `${getSpacingClass(spacingTop, 'top')} ${getSpacingClass(spacingBottom, 'bottom')}`
+
   return (
-    <section className={`${getSpacingClass(spacing)} px-4`}>
+    <section className={`${spacingClasses} px-4`}>
       <div className="max-w-6xl mx-auto">
         {title && <h2 className="text-3xl font-bold mb-8 text-center">{title}</h2>}
         <div className="space-y-4">

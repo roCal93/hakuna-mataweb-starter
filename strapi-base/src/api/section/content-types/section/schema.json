@@ -58,7 +58,22 @@
       },
       "required": true
     },
-    "spacing": {
+    "spacingTop": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "small",
+        "medium",
+        "large"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": "medium"
+    },
+    "spacingBottom": {
       "type": "enumeration",
       "enum": [
         "none",
