@@ -121,7 +121,9 @@ export class StrapiClient {
         if (p === '*' || p === '') {
           params.set('populate', '*');
         } else if (p.includes(',')) {
-          p.split(',').map(s => s.trim()).forEach(appendPopulateKey);
+          // Pour les chemins multiples séparés par virgules (ex: "sections.blocks.cards.image,seoImage")
+          // on les passe directement dans un seul paramètre populate
+          params.set('populate', p);
         } else {
           appendPopulateKey(p);
         }

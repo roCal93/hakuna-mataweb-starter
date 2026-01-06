@@ -60,13 +60,16 @@ export async function fetchAPI<T = unknown>(
 
 /**
  * Nettoie l'URL d'une image Strapi pour l'optimisation Next.js
- * Supprime les paramètres de requête qui peuvent causer des problèmes
+ * Convertit les URLs relatives en URLs absolues avec le domaine Strapi
  */
 export function cleanImageUrl(url: string | undefined): string | undefined {
   if (!url) return undefined
 
-  // Si c'est une URL relative, la retourner telle quelle
-  if (url.startsWith('/')) return url
+  // Si c'est une URL relative, la convertir en URL absolue avec le domaine Strapi
+  if (url.startsWith('/')) {
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
+    return `${strapiUrl}${url}`
+  }
 
   // Pour les URLs absolues, supprimer les paramètres de requête problématiques
   try {

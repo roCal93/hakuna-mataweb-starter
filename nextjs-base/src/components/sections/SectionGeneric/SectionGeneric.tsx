@@ -103,10 +103,7 @@ export const SectionGeneric = ({ title, blocks, spacingTop = 'medium', spacingBo
               frontTitle: card.frontTitle,
               frontContent: card.frontContent,
               backContent: card.backContent,
-              image: card.image ? {
-                url: card.image.url,
-                alternativeText: card.image.alternativeText || undefined
-              } : undefined
+              image: card.image ? { url: card.image.url, alternativeText: card.image.alternativeText || undefined } : undefined
             }))}
             autoplay={block.autoplay}
             autoplayDelay={block.autoplayDelay}
