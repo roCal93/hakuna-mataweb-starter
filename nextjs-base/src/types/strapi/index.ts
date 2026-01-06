@@ -163,6 +163,7 @@ export interface TextImageBlock {
   imageSize: string;
   verticalAlignment: string;
   textAlignment: string;
+  roundedImage?: boolean;
 }
 
 /**

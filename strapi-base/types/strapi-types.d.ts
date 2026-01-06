@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-06T09:14:01.204Z
+ * Généré le: 2026-01-06T11:59:45.304Z
  */
 
 // ============================================================================
@@ -159,6 +159,7 @@ export interface TextImageBlock {
   imageSize: string;
   verticalAlignment: string;
   textAlignment: string;
+  roundedImage?: boolean;
 }
 
 /**

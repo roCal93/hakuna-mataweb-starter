@@ -57,6 +57,10 @@
       ],
       "default": "left",
       "required": true
+    },
+    "roundedImage": {
+      "type": "boolean",
+      "default": false
     }
   },
   "config": {}

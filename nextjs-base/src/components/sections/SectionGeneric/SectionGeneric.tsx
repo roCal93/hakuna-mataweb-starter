@@ -80,6 +80,7 @@ export const SectionGeneric = ({ title, blocks, spacingTop = 'medium', spacingBo
             imageSize={block.imageSize as 'small' | 'medium' | 'large'}
             verticalAlignment={block.verticalAlignment as 'top' | 'center' | 'bottom'}
             textAlignment={block.textAlignment as 'left' | 'center' | 'right' | 'justify'}
+            roundedImage={block.roundedImage}
           />
         )
       

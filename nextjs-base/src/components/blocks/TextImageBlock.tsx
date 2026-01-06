@@ -10,6 +10,7 @@ type TextImageBlockProps = {
   imageSize: 'small' | 'medium' | 'large'
   verticalAlignment: 'top' | 'center' | 'bottom'
   textAlignment?: 'left' | 'center' | 'right' | 'justify'
+  roundedImage?: boolean
 }
 
 export const TextImageBlock = ({ 
@@ -18,7 +19,8 @@ export const TextImageBlock = ({
   imagePosition, 
   imageSize,
   verticalAlignment,
-  textAlignment = 'left'
+  textAlignment = 'left',
+  roundedImage = false
 }: TextImageBlockProps) => {
   const imageSrc = cleanImageUrl(image.url)
   const finalImageSrc = imageSrc && imageSrc.startsWith('/') 
@@ -29,6 +31,12 @@ export const TextImageBlock = ({
     small: 'md:w-1/3',
     medium: 'md:w-1/2',
     large: 'md:w-2/3',
+  }
+
+  const roundedImageSizeClasses = {
+    small: 'w-[468px] h-[468px]',
+    medium: 'w-[600px] h-[600px]',
+    large: 'w-[800px] h-[800px]',
   }
 
   const alignmentClasses = {
@@ -107,13 +115,13 @@ export const TextImageBlock = ({
   }
 
   const imageElement = (
-    <div className={`w-full ${imageSizeClasses[imageSize]} flex-shrink-0`}>
+    <div className={`${roundedImage ? roundedImageSizeClasses[imageSize] : `w-full ${imageSizeClasses[imageSize]}`} flex-shrink-0 mx-auto`}>
       <Image
         src={finalImageSrc || '/placeholder.jpg'}
         alt={image.alternativeText || 'Image'}
-        width={image.width || 800}
-        height={image.height || 600}
-        className="w-full h-auto object-cover rounded-lg"
+        width={roundedImage ? 800 : (image.width || 800)}
+        height={roundedImage ? 800 : (image.height || 600)}
+        className={`${roundedImage ? 'w-full h-full object-cover rounded-full' : 'w-full h-auto object-cover rounded-lg'}`}
         sizes="(max-width: 768px) 100vw, 50vw"
         unoptimized={true}
       />
