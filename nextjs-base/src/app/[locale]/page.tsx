@@ -23,10 +23,15 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
     populate: { 
       sections: { 
         populate: {
-          image: true,
-          cards: {
+          blocks: {
             populate: {
-              image: true
+              image: true,
+              buttons: true,
+              cards: {
+                populate: {
+                  image: true
+                }
+              }
             }
           }
         }
@@ -50,10 +55,15 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
       populate: { 
         sections: { 
           populate: {
-            image: true,
-            cards: {
+            blocks: {
               populate: {
-                image: true
+                image: true,
+                buttons: true,
+                cards: {
+                  populate: {
+                    image: true
+                  }
+                }
               }
             }
           }
@@ -171,11 +181,7 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
         <SectionGeneric
           key={section.id}
           title={section.hideTitle ? undefined : section.title}
-          content={section.content}
-          image={section.image}
-          reverse={section.reverse}
-          priority={index === 0}
-          cards={section.cards}
+          blocks={section.blocks as any}
         />
       ))}
     </Layout>

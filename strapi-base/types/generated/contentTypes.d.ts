@@ -607,13 +607,15 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
-    cards: Schema.Attribute.Relation<'oneToMany', 'api::card.card'> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    content: Schema.Attribute.Blocks &
+    blocks: Schema.Attribute.DynamicZone<
+      [
+        'blocks.text-block',
+        'blocks.button-block',
+        'blocks.image-block',
+        'blocks.cards-block',
+        'blocks.text-image-block',
+      ]
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -630,12 +632,6 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<false>;
-    image: Schema.Attribute.Media<'images' | 'files'> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -649,12 +645,6 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
-    reverse: Schema.Attribute.Boolean &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     title: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

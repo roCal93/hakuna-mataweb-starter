@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_blocks_text_blocks",
+  "info": {
+    "displayName": "Text Block",
+    "description": "Rich text content block"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "blocks",
+      "required": true
+    }
+  },
+  "config": {}
+}

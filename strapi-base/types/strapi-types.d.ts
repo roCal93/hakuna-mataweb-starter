@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-05T13:46:02.690Z
+ * Généré le: 2026-01-06T06:24:52.204Z
  */
 
 // ============================================================================
@@ -92,11 +92,58 @@ export interface StrapiErrorResponse {
 // ============================================================================
 
 /**
- * Component: shared.navigation-link
+ * Component: blocks.button-block
  */
-export interface NavigationLink {
+export interface ButtonBlock {
+  buttons: Button[];
+  alignment: string;
+}
+
+/**
+ * Component: blocks.cards-block
+ */
+export interface CardsBlock {
+  cards: (Card & StrapiEntity)[];
+  columns: string;
+}
+
+/**
+ * Component: blocks.image-block
+ */
+export interface ImageBlock {
+  image: StrapiMedia;
+  caption?: string;
+  alignment: string;
+  size: string;
+}
+
+/**
+ * Component: blocks.text-block
+ */
+export interface TextBlock {
+  content: StrapiBlock[];
+}
+
+/**
+ * Component: blocks.text-image-block
+ */
+export interface TextImageBlock {
+  content: StrapiBlock[];
+  image: StrapiMedia;
+  imagePosition: string;
+  imageSize: string;
+  verticalAlignment: string;
+}
+
+/**
+ * Component: shared.button
+ */
+export interface Button {
   label: string;
-  href: string;
+  url: string;
+  variant: string;
+  isExternal?: boolean;
+  icon?: string;
 }
 
 /**
@@ -162,11 +209,8 @@ export type PageCollectionResponse = StrapiCollectionResponse<Page>;
 export interface Section {
   title?: string;
   hideTitle?: boolean;
-  content: StrapiBlock[];
-  image?: StrapiMedia;
+  blocks: unknown[];
   order: number;
-  reverse?: boolean;
-  cards?: (Card & StrapiEntity)[];
   locale?: string;
   localizations?: (Section & StrapiEntity)[];
 }

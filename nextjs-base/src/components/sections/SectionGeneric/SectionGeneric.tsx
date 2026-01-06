@@ -1,102 +1,85 @@
 import React from 'react'
-import Image from 'next/image'
-import { cleanImageUrl } from '@/lib/strapi'
-import { StrapiMedia, StrapiBlock, Card, StrapiEntity } from '@/types/strapi'
-import { Card as CardComponent } from '@/components/sections/Card'
+import { 
+  TextBlock as TextBlockData, 
+  ButtonBlock as ButtonBlockData,
+  ImageBlock as ImageBlockData,
+  CardsBlock as CardsBlockData,
+  TextImageBlock as TextImageBlockData,
+} from '@/types/strapi'
+import { TextBlock, ButtonBlock, ImageBlock, CardsBlock, TextImageBlock } from '@/components/blocks'
+
+type DynamicBlock = 
+  | ({ __component: 'blocks.text-block' } & TextBlockData)
+  | ({ __component: 'blocks.button-block' } & ButtonBlockData)
+  | ({ __component: 'blocks.image-block' } & ImageBlockData)
+  | ({ __component: 'blocks.cards-block' } & CardsBlockData)
+  | ({ __component: 'blocks.text-image-block' } & TextImageBlockData)
 
 type SectionGenericProps = {
   title?: string
-  content: StrapiBlock[]
-  image?: StrapiMedia | string
-  reverse?: boolean
-  priority?: boolean
-  cards?: (Card & StrapiEntity)[]
+  blocks: DynamicBlock[]
 }
 
-export const SectionGeneric = ({ title, content, image, reverse = false, priority = false, cards }: SectionGenericProps) => {
-  let imageSrc: string | undefined
-  let imageData: StrapiMedia | undefined
-
-  if (typeof image === 'string') {
-    imageSrc = cleanImageUrl(image)
-  } else if (image && typeof image === 'object') {
-    imageData = image
-    // Utiliser l'image originale - l'utilisateur gère l'optimisation à l'upload
-    imageSrc = cleanImageUrl(image.url)
-  }
-
-  // Pour les images depuis Strapi, utiliser l'URL absolue
-  const finalImageSrc = imageSrc && imageSrc.startsWith('/') 
-    ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${imageSrc}` 
-    : imageSrc
-
-  // Fonction pour rendre les blocs Strapi
-  const renderBlocks = (blocks: StrapiBlock[]) => {
-    return blocks.map((block, index) => {
-      switch (block.type) {
-        case 'paragraph':
-          return (
-            <p key={index} className="text-gray-700 mb-4">
-              {block.children?.map((child, childIndex) => {
-                if (child.type === 'text') {
-                  return <span key={childIndex}>{child.text}</span>
-                }
-                // Gérer d'autres types d'enfants si nécessaire (bold, italic, etc.)
-                return null
-              })}
-            </p>
-          )
-        case 'heading':
-          const level = block.level || 2
-          const HeadingTag = `h${level}` as keyof React.JSX.IntrinsicElements
-          return (
-            <HeadingTag key={index} className="text-gray-700 mb-4">
-              {block.children?.map((child, childIndex) => {
-                if (child.type === 'text') {
-                  return <span key={childIndex}>{child.text}</span>
-                }
-                return null
-              })}
-            </HeadingTag>
-          )
-        // Ajouter d'autres types de blocs si nécessaire
-        default:
-          return null
-      }
-    })
+export const SectionGeneric = ({ title, blocks }: SectionGenericProps) => {
+  const renderBlock = (block: DynamicBlock, index: number) => {
+    switch (block.__component) {
+      case 'blocks.text-block':
+        return <TextBlock key={index} content={block.content} />
+      
+      case 'blocks.button-block':
+        return (
+          <ButtonBlock 
+            key={index} 
+            buttons={block.buttons} 
+            alignment={block.alignment as 'left' | 'center' | 'right' | 'space-between'} 
+          />
+        )
+      
+      case 'blocks.image-block':
+        return (
+          <ImageBlock 
+            key={index} 
+            image={block.image} 
+            caption={block.caption}
+            alignment={block.alignment as 'left' | 'center' | 'right' | 'full'}
+            size={block.size as 'small' | 'medium' | 'large' | 'full'}
+          />
+        )
+      
+      case 'blocks.cards-block':
+        return (
+          <CardsBlock 
+            key={index} 
+            cards={block.cards} 
+            columns={block.columns as '1' | '2' | '3' | '4'} 
+          />
+      case 'blocks.text-image-block':
+        return (
+          <TextImageBlock
+            key={index}
+            content={block.content}
+            image={block.image}
+            imagePosition={block.imagePosition as 'left' | 'right'}
+            imageSize={block.imageSize as 'small' | 'medium' | 'large'}
+            verticalAlignment={block.verticalAlignment as 'top' | 'center' | 'bottom'}
+          />
+        )
+      
+        )
+      
+      default:
+        console.warn('Unknown block type:', (block as any).__component)
+        return null
+    }
   }
 
   return (
-    <section className={`my-8`}>
-      <div className={`max-w-6xl mx-auto flex flex-col ${reverse ? 'flex-col-reverse' : ''} items-center`}>
-        {finalImageSrc && (
-          <Image 
-            src={finalImageSrc} 
-            alt={imageData?.alternativeText || title || 'Image'} 
-            width={imageData?.width || 800} 
-            height={imageData?.height || 600} 
-            className="w-full h-auto object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority={priority}
-            unoptimized={true}
-          />
-        )}
-        <div className="w-full p-4 text-center">
-          {title && <h2 className="text-2xl font-bold mb-2">{title}</h2>}
-          {renderBlocks(content)}
+    <section className="my-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        {title && <h2 className="text-3xl font-bold mb-8 text-center">{title}</h2>}
+        <div className="space-y-4">
+          {blocks.map((block, index) => renderBlock(block, index))}
         </div>
-        {cards && (
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-            {cards.map(card => (
-              <CardComponent 
-                key={card.id} 
-                title={card.title} 
-                description={card.description || []} 
-                image={card.image?.url} 
-              />
-            ))}
-          </div>
-        )}
       </div>
     </section>
   )

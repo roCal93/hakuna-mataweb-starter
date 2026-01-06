@@ -25,11 +25,19 @@ const fetchPageData = async (slug: string, locale: string, isDraft: boolean) => 
     fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
     populate: {
       sections: {
-        fields: ['title', 'hideTitle', 'content', 'order', 'reverse'],
+        fields: ['title', 'hideTitle', 'order'],
         populate: { 
-          image: { 
-            fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
-          } 
+          blocks: {
+            populate: {
+              image: true,
+              buttons: true,
+              cards: {
+                populate: {
+                  image: true
+                }
+              }
+            }
+          }
         } 
       }, 
       seoImage: { 
@@ -58,11 +66,19 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
     fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
     populate: {
       sections: {
-        fields: ['title', 'hideTitle', 'content', 'order', 'reverse'],
+        fields: ['title', 'hideTitle', 'order'],
         populate: { 
-          image: { 
-            fields: ['url', 'alternativeText', 'width', 'height', 'formats'] 
-          } 
+          blocks: {
+            populate: {
+              image: true,
+              buttons: true,
+              cards: {
+                populate: {
+                  image: true
+                }
+              }
+            }
+          }
         } 
       }, 
       seoImage: { 
@@ -207,10 +223,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
         <SectionGeneric
           key={section.id}
           title={section.hideTitle ? undefined : section.title}
-          content={section.content}
-          image={section.image?.url}
-          reverse={section.reverse}
-          priority={index === 0}
+          blocks={section.blocks as any}
         />
       ))}
     </Layout>

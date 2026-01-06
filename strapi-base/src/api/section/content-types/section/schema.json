@@ -33,27 +33,21 @@
       },
       "default": false
     },
-    "content": {
-      "type": "blocks",
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "blocks.text-block",
+        "blocks.button-block",
+        "blocks.image-block",
+        "blocks.cards-block",
+        "blocks.text-image-block"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
       "required": true
-    },
-    "image": {
-      "type": "media",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "multiple": false,
-      "allowedTypes": [
-        "images",
-        "files"
-      ]
     },
     "order": {
       "type": "integer",
@@ -63,24 +57,6 @@
         }
       },
       "required": true
-    },
-    "reverse": {
-      "type": "boolean",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "cards": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::card.card",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
     }
   }
 }
