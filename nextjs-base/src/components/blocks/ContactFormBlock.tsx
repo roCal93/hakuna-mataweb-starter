@@ -80,38 +80,41 @@ export const ContactFormBlock = ({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Champ Nom */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              Nom <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-              placeholder="Votre nom"
-            />
-          </div>
+          {/* Champs Nom et Email côte à côte */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Champ Nom */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Nom <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                placeholder="Votre nom"
+              />
+            </div>
 
-          {/* Champ Email */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-              placeholder="votre@email.com"
-            />
+            {/* Champ Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                placeholder="votre@email.com"
+              />
+            </div>
           </div>
 
           {/* Champ Message */}
