@@ -128,6 +128,8 @@ export interface ImageBlock {
 export interface TextBlock {
   content: StrapiBlock[];
   textAlignment: string;
+  blockAlignment: string;
+  maxWidth: string;
 }
 
 /**

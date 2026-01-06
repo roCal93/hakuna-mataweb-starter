@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-06T07:42:53.964Z
+ * Généré le: 2026-01-06T08:07:36.450Z
  */
 
 // ============================================================================
@@ -124,6 +124,8 @@ export interface ImageBlock {
 export interface TextBlock {
   content: StrapiBlock[];
   textAlignment: string;
+  blockAlignment: string;
+  maxWidth: string;
 }
 
 /**
