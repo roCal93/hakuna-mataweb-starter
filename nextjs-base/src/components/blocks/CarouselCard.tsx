@@ -76,13 +76,13 @@ export const CarouselCard = ({ frontTitle, frontContent, backContent, image }: C
           <div className="p-6 h-full flex flex-col items-center">
             <h3 className="text-2xl font-bold mb-4 text-center">{frontTitle}</h3>
             {cleanImage && (
-              <div className="relative w-48 h-48 mb-4 flex-shrink-0">
+              <div className="relative w-full max-w-md h-64 mb-4 flex-shrink-0">
                 <Image 
                   src={cleanImage} 
                   alt={image?.alternativeText || frontTitle} 
                   fill
-                  className="object-cover rounded-lg"
-                  sizes="192px"
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 448px"
                 />
               </div>
             )}
