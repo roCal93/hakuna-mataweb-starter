@@ -24,7 +24,15 @@ export const SectionGeneric = ({ title, blocks }: SectionGenericProps) => {
   const renderBlock = (block: DynamicBlock, index: number) => {
     switch (block.__component) {
       case 'blocks.text-block':
-        return <TextBlock key={index} content={block.content} />
+        return (
+          <TextBlock 
+            key={index} 
+            content={block.content}
+            textAlignment={block.textAlignment as 'left' | 'center' | 'right' | 'justify'}
+            blockAlignment={block.blockAlignment as 'left' | 'center' | 'right' | 'full'}
+            maxWidth={block.maxWidth as 'small' | 'medium' | 'large' | 'full'}
+          />
+        )
       
       case 'blocks.button-block':
         return (
@@ -51,7 +59,8 @@ export const SectionGeneric = ({ title, blocks }: SectionGenericProps) => {
           <CardsBlock 
             key={index} 
             cards={block.cards} 
-            columns={block.columns as '1' | '2' | '3' | '4'} 
+            columns={block.columns as '1' | '2' | '3' | '4'}
+            alignment={block.alignment as 'left' | 'center' | 'right'}
           />
         )
       
@@ -64,6 +73,7 @@ export const SectionGeneric = ({ title, blocks }: SectionGenericProps) => {
             imagePosition={block.imagePosition as 'left' | 'right'}
             imageSize={block.imageSize as 'small' | 'medium' | 'large'}
             verticalAlignment={block.verticalAlignment as 'top' | 'center' | 'bottom'}
+            textAlignment={block.textAlignment as 'left' | 'center' | 'right' | 'justify'}
           />
         )
       

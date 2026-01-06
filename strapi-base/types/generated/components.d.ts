@@ -68,7 +68,17 @@ export interface BlocksTextBlock extends Struct.ComponentSchema {
     displayName: 'Text Block';
   };
   attributes: {
+    blockAlignment: Schema.Attribute.Enumeration<
+      ['left', 'center', 'right', 'full']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'full'>;
     content: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    maxWidth: Schema.Attribute.Enumeration<
+      ['small', 'medium', 'large', 'full']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'full'>;
     textAlignment: Schema.Attribute.Enumeration<
       ['left', 'center', 'right', 'justify']
     > &

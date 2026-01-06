@@ -20,6 +20,28 @@
       ],
       "default": "left",
       "required": true
+    },
+    "blockAlignment": {
+      "type": "enumeration",
+      "enum": [
+        "left",
+        "center",
+        "right",
+        "full"
+      ],
+      "default": "full",
+      "required": true
+    },
+    "maxWidth": {
+      "type": "enumeration",
+      "enum": [
+        "small",
+        "medium",
+        "large",
+        "full"
+      ],
+      "default": "full",
+      "required": true
     }
   },
   "config": {}

@@ -4,14 +4,35 @@ import { StrapiBlock } from '@/types/strapi'
 type TextBlockProps = {
   content: StrapiBlock[]
   textAlignment?: 'left' | 'center' | 'right' | 'justify'
+  blockAlignment?: 'left' | 'center' | 'right' | 'full'
+  maxWidth?: 'small' | 'medium' | 'large' | 'full'
 }
 
-export const TextBlock = ({ content, textAlignment = 'left' }: TextBlockProps) => {
+export const TextBlock = ({ 
+  content, 
+  textAlignment = 'left',
+  blockAlignment = 'full',
+  maxWidth = 'full'
+}: TextBlockProps) => {
   const alignmentClasses = {
     left: 'text-left',
     center: 'text-center',
     right: 'text-right',
     justify: 'text-justify',
+  }
+
+  const blockAlignmentClasses = {
+    left: 'mr-auto',
+    center: 'mx-auto',
+    right: 'ml-auto',
+    full: 'w-full',
+  }
+
+  const maxWidthClasses = {
+    small: 'max-w-2xl',
+    medium: 'max-w-4xl',
+    large: 'max-w-6xl',
+    full: 'max-w-none',
   }
 
   const renderBlocks = (blocks: StrapiBlock[]) => {
@@ -76,5 +97,9 @@ export const TextBlock = ({ content, textAlignment = 'left' }: TextBlockProps) =
     })
   }
 
-  return <div className="prose max-w-none">{renderBlocks(content)}</div>
+  return (
+    <div className={`${blockAlignmentClasses[blockAlignment]} ${maxWidthClasses[maxWidth]}`}>
+      <div className="prose max-w-none">{renderBlocks(content)}</div>
+    </div>
+  )
 }
