@@ -41,6 +41,36 @@ export interface BlocksCardsBlock extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksHeroBlock extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_hero_blocks';
+  info: {
+    description: 'Hero section with title, subtitle, buttons and optional background image';
+    displayName: 'Hero Block';
+  };
+  attributes: {
+    backgroundImage: Schema.Attribute.Media<'images'>;
+    buttons: Schema.Attribute.Component<'shared.button', true> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 3;
+          min: 0;
+        },
+        number
+      >;
+    height: Schema.Attribute.Enumeration<['medium', 'large', 'full']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'large'>;
+    overlay: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    overlayOpacity: Schema.Attribute.Enumeration<['light', 'medium', 'dark']> &
+      Schema.Attribute.DefaultTo<'medium'>;
+    subtitle: Schema.Attribute.Text;
+    textAlignment: Schema.Attribute.Enumeration<['left', 'center', 'right']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'center'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface BlocksImageBlock extends Struct.ComponentSchema {
   collectionName: 'components_blocks_image_blocks';
   info: {
@@ -151,6 +181,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blocks.button-block': BlocksButtonBlock;
       'blocks.cards-block': BlocksCardsBlock;
+      'blocks.hero-block': BlocksHeroBlock;
       'blocks.image-block': BlocksImageBlock;
       'blocks.text-block': BlocksTextBlock;
       'blocks.text-image-block': BlocksTextImageBlock;

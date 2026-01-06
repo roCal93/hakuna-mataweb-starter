@@ -113,6 +113,16 @@ export interface CardsBlock {
 }
 
 /**
+ * Component: blocks.hero-block-simple-text
+ */
+export interface HeroBlockSimpleText {
+  title?: string;
+  content: string;
+  height: string;
+  textAlignment: string;
+}
+
+/**
  * Component: blocks.image-block
  */
 export interface ImageBlock {

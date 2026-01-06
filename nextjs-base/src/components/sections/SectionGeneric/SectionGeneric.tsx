@@ -5,8 +5,9 @@ import {
   ImageBlock as ImageBlockData,
   CardsBlock as CardsBlockData,
   TextImageBlock as TextImageBlockData,
+  HeroBlockSimpleText as HeroBlockSimpleTextData,
 } from '@/types/strapi'
-import { TextBlock, ButtonBlock, ImageBlock, CardsBlock, TextImageBlock } from '@/components/blocks'
+import { TextBlock, ButtonBlock, ImageBlock, CardsBlock, TextImageBlock, HeroBlockSimpleText } from '@/components/blocks'
 
 type DynamicBlock = 
   | ({ __component: 'blocks.text-block' } & TextBlockData)
@@ -14,6 +15,7 @@ type DynamicBlock =
   | ({ __component: 'blocks.image-block' } & ImageBlockData)
   | ({ __component: 'blocks.cards-block' } & CardsBlockData)
   | ({ __component: 'blocks.text-image-block' } & TextImageBlockData)
+  | ({ __component: 'blocks.hero-block-simple-text' } & HeroBlockSimpleTextData)
 
 type SectionGenericProps = {
   title?: string
@@ -74,6 +76,17 @@ export const SectionGeneric = ({ title, blocks }: SectionGenericProps) => {
             imageSize={block.imageSize as 'small' | 'medium' | 'large'}
             verticalAlignment={block.verticalAlignment as 'top' | 'center' | 'bottom'}
             textAlignment={block.textAlignment as 'left' | 'center' | 'right' | 'justify'}
+          />
+        )
+      
+      case 'blocks.hero-block-simple-text':
+        return (
+          <HeroBlockSimpleText
+            key={index}
+            title={block.title}
+            content={block.content}
+            height={block.height as 'medium' | 'large' | 'full'}
+            textAlignment={block.textAlignment as 'left' | 'center' | 'right'}
           />
         )
       

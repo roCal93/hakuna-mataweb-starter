@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-06T08:07:36.450Z
+ * Généré le: 2026-01-06T08:32:39.131Z
  */
 
 // ============================================================================
@@ -106,6 +106,16 @@ export interface CardsBlock {
   cards: (Card & StrapiEntity)[];
   columns: string;
   alignment: string;
+}
+
+/**
+ * Component: blocks.hero-block-simple-text
+ */
+export interface HeroBlockSimpleText {
+  title?: string;
+  content: string;
+  height: string;
+  textAlignment: string;
 }
 
 /**
