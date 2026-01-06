@@ -61,7 +61,7 @@ export const Card = ({ title, description, image }: CardProps) => {
           />
         </div>
       )}
-      <h3 className="text-xl font-semibold">{title}</h3>
+      <h3 className="text-xl font-semibold whitespace-pre-line">{title}</h3>
       <div className="mt-2">{renderBlocks(description)}</div>
     </div>
   )

@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-06T08:32:39.131Z
+ * Généré le: 2026-01-06T08:48:02.121Z
  */
 
 // ============================================================================
@@ -226,6 +226,7 @@ export interface Section {
   hideTitle?: boolean;
   blocks: unknown[];
   order: number;
+  spacing?: string;
   locale?: string;
   localizations?: (Section & StrapiEntity)[];
 }

@@ -167,6 +167,7 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
           key={section.id}
           title={section.hideTitle ? undefined : section.title}
           blocks={section.blocks as DynamicBlock[]}
+          spacing={section.spacing as 'none' | 'small' | 'medium' | 'large' | undefined}
         />
       ))}
     </Layout>

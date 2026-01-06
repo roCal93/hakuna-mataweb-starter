@@ -230,6 +230,7 @@ export interface Section {
   hideTitle?: boolean;
   blocks: unknown[];
   order: number;
+  spacing?: string;
   locale?: string;
   localizations?: (Section & StrapiEntity)[];
 }

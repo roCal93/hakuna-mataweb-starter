@@ -57,6 +57,21 @@
         }
       },
       "required": true
+    },
+    "spacing": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "small",
+        "medium",
+        "large"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": "medium"
     }
   }
 }
