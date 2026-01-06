@@ -53,7 +53,7 @@ export async function fetchAPI<T = unknown>(
 
   try {
     return JSON.parse(text) as T
-  } catch (e) {
+  } catch {
     throw new Error('Réponse non JSON : ' + text.slice(0, 200))
   }
 }
