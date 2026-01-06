@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-06T11:59:45.304Z
+ * Généré le: 2026-01-06T12:50:35.794Z
  */
 
 // ============================================================================
@@ -117,6 +117,17 @@ export interface CarouselBlock {
   autoplayDelay?: number;
   showControls?: boolean;
   showIndicators?: boolean;
+}
+
+/**
+ * Component: blocks.contact-form-block
+ */
+export interface ContactFormBlock {
+  title?: string;
+  description?: string;
+  submitButtonText?: string;
+  blockAlignment: string;
+  maxWidth: string;
 }
 
 /**

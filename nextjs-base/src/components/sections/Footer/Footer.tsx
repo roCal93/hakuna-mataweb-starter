@@ -29,8 +29,9 @@ export const Footer = ({ siteName = 'Hakuna Mataweb' }: FooterProps) => {
           <Image
             src="/images/hakuna-mataweb-logo.svg"
             alt="Logo Hakuna Mataweb"
-            width={120}
-            height={40}
+            width={30}
+            height={25}
+            style={{ transform: 'rotate(21deg)' }}
             className="opacity-80 hover:opacity-100 transition-opacity"
           />
         </div>

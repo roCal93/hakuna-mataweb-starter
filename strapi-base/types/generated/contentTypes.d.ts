@@ -459,7 +459,7 @@ export interface ApiCardCard extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::card.card'>;
     publishedAt: Schema.Attribute.DateTime;
-    title: Schema.Attribute.String &
+    title: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -476,6 +476,7 @@ export interface ApiHeaderHeader extends Struct.SingleTypeSchema {
   collectionName: 'headers';
   info: {
     displayName: 'header';
+    mainField: 'title';
     pluralName: 'headers';
     singularName: 'header';
   };
@@ -614,6 +615,9 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
         'blocks.image-block',
         'blocks.cards-block',
         'blocks.text-image-block',
+        'blocks.hero-block-simple-text',
+        'blocks.carousel-block',
+        'blocks.contact-form-block',
       ]
     > &
       Schema.Attribute.Required &
@@ -645,6 +649,24 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    spacingBottom: Schema.Attribute.Enumeration<
+      ['none', 'small', 'medium', 'large']
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'medium'>;
+    spacingTop: Schema.Attribute.Enumeration<
+      ['none', 'small', 'medium', 'large']
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'medium'>;
     title: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

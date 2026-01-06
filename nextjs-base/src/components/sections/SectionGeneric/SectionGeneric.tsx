@@ -7,8 +7,9 @@ import {
   TextImageBlock as TextImageBlockData,
   HeroBlockSimpleText as HeroBlockSimpleTextData,
   CarouselBlock as CarouselBlockData,
+  ContactFormBlock as ContactFormBlockData,
 } from '@/types/strapi'
-import { TextBlock, ButtonBlock, ImageBlock, CardsBlock, TextImageBlock, HeroBlockSimpleText, CarouselBlock } from '@/components/blocks'
+import { TextBlock, ButtonBlock, ImageBlock, CardsBlock, TextImageBlock, HeroBlockSimpleText, CarouselBlock, ContactFormBlock } from '@/components/blocks'
 
 type DynamicBlock = 
   | ({ __component: 'blocks.text-block' } & TextBlockData)
@@ -18,6 +19,7 @@ type DynamicBlock =
   | ({ __component: 'blocks.text-image-block' } & TextImageBlockData)
   | ({ __component: 'blocks.hero-block-simple-text' } & HeroBlockSimpleTextData)
   | ({ __component: 'blocks.carousel-block' } & CarouselBlockData)
+  | ({ __component: 'blocks.contact-form-block' } & ContactFormBlockData)
 
 type SectionGenericProps = {
   title?: string
@@ -110,6 +112,18 @@ export const SectionGeneric = ({ title, blocks, spacingTop = 'medium', spacingBo
             autoplayDelay={block.autoplayDelay}
             showControls={block.showControls}
             showIndicators={block.showIndicators}
+          />
+        )
+      
+      case 'blocks.contact-form-block':
+        return (
+          <ContactFormBlock
+            key={index}
+            title={block.title}
+            description={block.description}
+            submitButtonText={block.submitButtonText}
+            blockAlignment={block.blockAlignment as 'left' | 'center' | 'right' | 'full'}
+            maxWidth={block.maxWidth as 'small' | 'medium' | 'large' | 'full'}
           />
         )
       

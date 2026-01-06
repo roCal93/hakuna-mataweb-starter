@@ -41,33 +41,75 @@ export interface BlocksCardsBlock extends Struct.ComponentSchema {
   };
 }
 
-export interface BlocksHeroBlock extends Struct.ComponentSchema {
-  collectionName: 'components_blocks_hero_blocks';
+export interface BlocksCarouselBlock extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_carousel_blocks';
   info: {
-    description: 'Hero section with title, subtitle, buttons and optional background image';
-    displayName: 'Hero Block';
+    description: 'Carousel with flippable cards';
+    displayName: 'Carousel Block';
   };
   attributes: {
-    backgroundImage: Schema.Attribute.Media<'images'>;
-    buttons: Schema.Attribute.Component<'shared.button', true> &
+    autoplay: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    autoplayDelay: Schema.Attribute.Integer &
       Schema.Attribute.SetMinMax<
         {
-          max: 3;
-          min: 0;
+          min: 1000;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5000>;
+    cards: Schema.Attribute.Component<'shared.carousel-card', true> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
         },
         number
       >;
+    showControls: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showIndicators: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+  };
+}
+
+export interface BlocksContactFormBlock extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_contact_form_blocks';
+  info: {
+    description: 'Contact form with name, email and message fields';
+    displayName: 'Contact Form Block';
+  };
+  attributes: {
+    blockAlignment: Schema.Attribute.Enumeration<
+      ['left', 'center', 'right', 'full']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'center'>;
+    description: Schema.Attribute.Text;
+    maxWidth: Schema.Attribute.Enumeration<
+      ['small', 'medium', 'large', 'full']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'medium'>;
+    submitButtonText: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Envoyer'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Contactez-nous'>;
+  };
+}
+
+export interface BlocksHeroBlockSimpleText extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_hero_block_simple_texts';
+  info: {
+    description: 'Hero section with optional title and text content';
+    displayName: 'Hero Block Simple Text';
+  };
+  attributes: {
+    content: Schema.Attribute.Text & Schema.Attribute.Required;
     height: Schema.Attribute.Enumeration<['medium', 'large', 'full']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'large'>;
-    overlay: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    overlayOpacity: Schema.Attribute.Enumeration<['light', 'medium', 'dark']> &
-      Schema.Attribute.DefaultTo<'medium'>;
-    subtitle: Schema.Attribute.Text;
     textAlignment: Schema.Attribute.Enumeration<['left', 'center', 'right']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'center'>;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -132,6 +174,7 @@ export interface BlocksTextImageBlock extends Struct.ComponentSchema {
     imageSize: Schema.Attribute.Enumeration<['small', 'medium', 'large']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'medium'>;
+    roundedImage: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     textAlignment: Schema.Attribute.Enumeration<
       ['left', 'center', 'right', 'justify']
     > &
@@ -164,6 +207,20 @@ export interface SharedButton extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedCarouselCard extends Struct.ComponentSchema {
+  collectionName: 'components_shared_carousel_cards';
+  info: {
+    description: 'Card with front and back content for carousel';
+    displayName: 'Carousel Card';
+  };
+  attributes: {
+    backContent: Schema.Attribute.Blocks;
+    frontContent: Schema.Attribute.Blocks;
+    frontTitle: Schema.Attribute.String & Schema.Attribute.Required;
+    image: Schema.Attribute.Media<'images'>;
+  };
+}
+
 export interface SharedPageLink extends Struct.ComponentSchema {
   collectionName: 'components_shared_page_links';
   info: {
@@ -181,11 +238,14 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blocks.button-block': BlocksButtonBlock;
       'blocks.cards-block': BlocksCardsBlock;
-      'blocks.hero-block': BlocksHeroBlock;
+      'blocks.carousel-block': BlocksCarouselBlock;
+      'blocks.contact-form-block': BlocksContactFormBlock;
+      'blocks.hero-block-simple-text': BlocksHeroBlockSimpleText;
       'blocks.image-block': BlocksImageBlock;
       'blocks.text-block': BlocksTextBlock;
       'blocks.text-image-block': BlocksTextImageBlock;
       'shared.button': SharedButton;
+      'shared.carousel-card': SharedCarouselCard;
       'shared.page-link': SharedPageLink;
     }
   }

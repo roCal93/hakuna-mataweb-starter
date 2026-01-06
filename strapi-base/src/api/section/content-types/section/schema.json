@@ -35,6 +35,11 @@
     },
     "blocks": {
       "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
       "components": [
         "blocks.text-block",
         "blocks.button-block",
@@ -42,13 +47,9 @@
         "blocks.cards-block",
         "blocks.text-image-block",
         "blocks.hero-block-simple-text",
-        "blocks.carousel-block"
+        "blocks.carousel-block",
+        "blocks.contact-form-block"
       ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
       "required": true
     },
     "order": {
@@ -62,33 +63,33 @@
     },
     "spacingTop": {
       "type": "enumeration",
-      "enum": [
-        "none",
-        "small",
-        "medium",
-        "large"
-      ],
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "default": "medium"
+      "default": "medium",
+      "enum": [
+        "none",
+        "small",
+        "medium",
+        "large"
+      ]
     },
     "spacingBottom": {
       "type": "enumeration",
-      "enum": [
-        "none",
-        "small",
-        "medium",
-        "large"
-      ],
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "default": "medium"
+      "default": "medium",
+      "enum": [
+        "none",
+        "small",
+        "medium",
+        "large"
+      ]
     }
   }
 }

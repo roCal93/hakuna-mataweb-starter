@@ -124,6 +124,17 @@ export interface CarouselBlock {
 }
 
 /**
+ * Component: blocks.contact-form-block
+ */
+export interface ContactFormBlock {
+  title?: string;
+  description?: string;
+  submitButtonText?: string;
+  blockAlignment: string;
+  maxWidth: string;
+}
+
+/**
  * Component: blocks.hero-block-simple-text
  */
 export interface HeroBlockSimpleText {
