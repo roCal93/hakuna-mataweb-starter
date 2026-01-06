@@ -73,10 +73,13 @@ export const CarouselCard = ({ frontTitle, frontContent, backContent, image }: C
           className="absolute w-full h-full backface-hidden bg-white rounded-lg shadow-lg overflow-hidden"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <div className="p-6 h-full flex flex-col items-center">
+          <div className="p-6 h-full flex flex-col items-center justify-center">
             <h3 className="text-2xl font-bold mb-4 text-center">{frontTitle}</h3>
+            <div className="mb-4 text-center">
+              {renderBlocks(frontContent)}
+            </div>
             {cleanImage && (
-              <div className="relative w-full max-w-md h-64 mb-4 flex-shrink-0">
+              <div className="relative w-full max-w-md h-64 flex-shrink-0">
                 <Image 
                   src={cleanImage} 
                   alt={image?.alternativeText || frontTitle} 
@@ -86,9 +89,6 @@ export const CarouselCard = ({ frontTitle, frontContent, backContent, image }: C
                 />
               </div>
             )}
-            <div className="flex-1 overflow-auto text-center">
-              {renderBlocks(frontContent)}
-            </div>
           </div>
         </div>
 
