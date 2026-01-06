@@ -38,7 +38,7 @@ export const Layout = async ({ children, locale }: LayoutProps) => {
         navigation={headerData?.navigation}
       />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer siteName={headerData?.title} />
     </div>
   )
 }

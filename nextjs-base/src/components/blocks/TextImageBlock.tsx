@@ -34,9 +34,9 @@ export const TextImageBlock = ({
   }
 
   const roundedImageSizeClasses = {
-    small: 'w-[468px] h-[468px]',
-    medium: 'w-[600px] h-[600px]',
-    large: 'w-[800px] h-[800px]',
+    small: 'w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[468px] lg:h-[468px]',
+    medium: 'w-80 h-80 sm:w-96 sm:h-96 md:w-[468px] md:h-[468px] lg:w-[600px] lg:h-[600px]',
+    large: 'w-96 h-96 sm:w-[468px] sm:h-[468px] md:w-[600px] md:h-[600px] lg:w-[800px] lg:h-[800px]',
   }
 
   const alignmentClasses = {
