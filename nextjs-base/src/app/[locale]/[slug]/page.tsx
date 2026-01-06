@@ -4,6 +4,7 @@ import { Layout } from '@/components/layout'
 import { Hero } from '@/components/sections/Hero'
 import { SectionGeneric } from '@/components/sections/SectionGeneric'
 import { PageCollectionResponse, StrapiBlock, StrapiEntity, Page as PageType } from '@/types/strapi'
+import { DynamicBlock } from '@/types/custom'
 import { notFound, redirect } from 'next/navigation'
 import { locales as SUPPORTED_LOCALES } from '@/lib/locales'
 import { draftMode } from 'next/headers'
@@ -28,15 +29,7 @@ const fetchPageData = async (slug: string, locale: string, isDraft: boolean) => 
         fields: ['title', 'hideTitle', 'order'],
         populate: { 
           blocks: {
-            populate: {
-              image: true,
-              buttons: true,
-              cards: {
-                populate: {
-                  image: true
-                }
-              }
-            }
+            populate: '*'
           }
         } 
       }, 
@@ -69,15 +62,7 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
         fields: ['title', 'hideTitle', 'order'],
         populate: { 
           blocks: {
-            populate: {
-              image: true,
-              buttons: true,
-              cards: {
-                populate: {
-                  image: true
-                }
-              }
-            }
+            populate: '*'
           }
         } 
       }, 
@@ -219,11 +204,11 @@ export default async function Page({ params, searchParams }: { params: Promise<{
         />
       )}
 
-      {sections.map((section, index) => (
+      {sections.map((section) => (
         <SectionGeneric
           key={section.id}
           title={section.hideTitle ? undefined : section.title}
-          blocks={section.blocks as any}
+          blocks={section.blocks as DynamicBlock[]}
         />
       ))}
     </Layout>

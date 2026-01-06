@@ -5,6 +5,7 @@ import { Layout } from '@/components/layout'
 import { Hero } from '@/components/sections/Hero'
 import { SectionGeneric } from '@/components/sections/SectionGeneric'
 import { PageCollectionResponse, StrapiBlock } from '@/types/strapi'
+import { DynamicBlock } from '@/types/custom'
 import { draftMode } from 'next/headers'
 import { unstable_cache } from 'next/cache'
 
@@ -24,15 +25,7 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
       sections: { 
         populate: {
           blocks: {
-            populate: {
-              image: true,
-              buttons: true,
-              cards: {
-                populate: {
-                  image: true
-                }
-              }
-            }
+            populate: '*'
           }
         }
       }, 
@@ -56,15 +49,7 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
         sections: { 
           populate: {
             blocks: {
-              populate: {
-                image: true,
-                buttons: true,
-                cards: {
-                  populate: {
-                    image: true
-                  }
-                }
-              }
+              populate: '*'
             }
           }
         } 
@@ -109,7 +94,8 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   // Fetch home data to get the first image for preload
   const res = await getHomePageData(locale)
   const page = res?.data?.[0]
-  const firstImage = page?.sections?.[0]?.image
+  const firstBlock = page?.sections?.[0]?.blocks?.[0] as { image?: { url: string } } | undefined
+  const firstImage = firstBlock?.image
   
   const links: { rel: string; href: string; as?: string }[] = []
   
@@ -160,7 +146,6 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
     )
   }
 
-  type RichTextValue = { children?: { text?: string }[] }[]
   const getText = (value: unknown) =>
     typeof value === 'string'
       ? value
@@ -177,11 +162,11 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
         />
       )}
 
-      {page.sections?.map((section, index) => (
+      {page.sections?.map((section) => (
         <SectionGeneric
           key={section.id}
           title={section.hideTitle ? undefined : section.title}
-          blocks={section.blocks as any}
+          blocks={section.blocks as DynamicBlock[]}
         />
       ))}
     </Layout>
