@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-07T06:38:39.190Z
+ * Généré le: 2026-01-07T07:06:35.760Z
  */
 
 // ============================================================================
@@ -178,7 +178,8 @@ export interface TextImageBlock {
  */
 export interface Button {
   label: string;
-  url: string;
+  url?: string;
+  file?: StrapiMedia;
   variant: string;
   isExternal?: boolean;
   icon?: string;
@@ -220,7 +221,7 @@ export type CardResponse = StrapiResponse<Card>;
 export type CardCollectionResponse = StrapiCollectionResponse<Card>;
 
 /**
- * header
+ * Header
  */
 export interface Header {
   logo?: StrapiMedia;

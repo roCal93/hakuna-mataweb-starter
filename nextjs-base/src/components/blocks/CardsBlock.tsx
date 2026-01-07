@@ -10,7 +10,7 @@ type CardsBlockProps = {
 
 export const CardsBlock = ({ cards, columns, alignment = 'center' }: CardsBlockProps) => {
   const columnClasses = {
-    '1': 'grid-cols-1',
+    '1': 'grid-cols-1 max-w-3xl mx-auto',
     '2': 'grid-cols-1 md:grid-cols-2',
     '3': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
     '4': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
@@ -22,15 +22,24 @@ export const CardsBlock = ({ cards, columns, alignment = 'center' }: CardsBlockP
     right: 'justify-items-end',
   }
 
+  // Add width classes for individual cards based on column count
+  const cardWidthClasses = {
+    '1': 'w-full',
+    '2': 'w-full',
+    '3': 'w-full',
+    '4': 'w-full',
+  }
+
   return (
     <div className={`grid ${columnClasses[columns]} ${alignmentClasses[alignment]} gap-6 my-8`}>
       {cards.map((card) => (
-        <Card
-          key={card.id}
-          title={card.title}
-          description={card.description || []}
-          image={card.image?.url}
-        />
+        <div key={card.id} className={cardWidthClasses[columns]}>
+          <Card
+            title={card.title}
+            description={card.description || []}
+            image={card.image?.url}
+          />
+        </div>
       ))}
     </div>
   )

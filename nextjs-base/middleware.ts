@@ -17,15 +17,14 @@ export function middleware(req: NextRequest) {
     const first = segments[0]
     const locale = (first && (locales as readonly string[]).includes(first)) ? first : defaultLocale
 
-    // If the first segment is not a supported locale, rewrite the URL
-    // to include the `defaultLocale` prefix so routing matches
+    // If the first segment is not a supported locale, redirect to include the default locale
     if (!first || !(locales as readonly string[]).includes(first)) {
       const url = req.nextUrl.clone()
       url.pathname = `/${locale}${url.pathname}`
 
-      const rewriteRes = NextResponse.rewrite(url)
+      const redirectRes = NextResponse.redirect(url)
       try {
-        rewriteRes.cookies.set({
+        redirectRes.cookies.set({
           name: 'locale',
           value: locale,
           path: '/',
@@ -36,10 +35,10 @@ export function middleware(req: NextRequest) {
         })
       } catch (err) {
         const cookieValue = `locale=${encodeURIComponent(locale)}; Path=/; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}${process.env.NODE_ENV === 'production' ? '; Secure; HttpOnly' : ''}`
-        rewriteRes.headers.set('set-cookie', cookieValue)
+        redirectRes.headers.set('set-cookie', cookieValue)
       }
 
-      return rewriteRes
+      return redirectRes
     }
 
     const res = NextResponse.next()

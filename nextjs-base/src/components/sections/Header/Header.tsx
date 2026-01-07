@@ -4,7 +4,6 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/Button'
 import { BurgerMenu } from '@/components/ui/BurgerMenu'
 import { LanguageSwitcher } from '@/components/locale/LanguageSwitcher'
 import type { StrapiMedia, PageLink } from '@/types/strapi'
@@ -64,15 +63,19 @@ export const Header = ({
         )}
       </Link>
       <div className="hidden md:flex items-center space-x-12">
-        <nav className="hidden md:flex space-x-4">
+        <nav className="hidden md:flex space-x-6">
           {links.map((link, index) => (
-            <Link key={link.slug || index} href={getLocalizedHref(link.slug, link.isHome)} prefetch>
-              <Button 
-                variant={isActive(link.slug, link.isHome) ? 'primary' : 'secondary'}
-                className={isActive(link.slug, link.isHome) ? 'font-semibold' : ''}
-              >
-                {link.label}
-              </Button>
+            <Link 
+              key={link.slug || index} 
+              href={getLocalizedHref(link.slug, link.isHome)} 
+              prefetch
+              className={`text-base transition-colors hover:text-gray-600 ${
+                isActive(link.slug, link.isHome) 
+                  ? 'font-semibold text-black' 
+                  : 'text-gray-700'
+              }`}
+            >
+              {link.label}
             </Link>
           ))}
         </nav>

@@ -182,7 +182,8 @@ export interface TextImageBlock {
  */
 export interface Button {
   label: string;
-  url: string;
+  url?: string;
+  file?: StrapiMedia;
   variant: string;
   isExternal?: boolean;
   icon?: string;
@@ -224,7 +225,7 @@ export type CardResponse = StrapiResponse<Card>;
 export type CardCollectionResponse = StrapiCollectionResponse<Card>;
 
 /**
- * header
+ * Header
  */
 export interface Header {
   logo?: StrapiMedia;

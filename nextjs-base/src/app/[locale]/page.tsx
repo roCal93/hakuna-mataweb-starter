@@ -21,7 +21,7 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
   let res: PageCollectionResponse = await client.findMany('pages', {
     filters: { slug: { $eq: 'home' } },
     fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
-    populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
+    populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons.file,seoImage,localizations',
     locale,
     publicationState: isDraft ? 'preview' : 'live',
   })
@@ -31,7 +31,7 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
     res = await client.findMany('pages', {
       filters: { slug: { $eq: 'home' } },
       fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
-      populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
+      populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons.file,seoImage,localizations',
       locale: 'fr',
       publicationState: isDraft ? 'preview' : 'live',
     })

@@ -12,7 +12,16 @@
     },
     "url": {
       "type": "string",
-      "required": true
+      "required": false
+    },
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "files",
+        "images"
+      ]
     },
     "variant": {
       "type": "enumeration",

@@ -24,7 +24,7 @@ const fetchPageData = async (slug: string, locale: string, isDraft: boolean) => 
   const pageRes: PageCollectionResponse = await client.findMany('pages', {
     filters: { slug: { $eq: slug } },
     fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
-    populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
+    populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons.file,seoImage,localizations',
     locale,
     publicationState: isDraft ? 'preview' : 'live',
   })
@@ -42,7 +42,7 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
   const fallbackRes: PageCollectionResponse = await client.findMany('pages', {
     filters: { slug: { $eq: slug } },
     fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
-    populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
+    populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons.file,seoImage,localizations',
     publicationState: isDraft ? 'preview' : 'live',
   })
 
