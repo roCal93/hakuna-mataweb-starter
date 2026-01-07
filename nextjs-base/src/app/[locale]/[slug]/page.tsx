@@ -23,7 +23,7 @@ const fetchPageData = async (slug: string, locale: string, isDraft: boolean) => 
 
   const pageRes: PageCollectionResponse = await client.findMany('pages', {
     filters: { slug: { $eq: slug } },
-    fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
+    fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
     populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
     locale,
     publicationState: isDraft ? 'preview' : 'live',
@@ -41,7 +41,7 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
 
   const fallbackRes: PageCollectionResponse = await client.findMany('pages', {
     filters: { slug: { $eq: slug } },
-    fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
+    fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
     populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
     publicationState: isDraft ? 'preview' : 'live',
   })
@@ -154,23 +154,11 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const page = pageRes.data[0]
   const sections = (page.sections || []).sort((a, b) => (a.order || 0) - (b.order || 0))
 
-  // Helper function to extract text from Strapi blocks
-  const extractTextFromBlocks = (blocks: StrapiBlock[]): string => {
-    return blocks
-      .map(block =>
-        block.children
-          ?.map(child => child.text || '')
-          .join('') || ''
-      )
-      .join('\n')
-  }
-
   return (
     <Layout locale={locale}>
       {!page.hideTitle && (
         <Hero
           title={page.title || ''}
-          subtitle={page.heroContent ? extractTextFromBlocks(page.heroContent) : undefined}
         />
       )}
 

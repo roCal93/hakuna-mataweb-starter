@@ -38,14 +38,6 @@
       "targetField": "title",
       "required": true
     },
-    "heroContent": {
-      "type": "blocks",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "sections": {
       "type": "relation",
       "relation": "oneToMany",

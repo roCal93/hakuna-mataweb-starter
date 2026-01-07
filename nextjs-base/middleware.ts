@@ -17,6 +17,31 @@ export function middleware(req: NextRequest) {
     const first = segments[0]
     const locale = (first && (locales as readonly string[]).includes(first)) ? first : defaultLocale
 
+    // If the first segment is not a supported locale, rewrite the URL
+    // to include the `defaultLocale` prefix so routing matches
+    if (!first || !(locales as readonly string[]).includes(first)) {
+      const url = req.nextUrl.clone()
+      url.pathname = `/${locale}${url.pathname}`
+
+      const rewriteRes = NextResponse.rewrite(url)
+      try {
+        rewriteRes.cookies.set({
+          name: 'locale',
+          value: locale,
+          path: '/',
+          sameSite: 'lax',
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 60 * 60 * 24 * 30,
+        })
+      } catch (err) {
+        const cookieValue = `locale=${encodeURIComponent(locale)}; Path=/; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}${process.env.NODE_ENV === 'production' ? '; Secure; HttpOnly' : ''}`
+        rewriteRes.headers.set('set-cookie', cookieValue)
+      }
+
+      return rewriteRes
+    }
+
     const res = NextResponse.next()
 
     try {
@@ -35,8 +60,6 @@ export function middleware(req: NextRequest) {
       const cookieValue = `locale=${encodeURIComponent(locale)}; Path=/; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}${process.env.NODE_ENV === 'production' ? '; Secure; HttpOnly' : ''}`
       res.headers.set('set-cookie', cookieValue)
     }
-
-
 
     return res
   } catch (err) {

@@ -20,7 +20,7 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
 
   let res: PageCollectionResponse = await client.findMany('pages', {
     filters: { slug: { $eq: 'home' } },
-    fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
+    fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
     populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
     locale,
     publicationState: isDraft ? 'preview' : 'live',
@@ -30,7 +30,7 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
   if (!res.data || res.data.length === 0) {
     res = await client.findMany('pages', {
       filters: { slug: { $eq: 'home' } },
-      fields: ['title', 'hideTitle', 'slug', 'heroContent', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
+      fields: ['title', 'hideTitle', 'slug', 'seoTitle', 'seoDescription', 'noIndex', 'locale'],
       populate: 'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons,seoImage,localizations',
       locale: 'fr',
       publicationState: isDraft ? 'preview' : 'live',
@@ -45,7 +45,6 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
         documentId: 'fallback-home',
         title: 'Bienvenue',
         slug: 'home',
-        heroContent: [{ type: 'paragraph', children: [{ type: 'text', text: 'Site en construction' }] }],
         seoTitle: 'Accueil',
         seoDescription: [{ type: 'paragraph', children: [{ type: 'text', text: 'Page d\'accueil' }] }],
         noIndex: false,
@@ -136,7 +135,6 @@ export default async function HomeLocale({ params, searchParams }: { params: Pro
       {!page.hideTitle && (
         <Hero
           title={getText(page.title)}
-          subtitle={getText(page.heroContent)}
         />
       )}
 

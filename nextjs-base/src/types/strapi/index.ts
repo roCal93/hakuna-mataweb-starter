@@ -243,7 +243,6 @@ export interface Page {
   title?: string;
   hideTitle?: boolean;
   slug: string;
-  heroContent?: StrapiBlock[];
   sections?: (Section & StrapiEntity)[];
   seoTitle?: string;
   seoDescription?: StrapiBlock[];

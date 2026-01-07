@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-06T12:50:35.794Z
+ * Généré le: 2026-01-07T06:38:39.190Z
  */
 
 // ============================================================================
@@ -239,7 +239,6 @@ export interface Page {
   title?: string;
   hideTitle?: boolean;
   slug: string;
-  heroContent?: StrapiBlock[];
   sections?: (Section & StrapiEntity)[];
   seoTitle?: string;
   seoDescription?: StrapiBlock[];
