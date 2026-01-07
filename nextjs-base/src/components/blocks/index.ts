@@ -1,11 +1,11 @@
-export * from './TextBlock'
-export * from './ButtonBlock'
-export * from './ImageBlock'
-export * from './CardsBlock'
-export * from './TextImageBlock'
-export * from './HeroBlockSimpleText'
-export * from './CarouselBlock'
-export * from './CarouselCard'
-export * from './ContactFormBlock'
-export * from './WorkBlock'
-export * from './WorkCard'
+/**
+ * 🧱 Blocks Components Index
+ * 
+ * Ce fichier sera automatiquement rempli par create-hakuna-app
+ * lors de la création du projet selon le preset choisi.
+ * 
+ * Les blocks sont gérés via la block-library centralisée.
+ * Pour ajouter des blocks : npm run blocks:add <BlockName>
+ */
+
+// Les exports seront ajoutés automatiquement ici

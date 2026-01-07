@@ -60,7 +60,7 @@
         "blocks.hero-block-simple-text",
         "blocks.carousel-block",
         "blocks.contact-form-block",
-        "blocks.portfolio-block"
+        "blocks.work-block"
       ],
       "required": true
     },
