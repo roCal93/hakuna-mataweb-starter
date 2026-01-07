@@ -155,19 +155,6 @@ export interface ImageBlock {
 }
 
 /**
- * Component: blocks.portfolio-block
- */
-export interface PortfolioBlock {
-  filterByThemes?: (PortfolioTheme & StrapiEntity)[];
-  showAllThemes?: boolean;
-  showFeaturedOnly?: boolean;
-  limit?: number;
-  columns: string;
-  showFilters?: boolean;
-  layout?: string;
-}
-
-/**
  * Component: blocks.text-block
  */
 export interface TextBlock {
@@ -188,6 +175,20 @@ export interface TextImageBlock {
   verticalAlignment: string;
   textAlignment: string;
   roundedImage?: boolean;
+}
+
+/**
+ * Component: blocks.work-block
+ */
+export interface WorkBlock {
+  filterByCategories?: (WorkCategory & StrapiEntity)[];
+  showAllCategories?: boolean;
+  showFeaturedOnly?: boolean;
+  limit?: number;
+  columns: string;
+  showFilters?: boolean;
+  layout?: string;
+  filterByItemType?: string;
 }
 
 /**
@@ -269,45 +270,6 @@ export type PageResponse = StrapiResponse<Page>;
 export type PageCollectionResponse = StrapiCollectionResponse<Page>;
 
 /**
- * Portfolio Item
- */
-export interface PortfolioItem {
-  title: string;
-  slug: string;
-  description?: StrapiBlock[];
-  shortDescription?: string;
-  image: StrapiMedia;
-  gallery?: StrapiMedia[];
-  themes?: (PortfolioTheme & StrapiEntity)[];
-  link?: string;
-  client?: string;
-  year?: number;
-  technologies?: Record<string, unknown>;
-  featured?: boolean;
-  order?: number;
-  locale?: string;
-  localizations?: (PortfolioItem & StrapiEntity)[];
-}
-export type PortfolioItemResponse = StrapiResponse<PortfolioItem>;
-export type PortfolioItemCollectionResponse = StrapiCollectionResponse<PortfolioItem>;
-
-/**
- * Portfolio Theme
- */
-export interface PortfolioTheme {
-  name: string;
-  slug: string;
-  description?: string;
-  color?: string;
-  icon?: StrapiMedia;
-  portfolio_items?: (PortfolioItem & StrapiEntity)[];
-  locale?: string;
-  localizations?: (PortfolioTheme & StrapiEntity)[];
-}
-export type PortfolioThemeResponse = StrapiResponse<PortfolioTheme>;
-export type PortfolioThemeCollectionResponse = StrapiCollectionResponse<PortfolioTheme>;
-
-/**
  * section
  */
 export interface Section {
@@ -323,3 +285,45 @@ export interface Section {
 }
 export type SectionResponse = StrapiResponse<Section>;
 export type SectionCollectionResponse = StrapiCollectionResponse<Section>;
+
+/**
+ * Work Category
+ */
+export interface WorkCategory {
+  name: string;
+  slug: string;
+  description?: string;
+  color?: string;
+  icon?: StrapiMedia;
+  work_items?: (WorkItem & StrapiEntity)[];
+  locale?: string;
+  localizations?: (WorkCategory & StrapiEntity)[];
+}
+export type WorkCategoryResponse = StrapiResponse<WorkCategory>;
+export type WorkCategoryCollectionResponse = StrapiCollectionResponse<WorkCategory>;
+
+/**
+ * Work Item
+ */
+export interface WorkItem {
+  title: string;
+  slug: string;
+  description?: StrapiBlock[];
+  shortDescription?: string;
+  image: StrapiMedia;
+  gallery?: StrapiMedia[];
+  categories?: (WorkCategory & StrapiEntity)[];
+  link?: string;
+  client?: string;
+  year?: number;
+  technologies?: Record<string, unknown>;
+  customFields?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+  featured?: boolean;
+  order?: number;
+  itemType?: string;
+  locale?: string;
+  localizations?: (WorkItem & StrapiEntity)[];
+}
+export type WorkItemResponse = StrapiResponse<WorkItem>;
+export type WorkItemCollectionResponse = StrapiCollectionResponse<WorkItem>;

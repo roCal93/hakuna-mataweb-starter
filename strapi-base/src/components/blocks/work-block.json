@@ -1,17 +1,17 @@
 {
-  "collectionName": "components_blocks_portfolio_blocks",
+  "collectionName": "components_blocks_work_blocks",
   "info": {
-    "displayName": "Portfolio Block",
-    "description": "Display portfolio items with filtering by theme"
+    "displayName": "Work Block",
+    "description": "Display work items (projects, case studies, services, etc.) with filtering by category"
   },
   "options": {},
   "attributes": {
-    "filterByThemes": {
+    "filterByCategories": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::portfolio-theme.portfolio-theme"
+      "target": "api::work-category.work-category"
     },
-    "showAllThemes": {
+    "showAllCategories": {
       "type": "boolean",
       "default": true
     },
@@ -41,9 +41,24 @@
       "type": "enumeration",
       "enum": [
         "grid",
-        "masonry"
+        "masonry",
+        "list"
       ],
       "default": "grid"
+    },
+    "filterByItemType": {
+      "type": "enumeration",
+      "enum": [
+        "all",
+        "project",
+        "case-study",
+        "service",
+        "product",
+        "article",
+        "achievement",
+        "custom"
+      ],
+      "default": "all"
     }
   },
   "config": {}
