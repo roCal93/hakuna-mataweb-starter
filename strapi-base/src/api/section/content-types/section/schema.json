@@ -24,6 +24,16 @@
       },
       "required": false
     },
+    "identifier": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
     "hideTitle": {
       "type": "boolean",
       "pluginOptions": {
