@@ -124,23 +124,6 @@ export interface CarouselBlock {
 }
 
 /**
- * Component: blocks.case-studies-list-block
- */
-export interface CaseStudiesListBlock {
-  mode: string;
-  selected_case_studies?: (CaseStudy & StrapiEntity)[];
-  filter_domains?: (Domain & StrapiEntity)[];
-  filter_content_types?: (ContentTypeTaxonomy & StrapiEntity)[];
-  filter_tags?: (Tag & StrapiEntity)[];
-  show_featured_only?: boolean;
-  max_items?: number;
-  sort_by?: string;
-  show_filters?: boolean;
-  layout?: string;
-  columns?: string;
-}
-
-/**
  * Component: blocks.contact-form-block
  */
 export interface ContactFormBlock {
@@ -224,27 +207,6 @@ export interface PageLink {
   customLabel?: string;
 }
 
-/**
- * Component: shared.project-constraints
- */
-export interface ProjectConstraints {
-  tone?: string;
-  terminology?: string;
-  style_guide?: string;
-  cat_tool?: string;
-  other_constraints?: string;
-}
-
-/**
- * Component: shared.project-results
- */
-export interface ProjectResults {
-  summary?: string;
-  client_feedback?: string;
-  kpis?: string;
-  testimonial?: string;
-}
-
 // ============================================================================
 // CONTENT TYPES
 // ============================================================================
@@ -261,66 +223,6 @@ export interface Card {
 }
 export type CardResponse = StrapiResponse<Card>;
 export type CardCollectionResponse = StrapiCollectionResponse<Card>;
-
-/**
- * Case Study
- */
-export interface CaseStudy {
-  title: string;
-  identifier: string;
-  client_display?: string;
-  client_is_anonymous?: boolean;
-  summary?: string;
-  context?: string;
-  objective?: string;
-  source_language?: string;
-  target_language?: string;
-  volume?: number;
-  volume_unit?: string;
-  deadline?: string;
-  turnaround_days?: number;
-  constraints?: ProjectConstraints;
-  results?: ProjectResults;
-  domains?: (Domain & StrapiEntity)[];
-  content_types?: (ContentTypeTaxonomy & StrapiEntity)[];
-  tags?: (Tag & StrapiEntity)[];
-  featured?: boolean;
-  order?: number;
-  cover_image?: StrapiMedia;
-  deliverables?: StrapiMedia[];
-  locale?: string;
-  localizations?: (CaseStudy & StrapiEntity)[];
-}
-export type CaseStudyResponse = StrapiResponse<CaseStudy>;
-export type CaseStudyCollectionResponse = StrapiCollectionResponse<CaseStudy>;
-
-/**
- * Content Type
- */
-export interface ContentTypeTaxonomy {
-  name: string;
-  slug: string;
-  description?: string;
-  case_studies?: (CaseStudy & StrapiEntity)[];
-  locale?: string;
-  localizations?: (ContentTypeTaxonomy & StrapiEntity)[];
-}
-export type ContentTypeTaxonomyResponse = StrapiResponse<ContentTypeTaxonomy>;
-export type ContentTypeTaxonomyCollectionResponse = StrapiCollectionResponse<ContentTypeTaxonomy>;
-
-/**
- * Domain
- */
-export interface Domain {
-  name: string;
-  slug: string;
-  description?: string;
-  case_studies?: (CaseStudy & StrapiEntity)[];
-  locale?: string;
-  localizations?: (Domain & StrapiEntity)[];
-}
-export type DomainResponse = StrapiResponse<Domain>;
-export type DomainCollectionResponse = StrapiCollectionResponse<Domain>;
 
 /**
  * Header
@@ -369,16 +271,3 @@ export interface Section {
 }
 export type SectionResponse = StrapiResponse<Section>;
 export type SectionCollectionResponse = StrapiCollectionResponse<Section>;
-
-/**
- * Tag
- */
-export interface Tag {
-  name: string;
-  slug: string;
-  case_studies?: (CaseStudy & StrapiEntity)[];
-  locale?: string;
-  localizations?: (Tag & StrapiEntity)[];
-}
-export type TagResponse = StrapiResponse<Tag>;
-export type TagCollectionResponse = StrapiCollectionResponse<Tag>;
