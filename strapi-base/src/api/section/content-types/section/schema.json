@@ -4,7 +4,8 @@
   "info": {
     "singularName": "section",
     "pluralName": "sections",
-    "displayName": "section"
+    "displayName": "section",
+    "mainField": "identifier"
   },
   "options": {
     "draftAndPublish": true
@@ -58,7 +59,8 @@
         "blocks.text-image-block",
         "blocks.hero-block-simple-text",
         "blocks.carousel-block",
-        "blocks.contact-form-block"
+        "blocks.contact-form-block",
+        "blocks.case-studies-list-block"
       ],
       "required": true
     },

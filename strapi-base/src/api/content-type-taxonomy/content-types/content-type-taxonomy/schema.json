@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "content_type_taxonomies",
+  "info": {
+    "singularName": "content-type-taxonomy",
+    "pluralName": "content-type-taxonomies",
+    "displayName": "Content Type",
+    "description": "Taxonomy for types of content (e.g., website, app, document)"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "case_studies": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::case-study.case-study",
+      "mappedBy": "content_types"
+    }
+  }
+}

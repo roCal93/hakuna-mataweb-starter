@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_case_study_project_results",
+  "info": {
+    "displayName": "Project Results",
+    "description": "Results and KPIs for a case study"
+  },
+  "options": {},
+  "attributes": {
+    "summary": {
+      "type": "text"
+    },
+    "client_feedback": {
+      "type": "text"
+    },
+    "kpis": {
+      "type": "richtext"
+    },
+    "testimonial": {
+      "type": "text"
+    }
+  }
+}
