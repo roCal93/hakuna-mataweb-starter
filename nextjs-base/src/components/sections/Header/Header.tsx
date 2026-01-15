@@ -33,9 +33,9 @@ export const Header = ({
     .filter(link => link.page?.slug) // Only keep links with valid pages
     .map(link => ({
       slug: link.page!.slug,
-      label: link.customLabel || link.section?.title || link.page!.title || '',
+      label: link.customLabel || link.page!.title || '',
       isHome: link.page!.slug === 'home',
-      anchor: link.section?.identifier
+      anchor: undefined // No section anchors for now
     })), [navigation])
 
   const [activeAnchor, setActiveAnchor] = useState<string | null>(null)
