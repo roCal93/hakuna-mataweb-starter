@@ -39,11 +39,11 @@ export const Header = ({
     })), [navigation])
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') console.debug('[Header] navigation prop:', navigation)
+    // No-op: navigation prop is available via props
   }, [navigation])
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') console.debug('[Header] processed links:', links)
+    // No-op: links are derived from navigation prop
   }, [links])
 
   const [activeAnchor, setActiveAnchor] = useState<string | null>(null)
