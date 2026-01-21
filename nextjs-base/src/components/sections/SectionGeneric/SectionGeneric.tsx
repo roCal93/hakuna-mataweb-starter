@@ -59,7 +59,7 @@ export const SectionGeneric = ({
       | undefined
 
     if (BlockComponent) {
-      return <BlockComponent key={index} {...(block as Record<string, unknown>)} />
+      return <BlockComponent key={index} {...(block as unknown as Record<string, unknown>)} />
     }
 
     // Fallback placeholder (starter)
