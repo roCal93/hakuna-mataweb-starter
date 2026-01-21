@@ -31,6 +31,9 @@ async function getHeaderData(locale: string) {
     let respSection = null
     if (sectionResult.status === 'fulfilled') {
       respSection = sectionResult.value
+    } else {
+      // La récupération des sections a échoué (ex: populate non supporté).
+      // On ignore proprement l'erreur et on continue sans données de sections.
     }
 
     const dataPage = respPage?.data || null
