@@ -55,10 +55,11 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
   }, [isOpen])
 
   // Track current hash to determine active state for anchor links
-  const [currentHash, setCurrentHash] = useState<string>('')
+  const [currentHash, setCurrentHash] = useState<string>(() =>
+    typeof window !== 'undefined' ? window.location.hash : ''
+  )
   useEffect(() => {
     if (typeof window === 'undefined') return
-    setCurrentHash(window.location.hash)
     const onHashChange = () => setCurrentHash(window.location.hash)
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
@@ -67,8 +68,13 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
   // Ensure hash state is synced when the pathname changes (e.g., navigating back to home)
   useEffect(() => {
     if (typeof window === 'undefined') return
-    setCurrentHash(window.location.hash)
-  }, [pathname])
+    const newHash = window.location.hash
+    if (newHash !== currentHash) {
+      const t = setTimeout(() => setCurrentHash(newHash), 0)
+      return () => clearTimeout(t)
+    }
+    return
+  }, [pathname, currentHash])
 
   // Observe sections on the page and update the currentHash based on the visible section
   useEffect(() => {
