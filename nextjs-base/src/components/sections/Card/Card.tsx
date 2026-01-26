@@ -48,14 +48,14 @@ export const Card = ({ title, subtitle, content, image }: CardProps) => {
       }
     })
   }
-  
+
   return (
     <div className="border rounded-lg overflow-hidden shadow p-4 bg-white h-full flex flex-col">
       {cleanImage && (
         <div className="relative w-full h-40 mb-4 flex-shrink-0">
-          <Image 
-            src={cleanImage} 
-            alt={title} 
+          <Image
+            src={cleanImage}
+            alt={title}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -64,9 +64,11 @@ export const Card = ({ title, subtitle, content, image }: CardProps) => {
       )}
       <h3 className="text-xl font-semibold whitespace-pre-line">{title}</h3>
       {subtitle && (
-        <h4 className="text-sm text-gray-700 mt-1 whitespace-pre-line">{subtitle}</h4>
+        <h4 className="text-sm text-gray-700 mt-1 whitespace-pre-line">
+          {subtitle}
+        </h4>
       )}
       <div className="mt-2 flex-grow">{renderBlocks(content || [])}</div>
     </div>
   )
-} 
+}
