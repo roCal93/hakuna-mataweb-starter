@@ -88,7 +88,10 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
         // pick the most visible intersecting entry
         let bestEntry: IntersectionObserverEntry | null = null
         for (const entry of entries) {
-          if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
+          if (
+            !bestEntry ||
+            entry.intersectionRatio > bestEntry.intersectionRatio
+          ) {
             bestEntry = entry
           }
         }
@@ -175,7 +178,11 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
                   onClick={(e) => handleMenuNavClick(e, link)}
                 >
                   <Button
-                    variant={isActive(link.slug, link.isHome, link.anchor) ? 'primary' : 'secondary'}
+                    variant={
+                      isActive(link.slug, link.isHome, link.anchor)
+                        ? 'primary'
+                        : 'secondary'
+                    }
                     className={`w-full ${isActive(link.slug, link.isHome, link.anchor) ? 'font-semibold' : ''}`}
                   >
                     {link.label}
