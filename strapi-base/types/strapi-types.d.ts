@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-15T12:42:51.363Z
+ * Généré le: 2026-01-26T13:53:04.430Z
  */
 
 // ============================================================================
@@ -156,7 +156,8 @@ export interface TimelineItem {
  */
 export interface Card {
   title: string;
-  description?: StrapiBlock[];
+  subtitle?: string;
+  content?: StrapiBlock[];
   image?: StrapiMedia;
   locale?: string;
   localizations?: (Card & StrapiEntity)[];

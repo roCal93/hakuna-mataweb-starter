@@ -5,11 +5,12 @@ import { StrapiBlock } from '@/types/strapi'
 
 type CardProps = {
   title: string
-  description: StrapiBlock[]
+  subtitle?: string
+  content?: StrapiBlock[]
   image?: string
 }
 
-export const Card = ({ title, description, image }: CardProps) => {
+export const Card = ({ title, subtitle, content, image }: CardProps) => {
   const cleanImage = cleanImageUrl(image)
 
   // Fonction pour rendre les blocs Strapi
@@ -62,7 +63,10 @@ export const Card = ({ title, description, image }: CardProps) => {
         </div>
       )}
       <h3 className="text-xl font-semibold whitespace-pre-line">{title}</h3>
-      <div className="mt-2 flex-grow">{renderBlocks(description)}</div>
+      {subtitle && (
+        <h4 className="text-sm text-gray-700 mt-1 whitespace-pre-line">{subtitle}</h4>
+      )}
+      <div className="mt-2 flex-grow">{renderBlocks(content || [])}</div>
     </div>
   )
-}
+} 
