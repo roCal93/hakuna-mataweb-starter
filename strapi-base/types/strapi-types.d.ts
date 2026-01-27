@@ -248,7 +248,6 @@ export interface WorkItem {
   metadata?: Record<string, unknown>;
   featured?: boolean;
   order?: number;
-  itemType?: string;
   locale?: string;
   localizations?: (WorkItem & StrapiEntity)[];
 }
