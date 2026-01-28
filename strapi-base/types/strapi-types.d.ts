@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-26T13:53:04.430Z
+ * Généré le: 2026-01-28T06:48:05.431Z
  */
 
 // ============================================================================
@@ -127,6 +127,7 @@ export interface ExternalLink {
 export interface PageLink {
   page?: (Page & StrapiEntity);
   customLabel?: string;
+  section?: (Section & StrapiEntity);
 }
 
 /**
@@ -207,6 +208,7 @@ export interface Section {
   order: number;
   spacingTop?: string;
   spacingBottom?: string;
+  containerWidth?: string;
   locale?: string;
   localizations?: (Section & StrapiEntity)[];
 }

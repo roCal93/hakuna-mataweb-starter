@@ -156,24 +156,27 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
     <div ref={wrapperRef} className="relative min-[850px]:hidden">
       <button
         onClick={toggleMenu}
-        className="relative flex justify-center items-center w-8 h-8"
+        className="relative flex justify-center items-center w-8 h-8 cursor-pointer group hover:bg-gray-100/60 hover:scale-105 transition transform duration-150"
         aria-label="Toggle menu"
       >
         <span
-          className={`absolute left-1 w-6 h-1 bg-gray-800 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'rotate-45' : '-translate-y-2.5'}`}
+          className={`absolute left-1 w-6 h-1 bg-gray-800 group-hover:bg-gray-900 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'rotate-45' : '-translate-y-2.5'}`}
         ></span>
         <span
-          className={`absolute left-1 w-6 h-1 bg-gray-800 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'opacity-0' : ''}`}
+          className={`absolute left-1 w-6 h-1 bg-gray-800 group-hover:bg-gray-900 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'opacity-0' : ''}`}
         ></span>
         <span
-          className={`absolute left-1 w-6 h-1 bg-gray-800 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? '-rotate-45' : 'translate-y-2.5'}`}
+          className={`absolute left-1 w-6 h-1 bg-gray-800 group-hover:bg-gray-900 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? '-rotate-45' : 'translate-y-2.5'}`}
         ></span>
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-40" onClick={toggleMenu}></div>
+          <div
+            className="fixed inset-0 z-40 cursor-pointer"
+            onClick={toggleMenu}
+          ></div>
           <div className="absolute right-0 top-22 w-64 bg-white shadow-lg rounded-lg z-50 border border-gray-200">
             <nav className="flex flex-col p-4 space-y-2">
               {links.map((link, index) => (

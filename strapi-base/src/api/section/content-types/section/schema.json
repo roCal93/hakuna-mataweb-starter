@@ -102,6 +102,21 @@
         "medium",
         "large"
       ]
+    },
+    "containerWidth": {
+      "type": "enumeration",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "default": "medium",
+      "enum": [
+        "small",
+        "medium",
+        "large",
+        "full"
+      ]
     }
   }
 }

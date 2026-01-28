@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -58,6 +59,9 @@ export const Header = ({
 
   const [activeAnchor, setActiveAnchor] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+
+  const shouldReduceMotion = useReducedMotion()
 
   useEffect(() => {
     // Set mounted asynchronously to avoid triggering a synchronous state update within the effect
@@ -162,9 +166,9 @@ export const Header = ({
   return (
     <header
       id="site-header"
-      className="sticky top-0 z-50 backdrop-blur-sm bg-white/95 border-b border-gray-200 flex justify-between items-center p-6"
+      className="sticky top-0 z-50 backdrop-blur-sm bg-white/95 border-b border-gray-200 flex justify-center md:justify-between items-center p-6"
     >
-      <Link href={`/${currentLocale}`} prefetch className="flex-1 md:flex-none">
+      <Link href={`/${currentLocale}`} prefetch className="flex-none md:flex-1">
         {logo ? (
           <Image
             src={logo.url}
@@ -175,7 +179,7 @@ export const Header = ({
             priority
           />
         ) : (
-          <h1 className="text-2xl font-bold cursor-pointer text-center md:text-left">
+          <h1 className="text-2xl font-bold cursor-pointer text-center mx-auto md:text-left md:mx-0">
             {title.split(' ').map((word, i) => (
               <span key={i} className="block md:inline">
                 {word}
@@ -187,21 +191,46 @@ export const Header = ({
       </Link>
       <div className="hidden md:flex items-center space-x-12">
         <nav className="hidden md:flex space-x-6">
-          {links.map((link, index) => (
-            <Link
-              key={link.slug || index}
-              href={getLocalizedHref(link.slug, link.isHome, link.anchor)}
-              prefetch
-              onClick={(e) => handleNavClick(e, link)}
-              className={`text-base transition-colors hover:text-gray-600 ${
-                isActive(link.slug, link.isHome, link.anchor)
-                  ? 'font-semibold text-black'
-                  : 'text-gray-700'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link, index) => {
+            const active = isActive(link.slug, link.isHome, link.anchor)
+            const hovered = hoveredIndex === index
+            return (
+              <Link
+                key={link.slug || index}
+                href={getLocalizedHref(link.slug, link.isHome, link.anchor)}
+                prefetch
+                onClick={(e) => handleNavClick(e, link)}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className={`relative inline-flex items-center h-9 text-base transition-colors hover:text-gray-600 whitespace-nowrap flex-none ${
+                  active ? 'font-semibold text-black' : 'text-gray-700'
+                }`}
+              >
+                <span className="z-10">{link.label}</span>
+                <motion.span
+                  aria-hidden
+                  className="absolute left-0 bottom-0 h-[3px] w-full bg-blue-600 origin-left transform"
+                  initial={
+                    shouldReduceMotion
+                      ? {}
+                      : { scaleX: active || hovered ? 1 : 0 }
+                  }
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : { scaleX: active || hovered ? 1 : 0 }
+                  }
+                  transition={{
+                    type: 'spring',
+                    stiffness: 400,
+                    damping: 30,
+                    duration: 0.18,
+                  }}
+                  style={{ transformOrigin: 'left' }}
+                />
+              </Link>
+            )
+          })}
         </nav>
         <div className="hidden md:block">
           <LanguageSwitcher />
