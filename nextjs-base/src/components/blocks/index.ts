@@ -8,14 +8,15 @@
  * Pour ajouter des blocks : npm run blocks:add <BlockName>
  */
 
-// Placeholder exports for starter template - will be replaced by actual blocks
+// Placeholder exports pour le starter : remplace ou complète avec tes blocks réels
 export const TextBlock = () => null
 export const ButtonBlock = () => null
 export const ImageBlock = () => null
 export const CardsBlock = () => null
 export const TextImageBlock = () => null
 export const HeroBlockSimpleText = () => null
-export const CarouselBlock = () => null
+export { default as CarouselBlock } from './CarouselBlock'
+export { default as CarouselWorkCard } from './CarouselWorkCard'
 export const ContactFormBlock = () => null
 export const WorkBlock = () => null
 export const TimelineBlock = () => null
