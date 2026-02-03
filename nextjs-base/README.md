@@ -3,18 +3,21 @@
 Template de base pour tous les projets frontend.
 
 ## Stack
+
 - Next.js 16 (App Router)
 - TypeScript
 - Tailwind CSS 4
 - React 19
 
 ## Déploiement
+
 - Prévu pour Vercel
 - Variables d'environnement via `.env.local`
 
 ## Utilisation
 
 ### 1. Initialisation
+
 ```bash
 # Copier ce template
 cp -r templates/nextjs-base projects/clients/mon-projet-frontend
@@ -27,7 +30,9 @@ cp .env.example .env.local
 ```
 
 ### 2. Configuration Strapi
+
 Ajoutez dans `.env.local` :
+
 ```env
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=votre-token-api
@@ -38,21 +43,27 @@ STRAPI_API_TOKEN=votre-token-api
 Le template inclut la configuration ISR (Incremental Static Regeneration) pour régénérer automatiquement les pages quand le contenu Strapi change.
 
 #### ⚡ Mode de base (Recommandé - Fonctionne immédiatement)
+
 **Pas besoin de webhook !** L'ISR fonctionne avec une revalidation temporelle :
+
 - Les pages se régénèrent automatiquement toutes les heures
 - Configuration minimale, fonctionne out-of-the-box
 - Suffisant pour la plupart des sites web
 
 #### 🚀 Mode avancé (Revalidation instantanée - Optionnel)
+
 Pour des mises à jour instantanées quand le contenu change dans Strapi :
 
 #### Variables d'environnement
+
 Ajoutez dans `.env.local` (optionnel - seulement si vous voulez la revalidation instantanée) :
+
 ```env
 REVALIDATE_SECRET=Brnb60gSKW3YOOWwZmWXX425mxv5fRpT1QKYCgk6e88=
 ```
 
 #### Configuration dans Strapi
+
 1. Allez dans **Settings > Webhooks** dans Strapi
 2. Créez un nouveau webhook :
    - **Name**: `Next.js Revalidation`
@@ -61,6 +72,7 @@ REVALIDATE_SECRET=Brnb60gSKW3YOOWwZmWXX425mxv5fRpT1QKYCgk6e88=
    - **Events**: Cochez `Entry publish`, `Entry update`, `Entry delete` pour le Content-Type `page`
 
 #### Comment ça marche
+
 - **Revalidation temporelle** (toujours active) : Les pages se régénèrent automatiquement toutes les heures
 - **Revalidation à la demande** (optionnel) : Quand Strapi détecte un changement, il appelle le webhook qui invalide le cache immédiatement
 - **Cache intelligent** : Utilise `unstable_cache` avec des tags pour une invalidation précise
@@ -68,6 +80,7 @@ REVALIDATE_SECRET=Brnb60gSKW3YOOWwZmWXX425mxv5fRpT1QKYCgk6e88=
 ### 4. Types TypeScript Strapi
 
 #### Synchronisation des types
+
 Les types sont générés côté Strapi et synchronisés automatiquement.
 
 ```bash
@@ -76,32 +89,36 @@ npm run sync:types
 ```
 
 #### Utilisation dans le code
+
 Les types sont maintenant disponibles avec autocomplétion complète :
 
 ```tsx
-import { createStrapiClient } from '@/lib/strapi-client';
-import type { Page, PageEntity, PageCollectionResponse } from '@/types/strapi';
+import { createStrapiClient } from '@/lib/strapi-client'
+import type { Page, PageEntity, PageCollectionResponse } from '@/types/strapi'
 
 // Créer le client
 const strapi = createStrapiClient({
   apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL!,
   apiToken: process.env.STRAPI_API_TOKEN,
-});
+})
 
 // Récupérer des données avec types complets
 export async function getPages(): Promise<PageEntity[]> {
-  const response: PageCollectionResponse = await strapi.findMany<Page>('pages', {
-    sort: ['createdAt:desc'],
-    pagination: { pageSize: 100 },
-  });
-  
-  return response.data;
+  const response: PageCollectionResponse = await strapi.findMany<Page>(
+    'pages',
+    {
+      sort: ['createdAt:desc'],
+      pagination: { pageSize: 100 },
+    }
+  )
+
+  return response.data
 }
 
 // Utilisation dans un Server Component
 export default async function PagesPage() {
-  const pages = await getPages();
-  
+  const pages = await getPages()
+
   return (
     <div>
       {pages.map((page) => (
@@ -112,16 +129,18 @@ export default async function PagesPage() {
         </article>
       ))}
     </div>
-  );
+  )
 }
 ```
 
 #### Quand synchroniser ?
+
 - Après chaque modification de Content-Type dans Strapi
 - Après un `git pull` qui modifie les schemas Strapi
 - Au début d'un nouveau sprint de développement
 
 #### Structure des fichiers
+
 ```
 nextjs-base/
 ├── src/
@@ -137,6 +156,7 @@ nextjs-base/
 ```
 
 ### 4. Développement
+
 ```bash
 # Lancer le serveur de développement
 npm run dev
@@ -145,6 +165,7 @@ npm run dev
 ```
 
 ### 5. Build et déploiement
+
 ```bash
 # Build de production
 npm run build
@@ -161,6 +182,7 @@ vercel
 Le template inclut un client Strapi complet avec support TypeScript.
 
 ### Méthodes disponibles
+
 ```typescript
 // Récupérer une collection
 strapi.findMany<T>(contentType, options)
@@ -179,6 +201,7 @@ strapi.delete<T>(contentType, id)
 ```
 
 ### Options de requête
+
 ```typescript
 {
   populate: '*',                    // ou ['author', 'image']
@@ -192,9 +215,11 @@ strapi.delete<T>(contentType, id)
 ```
 
 ### Exemples complets
+
 Consultez [src/lib/strapi-usage-example.tsx](src/lib/strapi-usage-example.tsx) pour des exemples détaillés.
 
 ## Scripts disponibles
+
 ```bash
 npm run dev          # Développement
 npm run build        # Build de production
@@ -209,16 +234,19 @@ npm run lighthouse   # Test de performance Lighthouse
 Le template inclut un outil de test Lighthouse pour mesurer les performances, l'accessibilité, le SEO et les bonnes pratiques.
 
 ### Lancer un test Lighthouse
+
 ```bash
 # Les serveurs Next.js et Strapi doivent être démarrés
 npm run lighthouse
 ```
 
 Les rapports sont générés dans `.lighthouse/` :
+
 - `report.report.html` - Rapport visuel détaillé
 - `report.report.json` - Données brutes JSON
 
 ### Scores recommandés
+
 - **Performance** : > 90
 - **Accessibilité** : > 95
 - **Best Practices** : > 95
@@ -229,6 +257,7 @@ Consultez `.lighthouse/README.md` pour plus de détails.
 ## Configuration TypeScript
 
 Le projet est configuré avec des options strictes pour une sécurité maximale :
+
 - Types Strapi auto-générés
 - Autocomplétion complète
 - Détection des erreurs à la compilation
@@ -236,35 +265,39 @@ Le projet est configuré avec des options strictes pour une sécurité maximale 
 ## Bonnes pratiques
 
 ### Types Strapi
+
 - ✅ Utilisez toujours les types générés
 - ✅ Synchronisez régulièrement avec `npm run sync:types`
 - ❌ Ne modifiez jamais `src/types/strapi/index.ts`
 - ✅ Utilisez le client Strapi typé pour les requêtes
 
 ### Structure des données
+
 ```typescript
 // ❌ Mauvais : accès direct sans types
-const title = data.attributes.title; // Pas d'autocomplétion
+const title = data.attributes.title // Pas d'autocomplétion
 
 // ✅ Bon : avec types
-const response: PageResponse = await strapi.findOne<Page>('pages', id);
-const title = response.data?.attributes.title; // Autocomplétion !
+const response: PageResponse = await strapi.findOne<Page>('pages', id)
+const title = response.data?.attributes.title // Autocomplétion !
 ```
 
 ### Gestion des erreurs
+
 ```typescript
 try {
-  const pages = await strapi.findMany<Page>('pages');
-  return pages.data;
+  const pages = await strapi.findMany<Page>('pages')
+  return pages.data
 } catch (error) {
-  console.error('Erreur Strapi:', error);
-  return [];
+  console.error('Erreur Strapi:', error)
+  return []
 }
 ```
 
 ## Troubleshooting
 
 ### Types non trouvés
+
 ```bash
 # Vérifier que les types existent
 ls -la src/types/strapi/
@@ -274,6 +307,7 @@ npm run sync:types
 ```
 
 ### Types obsolètes
+
 ```bash
 # Depuis le projet Strapi
 cd ../strapi-base
@@ -285,7 +319,9 @@ npm run sync:types
 ```
 
 ### Erreurs TypeScript
+
 Si TypeScript ne trouve pas les types :
+
 1. Vérifiez que `src/types/strapi/index.ts` existe
 2. Relancez le serveur de développement
 3. Rechargez VS Code (Cmd+Shift+P > "Reload Window")
@@ -293,6 +329,7 @@ Si TypeScript ne trouve pas les types :
 ## Variables d'environnement
 
 ### Développement (`.env.local`)
+
 ```env
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
@@ -302,10 +339,11 @@ STRAPI_API_TOKEN=votre-token-de-dev
 > **Note:** `NEXT_PUBLIC_SITE_URL` est utilisé pour générer les URLs absolues du site (par ex. `sitemap.xml` et `robots.txt`) et sert aussi de `metadataBase` pour la génération des metadata. Définissez-le en local et en production (ex: Vercel) avec votre domaine, ex: `NEXT_PUBLIC_SITE_URL=https://mon-site.com`.
 
 ### Production (Vercel)
+
 Configurez les mêmes variables dans l'interface Vercel :
+
 - `NEXT_PUBLIC_STRAPI_URL` : URL de production Strapi
 - `STRAPI_API_TOKEN` : Token API de production
 
 ⚠️ **Ne jamais modifier ce template directement**  
 Pour un nouveau projet : copiez le dossier complet dans `/projects/clients/`
-
