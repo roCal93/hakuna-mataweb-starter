@@ -11,6 +11,7 @@
     "format": "prettier --write .",
     "sync:types": "node scripts/sync-types-from-strapi.js",
     "test": "vitest",
+    "lighthouse": "bash .lighthouse/run-lighthouse.sh",
     "prepare": "husky"
   },
   "dependencies": {

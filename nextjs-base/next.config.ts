@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   images: {
@@ -10,14 +10,20 @@ const nextConfig: NextConfig = {
         pathname: '/uploads/**',
       },
       // Pour la production, ajoutez votre domaine Strapi ici :
+      // IMPORTANT: Décommenter et configurer pour la production pour activer l'optimisation d'images
       // {
       //   protocol: 'https',
       //   hostname: 'votre-strapi.com',
       //   pathname: '/uploads/**',
       // },
     ],
-    unoptimized: process.env.NODE_ENV === 'development' || (process.env.NEXT_PUBLIC_STRAPI_URL || '').includes('localhost'), // Toujours non-optimisé pour localhost
+    unoptimized:
+      process.env.NODE_ENV === 'development' ||
+      (process.env.NEXT_PUBLIC_STRAPI_URL || '').includes('localhost'), // Toujours non-optimisé pour localhost
     formats: ['image/webp', 'image/avif'], // Formats modernes pour réduire la taille
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [75, 85], // Qualités d'images autorisées
   },
 
   // Optimisations de performance
@@ -26,7 +32,8 @@ const nextConfig: NextConfig = {
 
   // Autoriser l'admin Strapi à intégrer le site en iframe pour la Preview
   async headers() {
-    const strapiOrigin = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
+    const strapiOrigin =
+      process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
     const isProd = process.env.NODE_ENV === 'production'
 
     // Note: we rely on CSP `frame-ancestors` for iframe control (X-Frame-Options
@@ -74,6 +81,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

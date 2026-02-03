@@ -201,7 +201,30 @@ npm run build        # Build de production
 npm run start        # Démarrer en production
 npm run lint         # Linter
 npm run sync:types   # Synchroniser les types Strapi
+npm run lighthouse   # Test de performance Lighthouse
 ```
+
+## Test de performance
+
+Le template inclut un outil de test Lighthouse pour mesurer les performances, l'accessibilité, le SEO et les bonnes pratiques.
+
+### Lancer un test Lighthouse
+```bash
+# Les serveurs Next.js et Strapi doivent être démarrés
+npm run lighthouse
+```
+
+Les rapports sont générés dans `.lighthouse/` :
+- `report.report.html` - Rapport visuel détaillé
+- `report.report.json` - Données brutes JSON
+
+### Scores recommandés
+- **Performance** : > 90
+- **Accessibilité** : > 95
+- **Best Practices** : > 95
+- **SEO** : > 90
+
+Consultez `.lighthouse/README.md` pour plus de détails.
 
 ## Configuration TypeScript
 

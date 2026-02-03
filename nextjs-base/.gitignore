@@ -41,3 +41,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# lighthouse reports
+.lighthouse/*.html
+.lighthouse/*.json
+!.lighthouse/README.md
+!.lighthouse/*.sh
