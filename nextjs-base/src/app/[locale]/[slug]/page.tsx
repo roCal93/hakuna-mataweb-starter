@@ -42,7 +42,7 @@ const fetchPageData = async (
       'locale',
     ],
     populate: {
-      sections: { populate: 'blocks' },
+      sections: { populate: { blocks: { populate: '*' } } },
       seoImage: true,
       localizations: true,
     },
@@ -75,7 +75,7 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
       'locale',
     ],
     populate: {
-      sections: { populate: 'blocks' },
+      sections: { populate: { blocks: { populate: '*' } } },
       seoImage: true,
       localizations: true,
     },
