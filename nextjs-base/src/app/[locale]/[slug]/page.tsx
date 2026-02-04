@@ -42,19 +42,9 @@ const fetchPageData = async (
       'locale',
     ],
     populate: {
-      sections: {
-        populate: {
-          blocks: {
-            populate: '*',
-          },
-        },
-      },
-      seoImage: {
-        populate: '*',
-      },
-      localizations: {
-        populate: '*',
-      },
+      sections: { populate: { blocks: { populate: '*' } } },
+      seoImage: { populate: '*' },
+      localizations: '*',
     },
     locale,
     publicationState: isDraft ? 'preview' : 'live',
@@ -85,19 +75,9 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
       'locale',
     ],
     populate: {
-      sections: {
-        populate: {
-          blocks: {
-            populate: '*',
-          },
-        },
-      },
-      seoImage: {
-        populate: '*',
-      },
-      localizations: {
-        populate: '*',
-      },
+      sections: { populate: { blocks: { populate: '*' } } },
+      seoImage: { populate: '*' },
+      localizations: '*',
     },
     publicationState: isDraft ? 'preview' : 'live',
   })
