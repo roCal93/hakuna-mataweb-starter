@@ -1,15 +1,12 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const shouldReduce = useReducedMotion()
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
+  // isMounted will be true on client-side render, false on server
+  const [isMounted] = useState(true)
 
   // Don't animate on initial server render for better LCP
   const initialProps = isMounted ? { opacity: 0, y: 10 } : { opacity: 1, y: 0 }
