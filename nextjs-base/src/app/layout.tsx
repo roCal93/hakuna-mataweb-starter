@@ -4,6 +4,9 @@ import "./globals.css";
 import { cookies, headers } from 'next/headers'
 import { defaultLocale } from '@/lib/locales'
 
+// Mark layout dynamic since we read cookies/headers for locale detection
+export const dynamic = 'force-dynamic'
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
