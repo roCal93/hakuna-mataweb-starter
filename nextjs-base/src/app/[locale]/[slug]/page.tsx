@@ -41,8 +41,21 @@ const fetchPageData = async (
       'noIndex',
       'locale',
     ],
-    populate:
-      'sections.blocks.cards.image,sections.blocks.image,sections.blocks.imageDesktop,sections.blocks.buttons.file,sections.blocks.items.images.image,sections.blocks.items.images.link,seoImage,localizations',
+    populate: {
+      sections: {
+        populate: {
+          blocks: {
+            populate: '*',
+          },
+        },
+      },
+      seoImage: {
+        populate: '*',
+      },
+      localizations: {
+        populate: '*',
+      },
+    },
     locale,
     publicationState: isDraft ? 'preview' : 'live',
   })
@@ -71,8 +84,21 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
       'noIndex',
       'locale',
     ],
-    populate:
-      'sections.blocks.cards.image,sections.blocks.image,sections.blocks.buttons.file,sections.blocks.items.images.image,sections.blocks.items.images.link,seoImage,localizations',
+    populate: {
+      sections: {
+        populate: {
+          blocks: {
+            populate: '*',
+          },
+        },
+      },
+      seoImage: {
+        populate: '*',
+      },
+      localizations: {
+        populate: '*',
+      },
+    },
     publicationState: isDraft ? 'preview' : 'live',
   })
 

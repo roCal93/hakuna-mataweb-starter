@@ -2,6 +2,12 @@
 
 Toutes les modifications notables du starter seront documentées ici.
 
+## [2.0.1] - 2026-02-04
+
+### Corrigé
+- Populate profond pour les sections de pages (fix: les nouvelles sections n'apparaissaient pas)
+- Réduction du revalidate de 3600s à 60s pour des mises à jour plus rapides
+
 ## [2.0.0] - 2026-02-03
 
 ### Ajouté
