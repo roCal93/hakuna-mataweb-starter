@@ -111,7 +111,7 @@ API_TOKEN_SALT=votre-salt
 ```
 
 ### Vérifications manuelles (Cloudinary)
-Reportez-vous à `strapi-base/docs/cloudinary-setup.md` pour la checklist de vérification (upload test, CSP, image provider).
+Reportez-vous à `HAKUNA_MATAWEB_AGENCE/docs/cloudinary-setup.md` pour la checklist de vérification (upload test, CSP, image provider).
 
 ## Bonnes pratiques
 
