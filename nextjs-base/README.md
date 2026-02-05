@@ -334,7 +334,11 @@ Si TypeScript ne trouve pas les types :
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=votre-token-de-dev
+# (Optionnel) Désactiver le mode sombre globalement dans le starter :
+# NEXT_PUBLIC_DISABLE_DARK=true
 ```
+
+Vous pouvez désactiver le mode sombre globalement en définissant `NEXT_PUBLIC_DISABLE_DARK=true` dans votre `.env.local`. Quand cette variable est vraie, le starter ajoute un attribut `data-disable-dark` sur la balise `<html>` empêchant l'application des règles CSS liées au mode sombre (définies via `@media (prefers-color-scheme: dark)`).
 
 > **Note:** `NEXT_PUBLIC_SITE_URL` est utilisé pour générer les URLs absolues du site (par ex. `sitemap.xml` et `robots.txt`) et sert aussi de `metadataBase` pour la génération des metadata. Définissez-le en local et en production (ex: Vercel) avec votre domaine, ex: `NEXT_PUBLIC_SITE_URL=https://mon-site.com`.
 
