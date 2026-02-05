@@ -101,7 +101,17 @@ JWT_SECRET=votre-secret
 
 # API Tokens (optionnel)
 API_TOKEN_SALT=votre-salt
+
+# Cloudinary - required for uploads in production (preferred)
+# CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+# or (less recommended):
+# CLOUDINARY_NAME=your_cloud
+# CLOUDINARY_KEY=your_key
+# CLOUDINARY_SECRET=your_secret
 ```
+
+### Vérifications manuelles (Cloudinary)
+Reportez-vous à `strapi-base/docs/cloudinary-setup.md` pour la checklist de vérification (upload test, CSP, image provider).
 
 ## Bonnes pratiques
 

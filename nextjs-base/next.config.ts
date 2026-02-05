@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         port: '1337',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
       // Pour la production, ajoutez votre domaine Strapi ici :
       // IMPORTANT: Décommenter et configurer pour la production pour activer l'optimisation d'images
       // {
@@ -17,6 +22,55 @@ const nextConfig: NextConfig = {
       //   pathname: '/uploads/**',
       // },
     ],
+    // Ensure CSP allows cloudinary images
+    async headers() {
+      const strapiOrigin =
+        process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
+      const isProd = process.env.NODE_ENV === 'production'
+
+      const csp = [
+        "default-src 'self';",
+        `img-src 'self' data: https: ${strapiOrigin} https://res.cloudinary.com;`,
+        `script-src 'self' 'unsafe-inline'${isProd ? '' : " 'unsafe-eval'"};`,
+        "style-src 'self' 'unsafe-inline';",
+        `connect-src 'self' ${strapiOrigin} https://*.railway.app https://*.vercel.app;`,
+        "font-src 'self' data:;",
+        `frame-ancestors 'self' ${strapiOrigin};`,
+      ].join(' ')
+
+      const securityHeaders: { key: string; value: string }[] = [
+        {
+          key: 'X-Content-Type-Options',
+          value: 'nosniff',
+        },
+        {
+          key: 'Referrer-Policy',
+          value: 'strict-origin-when-cross-origin',
+        },
+        {
+          key: 'Permissions-Policy',
+          value: 'geolocation=(), microphone=(), camera=()',
+        },
+        {
+          key: 'Content-Security-Policy',
+          value: csp.replace(/\s{2,}/g, ' ').trim(),
+        },
+      ]
+
+      if (isProd) {
+        securityHeaders.push({
+          key: 'Strict-Transport-Security',
+          value: 'max-age=63072000; includeSubDomains; preload',
+        })
+      }
+
+      return [
+        {
+          source: '/(.*)',
+          headers: securityHeaders,
+        },
+      ]
+    }
     unoptimized:
       process.env.NODE_ENV === 'development' ||
       (process.env.NEXT_PUBLIC_STRAPI_URL || '').includes('localhost'), // Toujours non-optimisé pour localhost

@@ -20,6 +20,13 @@ export default [
           'connect-src': env('NODE_ENV') === 'production'
             ? ["'self'", 'https:']
             : ["'self'", 'https:', 'ws://localhost:5173', 'http://localhost:5173'],
+          // Allow images/media from Cloudinary in production
+          'img-src': env('NODE_ENV') === 'production'
+            ? ["'self'", 'data:', 'https://res.cloudinary.com', 'https://market-assets.strapi.io']
+            : ["'self'", 'data:', 'blob:', 'http://localhost:5173', 'https://res.cloudinary.com', 'https://market-assets.strapi.io'],
+          'media-src': env('NODE_ENV') === 'production'
+            ? ["'self'", 'data:', 'https://res.cloudinary.com']
+            : ["'self'", 'data:', 'blob:', 'https://res.cloudinary.com'],
         },
       },
     }),
