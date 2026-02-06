@@ -305,7 +305,7 @@ export interface SharedTimelineImage extends Struct.ComponentSchema {
     icon: 'image';
   };
   attributes: {
-    image: Schema.Attribute.Media & Schema.Attribute.Required;
+    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     link: Schema.Attribute.Component<'shared.external-link', false>;
   };
 }

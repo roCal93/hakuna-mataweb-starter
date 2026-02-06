@@ -35,9 +35,21 @@ export default [
     name: 'strapi::cors',
     config: {
       enabled: true,
-      origin: process.env.NODE_ENV === 'production' 
-        ? (process.env.ALLOWED_ORIGINS?.split(',') || ['https://yourdomain.com'])
-        : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:4173'],
+      // Allow a set of known origins in production, plus Vercel previews via regex.
+      origin: (ctx: any) => {
+        const requestOrigin = ctx.request.header.origin;
+        if (!requestOrigin) return '*';
+
+        const allowed = process.env.ALLOWED_ORIGINS?.split(',') || [
+          'https://yourdomain.com',
+        ];
+
+        const vercelPreview = /^https:\/\/.*\.vercel\.app$/;
+
+        return allowed.includes(requestOrigin) || vercelPreview.test(requestOrigin)
+          ? requestOrigin
+          : false;
+      },
       headers: '*',
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
       credentials: true,

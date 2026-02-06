@@ -36,7 +36,24 @@ TRANSFER_TOKEN_SALT=votre-secret
 JWT_SECRET=votre-secret
 
 # CORS - Domaines autorisés (séparés par des virgules)
-ALLOWED_ORIGINS=https://votre-frontend.com,https://www.votre-frontend.com
+# Exemple pour un site Amanda Traduction :
+ALLOWED_ORIGINS=https://amandatraduction.com,https://www.amandatraduction.com,https://traduction-amanda-production.up.railway.app
+
+# Notes:
+# - Les previews Vercel sont autorisées automatiquement par regex (si configuré dans middleware),
+#   vous n'avez pas besoin d'énumérer toutes les URLs de preview.
+# - Évitez d'utiliser "*" quand `credentials: true` est activé pour des raisons de sécurité.
+# - Après modification, redémarrez / redeployez votre service Strapi pour appliquer la nouvelle valeur.
+
+# Test CORS depuis votre machine (vérifier la présence de Access-Control-Allow-Origin)
+# Remplacez <ORIGIN> par l'origin à tester (ex: https://www.amandatraduction.com)
+# Exemple :
+# curl -i -H "Origin: https://www.amandatraduction.com" -G "https://traduction-amanda-production.up.railway.app/api/work-items" --data-urlencode "pagination[limit]=1"
+# La réponse doit contenir "Access-Control-Allow-Origin: https://www.amandatraduction.com"
+
+# Script helper
+# Vous pouvez aussi utiliser le script fourni pour tester :
+# ./scripts/check-cors.sh "https://www.amandatraduction.com" "https://traduction-amanda-production.up.railway.app/api/work-items?pagination[limit]=1"
 ```
 
 Astuce (si erreur SWC lors du build) :
