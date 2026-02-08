@@ -77,7 +77,66 @@ REVALIDATE_SECRET=Brnb60gSKW3YOOWwZmWXX425mxv5fRpT1QKYCgk6e88=
 - **Revalidation à la demande** (optionnel) : Quand Strapi détecte un changement, il appelle le webhook qui invalide le cache immédiatement
 - **Cache intelligent** : Utilise `unstable_cache` avec des tags pour une invalidation précise
 
-### 4. Types TypeScript Strapi
+### 4. Configuration du Preview Strapi (Recommandé)
+
+Permettez aux éditeurs de prévisualiser les brouillons avant publication.
+
+#### Variables d'environnement
+
+Ajoutez dans `.env.local` :
+
+```env
+# Token Strapi avec accès aux brouillons (Full Access)
+STRAPI_PREVIEW_TOKEN=votre-token-preview-256-chars
+
+# Secret pour sécuriser l'endpoint de preview
+PREVIEW_SECRET=votre-secret-aleatoire-44-chars
+
+# Activer le Draft Mode (recommandé)
+USE_DRAFT_MODE=true
+```
+
+**Générer les tokens** :
+
+```bash
+# Preview Secret (32 bytes minimum)
+openssl rand -base64 32
+
+# Token Preview : créez-le dans Strapi Admin
+# Settings → API Tokens → Create (type: Full Access)
+```
+
+#### Configuration Strapi Preview Button
+
+Dans Strapi Admin, configurez l'URL de preview :
+
+1. **Content-Type Builder** → Sélectionnez votre Content-Type (ex: `Page`)
+2. **Configure the view** → **Settings**
+3. **Enable preview** : `true`
+4. **Preview URL** :
+   ```
+   {NEXT_PUBLIC_SITE_URL}/api/preview?url={url}&secret={PREVIEW_SECRET}&status={status}
+   ```
+
+**⚠️ Important** : Strapi v5 utilise `status=draft/published` (breaking change depuis v4).
+
+Le starter inclut une **conversion automatique** de `publicationState` vers `status`.
+
+#### Comment ça marche
+
+- Clic sur "Preview" dans Strapi → Active Draft Mode → Affiche le brouillon
+- Clic sur "Published" → Désactive Draft Mode → Affiche la version publiée
+- Draft Mode = cookie persistant, reste actif jusqu'à désactivation
+
+#### Désactiver manuellement
+
+Visitez `/api/draft/disable?returnUrl=/` pour sortir du mode preview.
+
+📖 Documentation complète : [../../docs/strapi-preview-setup.md](../../docs/strapi-preview-setup.md)
+
+---
+
+### 5. Types TypeScript Strapi
 
 #### Synchronisation des types
 
@@ -155,7 +214,7 @@ nextjs-base/
     └── sync-types-from-strapi.js  # Script de synchronisation
 ```
 
-### 4. Développement
+### 6. Développement
 
 ```bash
 # Lancer le serveur de développement
@@ -164,7 +223,7 @@ npm run dev
 # Le site est accessible sur http://localhost:3000
 ```
 
-### 5. Build et déploiement
+### 7. Build et déploiement
 
 ```bash
 # Build de production
@@ -334,6 +393,9 @@ Si TypeScript ne trouve pas les types :
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
 STRAPI_API_TOKEN=votre-token-de-dev
+STRAPI_PREVIEW_TOKEN=votre-token-preview-full-access
+PREVIEW_SECRET=votre-secret-aleatoire
+USE_DRAFT_MODE=true
 # (Optionnel) Désactiver le mode sombre globalement dans le starter :
 # NEXT_PUBLIC_DISABLE_DARK=true
 ```

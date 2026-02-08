@@ -40,8 +40,9 @@ export default [
             // Allow embedding/iframes from the frontend
             'frame-src': ["'self'", ...clientUrls],
             // Allow inline scripts (needed for Strapi admin live dev client) in dev only
+            // In production we allow Vercel live scripts (used for preview & feedback)
             'script-src': env('NODE_ENV') === 'production'
-              ? ["'self'"]
+              ? ["'self'", 'https://vercel.live']
               : ["'self'", "'unsafe-inline'", 'http://localhost:5173'],
             // Allow Vite websocket & admin to connect to local dev servers
             'connect-src': env('NODE_ENV') === 'production'

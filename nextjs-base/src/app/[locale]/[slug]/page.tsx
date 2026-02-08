@@ -41,11 +41,8 @@ const fetchPageData = async (
       'noIndex',
       'locale',
     ],
-    populate: {
-      sections: { populate: { blocks: { populate: '*' } } },
-      seoImage: true,
-      localizations: true,
-    },
+    populate:
+      'sections.blocks.cards.image,sections.blocks.image,sections.blocks.imageDesktop,sections.blocks.buttons.file,sections.blocks.items.images.image,sections.blocks.items.images.link,sections.blocks.examples,sections.blocks.workItems.image,sections.blocks.workItems.categories,sections.blocks.privacyPolicy,seoImage,localizations',
     locale,
     publicationState: isDraft ? 'preview' : 'live',
   })
@@ -74,11 +71,8 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
       'noIndex',
       'locale',
     ],
-    populate: {
-      sections: { populate: { blocks: { populate: '*' } } },
-      seoImage: true,
-      localizations: true,
-    },
+    populate:
+      'sections.blocks.cards.image,sections.blocks.image,sections.blocks.imageDesktop,sections.blocks.buttons.file,sections.blocks.items.images.image,sections.blocks.items.images.link,sections.blocks.examples,sections.blocks.workItems.image,sections.blocks.workItems.categories,sections.blocks.privacyPolicy,seoImage,localizations',
     publicationState: isDraft ? 'preview' : 'live',
   })
 
@@ -121,10 +115,15 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>
 }) {
   const { slug, locale } = await params
+  const { isEnabled } = await draftMode()
+
+  const apiToken = isEnabled
+    ? process.env.STRAPI_PREVIEW_TOKEN || process.env.STRAPI_API_TOKEN
+    : process.env.STRAPI_API_TOKEN
 
   const client = createStrapiClient({
     apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337',
-    apiToken: process.env.STRAPI_API_TOKEN,
+    apiToken,
   })
   const res: PageCollectionResponse = await client.findMany('pages', {
     filters: { slug: { $eq: slug } },
@@ -145,6 +144,7 @@ export async function generateMetadata({
       },
     },
     locale,
+    publicationState: isEnabled ? 'preview' : 'live',
   })
 
   const page = res?.data?.[0]
@@ -208,13 +208,13 @@ export default async function Page({
 
   const sparams = searchParams ? await Promise.resolve(searchParams) : undefined
   const { isEnabled } = await draftMode()
-  const isDraft = sparams?.draft === 'true' || false
+  // Draft Mode is the source of truth, searchParams is fallback
+  const isDraft = isEnabled || sparams?.draft === 'true'
 
   // Bypass cache when Draft Mode is enabled (preview mode) regardless of draft/published status
-  const pageRes =
-    isEnabled || isDraft
-      ? await fetchPageData(slug, locale, isDraft)
-      : await getPageData(slug, locale)
+  const pageRes = isDraft
+    ? await fetchPageData(slug, locale, isDraft)
+    : await getPageData(slug, locale)
 
   if (!pageRes.data.length) {
     // Prefer redirecting to the default locale when the page doesn't exist in the requested locale.

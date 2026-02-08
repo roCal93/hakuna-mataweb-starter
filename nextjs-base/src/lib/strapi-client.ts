@@ -25,6 +25,7 @@ export interface StrapiQueryOptions {
   fields?: string[];
   locale?: string;
   publicationState?: 'live' | 'preview';
+  status?: 'draft' | 'published';
   next?: { revalidate?: number };
 }
 
@@ -165,9 +166,13 @@ export class StrapiClient {
       params.set('locale', options.locale);
     }
 
-    // Publication state
-    if (options.publicationState) {
-      params.set('publicationState', options.publicationState);
+    // Publication state (Strapi v5: use 'status' parameter instead of 'publicationState')
+    if (options.status) {
+      params.set('status', options.status);
+    } else if (options.publicationState) {
+      // Auto-convert publicationState to status for Strapi v5 compatibility
+      const status = options.publicationState === 'preview' ? 'draft' : 'published';
+      params.set('status', status);
     }
 
     url.search = params.toString();

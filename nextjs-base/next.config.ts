@@ -82,6 +82,8 @@ const nextConfig: NextConfig = {
       "style-src 'self' 'unsafe-inline';",
       `connect-src 'self' ${strapiOrigin} https://*.railway.app https://*.vercel.app;`,
       "font-src 'self' data:;",
+      // Allow embedding/vercel live iframe
+      `frame-src 'self' https://vercel.live ${getAllowedOrigins().join(' ')};`,
       `frame-ancestors 'self' ${getAllowedOrigins().join(' ')};`,
     ].join(' ')
 

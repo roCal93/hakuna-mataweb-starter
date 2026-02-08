@@ -33,11 +33,8 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
       'noIndex',
       'locale',
     ],
-    populate: {
-      sections: { populate: { blocks: { populate: '*' } } },
-      seoImage: true,
-      localizations: true,
-    },
+    populate:
+      'sections.blocks.cards.image,sections.blocks.image,sections.blocks.imageDesktop,sections.blocks.buttons.file,sections.blocks.items.images.image,sections.blocks.items.images.link,sections.blocks.examples,sections.blocks.workItems.image,sections.blocks.workItems.categories,sections.blocks.privacyPolicy,seoImage,localizations',
     locale,
     publicationState: isDraft ? 'preview' : 'live',
   })
@@ -55,11 +52,8 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
         'noIndex',
         'locale',
       ],
-      populate: {
-        sections: { populate: { blocks: { populate: '*' } } },
-        seoImage: true,
-        localizations: true,
-      },
+      populate:
+        'sections.blocks.cards.image,sections.blocks.image,sections.blocks.imageDesktop,sections.blocks.buttons.file,sections.blocks.items.images.image,sections.blocks.items.images.link,sections.blocks.examples,sections.blocks.workItems.image,sections.blocks.workItems.categories,sections.blocks.privacyPolicy,seoImage,localizations',
       locale: 'fr',
       publicationState: isDraft ? 'preview' : 'live',
     })
