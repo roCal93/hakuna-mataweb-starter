@@ -11,11 +11,17 @@ export const dynamic = 'force-dynamic'
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+  display: 'swap',
+  preload: false,
+  adjustFontFallback: true,
 })
 
 export const metadata: Metadata = {
@@ -27,6 +33,7 @@ export const metadata: Metadata = {
 }
 
 import DevPerfProtector from '@/components/dev/DevPerfProtector'
+import { SchemaOrg } from '@/components/seo/SchemaOrg'
 
 export default async function RootLayout({
   children,
@@ -69,6 +76,8 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Structured data for SEO */}
+        <SchemaOrg />
         {/* Dev-only protective wrapper to avoid dev tooling throwing on performance.measure */}
         <DevPerfProtector />
         {children}

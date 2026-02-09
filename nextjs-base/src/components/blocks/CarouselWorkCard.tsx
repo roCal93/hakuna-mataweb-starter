@@ -7,9 +7,13 @@ import { cleanImageUrl } from '@/lib/strapi'
 
 type CarouselWorkCardProps = {
   item: WorkItem & StrapiEntity
+  isPriority?: boolean
 }
 
-const CarouselWorkCard = ({ item }: CarouselWorkCardProps) => {
+const CarouselWorkCard = ({
+  item,
+  isPriority = false,
+}: CarouselWorkCardProps) => {
   const imageUrl = cleanImageUrl(item.image?.url)
 
   return (
@@ -21,6 +25,9 @@ const CarouselWorkCard = ({ item }: CarouselWorkCardProps) => {
             alt={item.image?.alternativeText || item.title}
             width={400}
             height={200}
+            priority={isPriority}
+            fetchPriority={isPriority ? 'high' : 'low'}
+            loading={isPriority ? undefined : 'lazy'}
             className="max-w-full max-h-full object-contain select-none pointer-events-none"
             sizes="400px"
             draggable={false}
