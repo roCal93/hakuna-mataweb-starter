@@ -55,6 +55,8 @@ export default [
             'media-src': env('NODE_ENV') === 'production'
               ? ["'self'", 'data:', 'https://res.cloudinary.com']
               : ["'self'", 'data:', 'blob:', 'https://res.cloudinary.com'],
+            // Objects (PDFs embeds): allow Cloudinary
+            'object-src': ["'self'", 'https://res.cloudinary.com'],
           },
         },
       };

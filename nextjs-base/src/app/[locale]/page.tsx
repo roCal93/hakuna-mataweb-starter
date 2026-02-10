@@ -1,6 +1,7 @@
 import { createStrapiClient } from '@/lib/strapi-client'
 import { getPageSEO } from '@/lib/seo'
 import { cleanImageUrl } from '@/lib/strapi'
+import { getHreflangAlternates } from '@/lib/hreflang'
 import { Layout } from '@/components/layout'
 import { Hero } from '@/components/sections/Hero'
 import { SectionGeneric } from '@/components/sections/SectionGeneric'
@@ -159,8 +160,20 @@ export async function generateMetadata({
   // SEO per-locale: fetch home metadata for the active locale
   const seo = await getPageSEO('home', false, locale)
 
+  // Build hreflang alternate links for multilingual SEO
+  const localizations = page?.localizations || []
+  const allLocales = [
+    { locale: page?.locale || locale, slug: 'home' },
+    ...localizations.map((loc) => ({
+      locale: loc.locale || 'fr',
+      slug: 'home',
+    })),
+  ]
+  const alternates = getHreflangAlternates('home', allLocales)
+
   return {
     ...seo,
+    alternates,
     other: links,
   }
 }

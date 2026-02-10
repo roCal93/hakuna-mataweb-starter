@@ -25,10 +25,16 @@ export interface HeaderProps {
   logo?: StrapiMedia
   title?: string
   navigation?: PageLink[]
+  hideLanguageSwitcher?: boolean
 }
 
 export const Header = memo(
-  ({ logo, title = 'My Website', navigation = [] }: HeaderProps) => {
+  ({
+    logo,
+    title = 'My Website',
+    navigation = [],
+    hideLanguageSwitcher = false,
+  }: HeaderProps) => {
     const rawPathname = usePathname() ?? '/'
     const pathname = useDeferredValue(rawPathname)
     const segments = pathname.split('/')
@@ -44,13 +50,21 @@ export const Header = memo(
       () =>
         navigation
           .filter((link) => link.page?.slug) // Only keep links with valid pages
-          .map((link) => ({
-            slug: link.page!.slug,
-            label:
-              link.customLabel || link.section?.title || link.page!.title || '',
-            isHome: link.page!.slug === 'home',
-            anchor: link.section?.identifier,
-          })),
+          .map(
+            (
+              link: PageLink & {
+                section?: { title?: string; identifier?: string }
+              }
+            ) => {
+              const sec = link.section
+              return {
+                slug: link.page!.slug,
+                label: link.customLabel || sec?.title || link.page!.title || '',
+                isHome: link.page!.slug === 'home',
+                anchor: sec?.identifier,
+              }
+            }
+          ),
       [navigation]
     )
 
@@ -165,12 +179,15 @@ export const Header = memo(
     return (
       <header
         id="site-header"
-        className="sticky top-0 z-50 backdrop-blur-sm bg-white/95 border-b border-gray-200 flex justify-center md:justify-between items-center p-6"
+        role="banner"
+        aria-label="Site header"
+        className="sticky top-0 z-50 backdrop-blur-sm bg-white/10 border-b border-gray-200 flex justify-center min-[850px]:justify-between items-center p-6"
       >
         <Link
           href={`/${currentLocale}`}
           prefetch
-          className="flex-none md:flex-1"
+          aria-label={`${title} - Return to homepage`}
+          className="flex-none min-[850px]:flex-1"
         >
           {logo ? (
             <Image
@@ -178,13 +195,13 @@ export const Header = memo(
               alt={logo.alternativeText || title}
               width={logo.width || 180}
               height={logo.height || 60}
-              className="cursor-pointer mx-auto md:mx-0"
+              className="cursor-pointer mx-auto min-[850px]:mx-0"
               priority
             />
           ) : (
-            <h1 className="text-2xl font-bold cursor-pointer text-center mx-auto md:text-left md:mx-0">
+            <h1 className="text-5xl font-caveat cursor-pointer hover:text-gray-600 text-center mx-auto min-[850px]:text-left min-[850px]:mx-0">
               {title.split(' ').map((word, i) => (
-                <span key={i} className="block md:inline">
+                <span key={i} className="block min-[850px]:inline">
                   {word}
                   {i < title.split(' ').length - 1 && ' '}
                 </span>
@@ -192,8 +209,12 @@ export const Header = memo(
             </h1>
           )}
         </Link>
-        <div className="hidden md:flex items-center space-x-12">
-          <nav className="hidden md:flex space-x-6">
+        <div className="hidden min-[850px]:flex items-center space-x-12">
+          <nav
+            role="navigation"
+            aria-label="Main navigation"
+            className="hidden min-[850px]:flex min-[850px]:flex-nowrap min-[850px]:space-x-6"
+          >
             {links.map((link, index) => {
               const active = isActive(link.slug, link.isHome, link.anchor)
               const hovered = hoveredIndex === index
@@ -205,14 +226,19 @@ export const Header = memo(
                   onClick={(e) => handleNavClick(e, link)}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className={`relative inline-flex items-center h-9 text-base transition-colors hover:text-gray-600 whitespace-nowrap flex-none ${
+                  aria-current={active ? 'page' : undefined}
+                  aria-label={
+                    link.anchor ? `${link.label} section` : link.label
+                  }
+                  // Relative container for absolute animated underline
+                  className={`relative inline-flex items-center h-9 text-lg transition-colors hover:text-gray-600 whitespace-nowrap flex-none ${
                     active ? 'font-semibold text-black' : 'text-gray-700'
                   }`}
                 >
                   <span className="z-10">{link.label}</span>
                   <motion.span
                     aria-hidden
-                    className="absolute left-0 bottom-0 h-[3px] w-full bg-blue-600 origin-left transform"
+                    className="absolute left-0 bottom-0 h-[3px] w-full bg-[#F88379] origin-left transform"
                     initial={
                       shouldReduceMotion
                         ? {}
@@ -235,11 +261,13 @@ export const Header = memo(
               )
             })}
           </nav>
-          <div className="hidden md:block">
-            <LanguageSwitcher />
-          </div>
+          {!hideLanguageSwitcher && (
+            <div className="hidden min-[850px]:block">
+              <LanguageSwitcher />
+            </div>
+          )}
         </div>
-        <div className="md:hidden absolute right-6">
+        <div className="min-[850px]:hidden absolute right-6">
           <BurgerMenu links={links} currentLocale={currentLocale} />
         </div>
       </header>
@@ -247,4 +275,5 @@ export const Header = memo(
   }
 )
 
+// Ensure ESLint/react DevTools can identify this component
 Header.displayName = 'Header'

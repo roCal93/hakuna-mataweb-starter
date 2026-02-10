@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Header } from '@/components/sections/Header'
 import { Footer } from '@/components/sections/Footer'
+import { SkipToContent } from '@/components/ui/SkipToContent'
 import { fetchAPI } from '@/lib/strapi'
 import type {
   HeaderResponse,
@@ -17,7 +18,7 @@ type LayoutProps = {
 
 async function getHeaderData(locale: string) {
   // Validate locale to avoid API calls with invalid locales
-  if (locale !== 'fr' && locale !== 'en') {
+  if (locale !== 'fr' && locale !== 'en' && locale !== 'it') {
     return null
   }
 
@@ -55,7 +56,7 @@ async function getHeaderData(locale: string) {
     if (!dataPage && !dataSection) return null
 
     // Merge navigation arrays using page id as key
-    type NavItem = PageLink & { id?: number }
+    type NavItem = PageLink & { id?: number; section?: Section & StrapiEntity }
     const navMap = new Map<string, NavItem>()
 
     // Only process page navigation since PageLink only has page references now
@@ -208,12 +209,21 @@ export const Layout = async ({ children, locale }: LayoutProps) => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <SkipToContent />
       <Header
         logo={headerData?.logo}
         title={headerData?.title}
         navigation={headerData?.navigation}
+        hideLanguageSwitcher={headerData?.hideLanguageSwitcher}
       />
-      <main className="flex-1">{children}</main>
+      <main
+        id="main-content"
+        role="main"
+        aria-label="Main content"
+        className="flex-1"
+      >
+        {children}
+      </main>
       <Footer siteName={headerData?.title} />
     </div>
   )

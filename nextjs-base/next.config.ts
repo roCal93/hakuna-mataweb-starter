@@ -41,13 +41,11 @@ const nextConfig: NextConfig = {
         hostname: 'res.cloudinary.com',
         pathname: '/**',
       },
-      // Pour la production, ajoutez votre domaine Strapi ici :
-      // IMPORTANT: Décommenter et configurer pour la production pour activer l'optimisation d'images
-      // {
-      //   protocol: 'https',
-      //   hostname: 'votre-strapi.com',
-      //   pathname: '/uploads/**',
-      // },
+      {
+        protocol: 'https',
+        hostname: 'traduction-amanda-production.up.railway.app',
+        pathname: '/uploads/**',
+      },
     ],
     unoptimized: process.env.NODE_ENV === 'development', // Activer l'optimisation en production
     formats: ['image/webp', 'image/avif'], // Formats modernes pour réduire la taille
@@ -75,15 +73,20 @@ const nextConfig: NextConfig = {
 
     // Note: we rely on CSP `frame-ancestors` for iframe control (X-Frame-Options
     // cannot express multiple allowed origins and would break Strapi preview embeds).
+    //
+    // ⚠️ Security note: 'unsafe-inline' is kept for compatibility with Next.js inline scripts
+    // For production, consider implementing nonces or moving to Next.js App Router with CSP support
     const csp = [
       "default-src 'self';",
       `img-src 'self' data: https: ${strapiOrigin};`,
-      `script-src 'self' 'unsafe-inline'${isProd ? '' : " 'unsafe-eval'"};`,
+      `script-src 'self' 'unsafe-inline' https://vercel.live${isProd ? '' : " 'unsafe-eval'"};`,
       "style-src 'self' 'unsafe-inline';",
       `connect-src 'self' ${strapiOrigin} https://*.railway.app https://*.vercel.app;`,
       "font-src 'self' data:;",
-      // Allow embedding/vercel live iframe
-      `frame-src 'self' https://vercel.live ${getAllowedOrigins().join(' ')};`,
+      "object-src 'none';",
+      "base-uri 'self';",
+      "form-action 'self';",
+      'upgrade-insecure-requests;',
       `frame-ancestors 'self' ${getAllowedOrigins().join(' ')};`,
     ].join(' ')
 

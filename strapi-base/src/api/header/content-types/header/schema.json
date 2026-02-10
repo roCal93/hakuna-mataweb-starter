@@ -47,6 +47,15 @@
       },
       "component": "shared.page-link",
       "repeatable": true
+    },
+    "hideLanguageSwitcher": {
+      "type": "boolean",
+      "default": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

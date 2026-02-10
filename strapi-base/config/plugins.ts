@@ -9,11 +9,7 @@ export default ({ env }) => {
 			enabled: true,
 			config: {
 				defaultLocale: 'fr',
-				locales: ['fr', 'en'],
-			},
-		},
-
-		upload: {
+			locales: ['fr', 'en', 'it'],
 			config: {
 				provider: 'cloudinary',
 				// If CLOUDINARY_URL is present Cloudinary SDK will use it; otherwise providerOptions can be read from individual vars

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
+import { motion, Transition } from 'framer-motion'
 import { LanguageSwitcher } from '@/components/locale/LanguageSwitcher'
 import { scrollToAnchor } from '@/lib/anchor'
 
@@ -21,6 +22,7 @@ interface BurgerMenuProps {
 
 export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
   const pathname = usePathname() ?? '/'
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -55,9 +57,9 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
   }, [isOpen])
 
   // Track current hash to determine active state for anchor links
-  const [currentHash, setCurrentHash] = useState<string>(() =>
-    typeof window !== 'undefined' ? window.location.hash : ''
-  )
+  const getInitialHash = () =>
+    typeof window === 'undefined' ? '' : window.location.hash
+  const [currentHash, setCurrentHash] = useState<string>(getInitialHash)
   useEffect(() => {
     if (typeof window === 'undefined') return
     const onHashChange = () => setCurrentHash(window.location.hash)
@@ -68,13 +70,12 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
   // Ensure hash state is synced when the pathname changes (e.g., navigating back to home)
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const newHash = window.location.hash
-    if (newHash !== currentHash) {
-      const t = setTimeout(() => setCurrentHash(newHash), 0)
-      return () => clearTimeout(t)
-    }
-    return
-  }, [pathname, currentHash])
+    const timeout = window.setTimeout(
+      () => setCurrentHash(window.location.hash),
+      0
+    )
+    return () => clearTimeout(timeout)
+  }, [pathname])
 
   // Observe sections on the page and update the currentHash based on the visible section
   useEffect(() => {
@@ -152,18 +153,35 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
     }
   }
 
+  const motionTransition: Transition = langOpen
+    ? {
+        type: 'spring',
+        stiffness: 160,
+        damping: 30,
+        opacity: { duration: 0.28, delay: 0.08 },
+      }
+    : {
+        type: 'spring',
+        stiffness: 200,
+        damping: 32,
+        opacity: { duration: 0.18 },
+      }
+
   return (
     <div ref={wrapperRef} className="relative min-[850px]:hidden">
       <button
         onClick={toggleMenu}
         className="relative flex justify-center items-center w-8 h-8 cursor-pointer group hover:bg-gray-100/60 hover:scale-105 transition transform duration-150"
-        aria-label="Toggle menu"
+        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={isOpen}
+        aria-controls="mobile-menu"
+        aria-haspopup="true"
       >
         <span
-          className={`absolute left-1 w-6 h-1 bg-gray-800 group-hover:bg-gray-900 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'rotate-45' : '-translate-y-2.5'}`}
+          className={`absolute left-1 w-6 h-1 bg-gray-800 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'rotate-45' : '-translate-y-2.5'}`}
         ></span>
         <span
-          className={`absolute left-1 w-6 h-1 bg-gray-800 group-hover:bg-gray-900 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'opacity-0' : ''}`}
+          className={`absolute left-1 w-6 h-1 bg-gray-800 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? 'opacity-0' : ''}`}
         ></span>
         <span
           className={`absolute left-1 w-6 h-1 bg-gray-800 group-hover:bg-gray-900 rounded-full origin-center transition-all duration-200 ease-in-out ${isOpen ? '-rotate-45' : 'translate-y-2.5'}`}
@@ -176,31 +194,60 @@ export const BurgerMenu = ({ links = [], currentLocale }: BurgerMenuProps) => {
           <div
             className="fixed inset-0 z-40 cursor-pointer"
             onClick={toggleMenu}
+            aria-hidden="true"
           ></div>
-          <div className="absolute right-0 top-22 w-64 bg-white shadow-lg rounded-lg z-50 border border-gray-200">
-            <nav className="flex flex-col p-4 space-y-2">
-              {links.map((link, index) => (
-                <Link
-                  key={link.slug || index}
-                  href={getLocalizedHref(link.slug, link.isHome, link.anchor)}
-                  prefetch
-                  onClick={(e) => handleMenuNavClick(e, link)}
-                >
-                  <Button
-                    variant={
-                      isActive(link.slug, link.isHome, link.anchor)
-                        ? 'primary'
-                        : 'secondary'
+          <div
+            id="mobile-menu"
+            className="absolute right-0 top-22 w-64 bg-[rgba(255,241,241,0.9)] shadow-lg rounded-lg z-50 border border-gray-200"
+            role="dialog"
+            aria-label="Mobile navigation menu"
+          >
+            <nav
+              className="flex flex-col p-4 space-y-2"
+              role="navigation"
+              aria-label="Mobile navigation"
+            >
+              {links.map((link, index) => {
+                const active = isActive(link.slug, link.isHome, link.anchor)
+                return (
+                  <Link
+                    key={link.slug || index}
+                    href={getLocalizedHref(link.slug, link.isHome, link.anchor)}
+                    prefetch
+                    onClick={(e) => handleMenuNavClick(e, link)}
+                    aria-current={active ? 'page' : undefined}
+                    aria-label={
+                      link.anchor ? `${link.label} section` : link.label
                     }
-                    className={`w-full ${isActive(link.slug, link.isHome, link.anchor) ? 'font-semibold' : ''}`}
                   >
-                    {link.label}
-                  </Button>
-                </Link>
-              ))}
-              <div className="pt-2 border-t border-gray-200 flex justify-center">
-                <LanguageSwitcher />
-              </div>
+                    <Button
+                      variant={active ? 'primary' : 'secondary'}
+                      className={`w-full ${active ? '!bg-[#F88379] hover:!bg-[#F88379] !text-white' : '!bg-[rgba(250,220,163,0.6)] hover:!bg-[rgba(250,220,163,0.6)] !text-gray-800'} cursor-pointer !shadow-md hover:!shadow-lg ${active ? 'font-semibold' : ''}`}
+                    >
+                      {link.label}
+                    </Button>
+                  </Link>
+                )
+              })}
+              <motion.div
+                layout
+                initial={false}
+                animate={{ opacity: langOpen ? 1 : 0.9 }}
+                transition={motionTransition}
+                className={`pt-2 border-t border-gray-200 flex ${langOpen ? 'justify-start' : 'justify-center'}`}
+              >
+                <motion.div
+                  initial={false}
+                  animate={{ x: langOpen ? -8 : 0 }}
+                  transition={motionTransition}
+                  className="inline-flex"
+                >
+                  <LanguageSwitcher
+                    side="right"
+                    onOpenChange={(v) => setLangOpen(v)}
+                  />
+                </motion.div>
+              </motion.div>
             </nav>
           </div>
         </>
