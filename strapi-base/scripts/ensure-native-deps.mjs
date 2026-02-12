@@ -8,6 +8,30 @@ if (process.env.SKIP_ENSURE_NATIVE_DEPS === '1') {
     process.exit(0);
 }
 
+// First, ensure better-sqlite3 is compiled (required for all platforms)
+console.log('[ensure-native-deps] Checking better-sqlite3 compilation...');
+try {
+    const betterSqlitePath = require.resolve('better-sqlite3');
+    const betterSqliteDir = betterSqlitePath.split('better-sqlite3')[0] + 'better-sqlite3';
+
+    // Check if the binding exists
+    const bindingExists = existsSync(`${betterSqliteDir}/build/Release/better_sqlite3.node`) ||
+        existsSync(`${betterSqliteDir}/build/better_sqlite3.node`);
+
+    if (!bindingExists) {
+        console.log('[ensure-native-deps] Compiling better-sqlite3...');
+        execSync('npm rebuild better-sqlite3', {
+            stdio: 'inherit',
+            cwd: process.cwd(),
+        });
+        console.log('[ensure-native-deps] ✅ better-sqlite3 compiled successfully');
+    } else {
+        console.log('[ensure-native-deps] ✅ better-sqlite3 already compiled');
+    }
+} catch (error) {
+    console.error('[ensure-native-deps] Warning: Could not ensure better-sqlite3 compilation:', error.message);
+}
+
 // This is primarily to protect Linux CI/container builds where the install step
 // can be cached (e.g. Railpack) and optional native deps were previously omitted.
 if (process.platform !== 'linux') {

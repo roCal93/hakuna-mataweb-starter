@@ -9,6 +9,7 @@
     "deploy": "strapi deploy",
     "dev": "bash scripts/backup-strapi-db.sh && strapi develop",
     "develop": "bash scripts/backup-strapi-db.sh && strapi develop",
+    "postinstall": "node scripts/ensure-native-deps.mjs",
     "prebuild": "node scripts/ensure-native-deps.mjs",
     "start": "strapi start",
     "strapi": "strapi",
