@@ -14,7 +14,15 @@ type LocalesResponse = {
   defaultLocale: string
 }
 
-export function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  side?: 'left' | 'right'
+  onOpenChange?: (open: boolean) => void
+}
+
+export function LanguageSwitcher({
+  side = 'left',
+  onOpenChange,
+}: LanguageSwitcherProps = {}) {
   const pathname = usePathname() ?? '/'
   const segments = pathname.split('/')
 
@@ -66,13 +74,22 @@ export function LanguageSwitcher() {
   const [open, setOpen] = React.useState(false)
   const containerRef = React.useRef<HTMLDivElement | null>(null)
 
+  const handleOpenChange = React.useCallback(
+    (newOpen: boolean) => {
+      setOpen(newOpen)
+      onOpenChange?.(newOpen)
+    },
+    [onOpenChange]
+  )
+
   React.useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (!containerRef.current) return
-      if (!containerRef.current.contains(e.target as Node)) setOpen(false)
+      if (!containerRef.current.contains(e.target as Node))
+        handleOpenChange(false)
     }
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key === 'Escape') handleOpenChange(false)
     }
     document.addEventListener('click', onClick)
     document.addEventListener('keydown', onKey)
@@ -80,7 +97,7 @@ export function LanguageSwitcher() {
       document.removeEventListener('click', onClick)
       document.removeEventListener('keydown', onKey)
     }
-  }, [])
+  }, [handleOpenChange])
 
   const otherLocales = supportedLocales.filter((l) => l !== currentLocale)
 
@@ -100,14 +117,18 @@ export function LanguageSwitcher() {
     <div
       className="relative"
       ref={containerRef}
-      onMouseEnter={() => canHover && otherLocales.length > 0 && setOpen(true)}
-      onMouseLeave={() => canHover && setOpen(false)}
+      onMouseEnter={() =>
+        canHover && otherLocales.length > 0 && handleOpenChange(true)
+      }
+      onMouseLeave={() => canHover && handleOpenChange(false)}
     >
       <button
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
-        onClick={() => otherLocales.length > 0 && setOpen((v) => !v)}
+        onClick={() =>
+          otherLocales.length > 0 && handleOpenChange(!open)
+        }
         className="w-9 h-9 rounded-full border flex items-center justify-center text-sm font-semibold hover:bg-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200"
       >
         {currentLocale.toUpperCase()}
@@ -129,7 +150,9 @@ export function LanguageSwitcher() {
               damping: 32,
               duration: 0.2,
             }}
-            className="absolute left-1/2 top-full mt-2 w-9 bg-white border rounded shadow z-50 overflow-hidden transform -translate-x-1/2"
+            className={`absolute ${
+              side === 'right' ? 'right-1/2 translate-x-1/2' : 'left-1/2 -translate-x-1/2'
+            } top-full mt-2 w-9 bg-white border rounded shadow z-50 overflow-hidden`}
           >
             {otherLocales.map((loc, idx) => {
               const href =
@@ -145,7 +168,7 @@ export function LanguageSwitcher() {
                   <Link
                     role="menuitem"
                     href={href}
-                    onClick={() => setOpen(false)}
+                    onClick={() => handleOpenChange(false)}
                     className="block py-2 hover:bg-gray-50 text-sm text-center w-full"
                   >
                     {loc.toUpperCase()}
