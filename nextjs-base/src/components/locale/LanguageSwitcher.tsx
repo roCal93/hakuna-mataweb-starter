@@ -126,9 +126,7 @@ export function LanguageSwitcher({
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
-        onClick={() =>
-          otherLocales.length > 0 && handleOpenChange(!open)
-        }
+        onClick={() => otherLocales.length > 0 && handleOpenChange(!open)}
         className="w-9 h-9 rounded-full border flex items-center justify-center text-sm font-semibold hover:bg-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200"
       >
         {currentLocale.toUpperCase()}
@@ -151,7 +149,9 @@ export function LanguageSwitcher({
               duration: 0.2,
             }}
             className={`absolute ${
-              side === 'right' ? 'right-1/2 translate-x-1/2' : 'left-1/2 -translate-x-1/2'
+              side === 'right'
+                ? 'right-1/2 translate-x-1/2'
+                : 'left-1/2 -translate-x-1/2'
             } top-full mt-2 w-9 bg-white border rounded shadow z-50 overflow-hidden`}
           >
             {otherLocales.map((loc, idx) => {
