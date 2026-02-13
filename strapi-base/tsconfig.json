@@ -17,7 +17,8 @@
   "include": [
     "config/**/*",
     "src/**/*",
-    "database/**/*"
+    "database/**/*",
+    "types/**/*"
   ],
   "exclude": [
     "node_modules/**",
