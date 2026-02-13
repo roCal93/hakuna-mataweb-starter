@@ -15,9 +15,14 @@ export default function RootNotFound() {
     const firstSegment = segments[0]
 
     // If first segment exists but is not a valid locale, redirect to default locale
-    if (firstSegment && !(locales as readonly string[]).includes(firstSegment)) {
+    if (
+      firstSegment &&
+      !(locales as readonly string[]).includes(firstSegment)
+    ) {
       const remainingPath = segments.slice(1).join('/')
-      const newPath = remainingPath ? `/${defaultLocale}/${remainingPath}` : `/${defaultLocale}`
+      const newPath = remainingPath
+        ? `/${defaultLocale}/${remainingPath}`
+        : `/${defaultLocale}`
       router.replace(newPath)
     }
   }, [pathname, router])
