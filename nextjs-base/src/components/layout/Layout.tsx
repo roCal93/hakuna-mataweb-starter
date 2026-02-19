@@ -211,6 +211,7 @@ export const Layout = async ({ children, locale }: LayoutProps) => {
     <div className="flex flex-col min-h-screen">
       <SkipToContent />
       <Header
+        variant={headerData?.variant}
         logo={headerData?.logo}
         title={headerData?.title}
         navigation={headerData?.navigation}
