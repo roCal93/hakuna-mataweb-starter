@@ -252,7 +252,9 @@ export const Header = memo(
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   aria-current={active ? 'page' : undefined}
-                  aria-label={link.anchor ? `${link.label} section` : link.label}
+                  aria-label={
+                    link.anchor ? `${link.label} section` : link.label
+                  }
                   className={`relative inline-flex items-center h-9 text-lg transition-colors hover:text-gray-600 w-fit ${
                     active ? 'font-semibold text-black' : 'text-gray-700'
                   }`}
@@ -283,7 +285,6 @@ export const Header = memo(
               )
             })}
           </nav>
-
         </header>
       )
     }
