@@ -218,11 +218,20 @@ async function getHeaderData(locale: string) {
 export const Layout = async ({ children, locale }: LayoutProps) => {
   const headerData = await getHeaderData(locale)
 
+  // Ensure `variant` matches HeaderProps ('default' | 'stacked') —
+  // Strapi types may be looser, so narrow at runtime for type safety.
+  const headerVariant: 'default' | 'stacked' | undefined =
+    headerData?.variant === 'stacked'
+      ? 'stacked'
+      : headerData?.variant === 'default'
+      ? 'default'
+      : undefined
+
   return (
     <div className="relative flex flex-col min-h-screen">
       <SkipToContent />
       <Header
-        variant={headerData?.variant}
+        variant={headerVariant}
         logo={headerData?.logo}
         title={headerData?.title}
         navigation={headerData?.navigation}
