@@ -4,7 +4,7 @@
  * ⚠️  FICHIER AUTO-GÉNÉRÉ - NE PAS MODIFIER
  * 
  * Pour régénérer: npm run generate:types
- * Généré le: 2026-01-29T12:39:14.001Z
+ * Généré le: 2026-02-20T06:22:00.559Z
  */
 
 // ============================================================================
@@ -92,6 +92,14 @@ export interface StrapiErrorResponse {
 // ============================================================================
 
 /**
+ * Component: blocks.carousel-block
+ */
+export interface CarouselBlock {
+  workItems?: (WorkItem & StrapiEntity)[];
+  scrollSpeed?: number;
+}
+
+/**
  * Component: shared.button
  */
 export interface Button {
@@ -156,7 +164,7 @@ export interface TimelineItem {
  * card
  */
 export interface Card {
-  title: string;
+  title?: string;
   subtitle?: string;
   content?: StrapiBlock[];
   image?: StrapiMedia;
@@ -170,10 +178,11 @@ export type CardCollectionResponse = StrapiCollectionResponse<Card>;
  * Header
  */
 export interface Header {
-  variant?: 'default' | 'stacked'
+  variant?: string;
   logo?: StrapiMedia;
   title?: string;
   navigation?: PageLink[];
+  hideLanguageSwitcher?: boolean;
   locale?: string;
   localizations?: (Header & StrapiEntity)[];
 }
@@ -197,6 +206,20 @@ export interface Page {
 }
 export type PageResponse = StrapiResponse<Page>;
 export type PageCollectionResponse = StrapiCollectionResponse<Page>;
+
+/**
+ * Privacy Policy
+ */
+export interface PrivacyPolicy {
+  title: string;
+  content: string;
+  closeButtonText?: string;
+  lastUpdated?: string;
+  locale?: string;
+  localizations?: (PrivacyPolicy & StrapiEntity)[];
+}
+export type PrivacyPolicyResponse = StrapiResponse<PrivacyPolicy>;
+export type PrivacyPolicyCollectionResponse = StrapiCollectionResponse<PrivacyPolicy>;
 
 /**
  * section
