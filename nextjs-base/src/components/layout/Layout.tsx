@@ -224,8 +224,8 @@ export const Layout = async ({ children, locale }: LayoutProps) => {
     headerData?.variant === 'stacked'
       ? 'stacked'
       : headerData?.variant === 'default'
-      ? 'default'
-      : undefined
+        ? 'default'
+        : undefined
 
   return (
     <div className="relative flex flex-col min-h-screen">
