@@ -160,7 +160,7 @@ export interface TimelineItem {
  * card
  */
 export interface Card {
-  title: string
+  title?: string
   subtitle?: string
   content?: StrapiBlock[]
   image?: StrapiMedia

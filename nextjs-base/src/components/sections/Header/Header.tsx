@@ -197,7 +197,7 @@ export const Header = memo(
           id="site-header"
           role="banner"
           aria-label="Site header"
-          className="sticky top-0 z-50 backdrop-blur-sm bg-white/10 border-b border-gray-200 p-6"
+          className="absolute top-8 left-0 right-0 z-50 p-6"
         >
           <div className="flex items-start justify-between gap-6">
             <Link
@@ -205,7 +205,7 @@ export const Header = memo(
               prefetch
               onClick={handleLogoClick}
               aria-label={`${title} - Return to homepage`}
-              className="block"
+              className="block pl-32"
             >
               {logo ? (
                 <Image
@@ -229,7 +229,7 @@ export const Header = memo(
             </Link>
 
             {!hideLanguageSwitcher && (
-              <div className="flex-none">
+              <div className="flex-none pr-6">
                 <LanguageSwitcher />
               </div>
             )}
