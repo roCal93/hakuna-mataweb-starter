@@ -14,6 +14,11 @@ Template de base pour tous les projets frontend.
 - Prévu pour Vercel
 - Variables d'environnement via `.env.local`
 
+### Sécurité API (recommandé)
+
+- Activez la protection d'origine + rate limiting distribué (Upstash) pour les endpoints publics.
+- Voir `docs/security-hardening.md`.
+
 ## Utilisation
 
 ### 1. Initialisation
