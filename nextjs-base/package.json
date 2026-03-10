@@ -15,7 +15,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@aws-sdk/client-sesv2": "^3.1004.0",
+    "@aws-sdk/client-sesv2": "^3.1005.0",
     "framer-motion": "^12.35.2",
     "js-cookie": "^3.0.5",
     "next": "16.1.6",
