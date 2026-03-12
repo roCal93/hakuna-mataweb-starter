@@ -6,9 +6,19 @@ const TypedBlocks = Blocks as unknown as BlocksMap
 
 type DynamicBlock = { __component?: string } & Record<string, unknown>
 
+type OpeningDay = {
+  dayLabel: string
+  isClosedAllDay?: boolean | null
+  firstPeriodOpenTime?: string | null
+  firstPeriodCloseTime?: string | null
+  secondPeriodOpenTime?: string | null
+  secondPeriodCloseTime?: string | null
+}
+
 type SectionGenericProps = {
   title?: string
   blocks: DynamicBlock[]
+  sharedOpeningDays?: OpeningDay[]
   identifier?: string
   spacingTop?: 'none' | 'small' | 'medium' | 'large'
   spacingBottom?: 'none' | 'small' | 'medium' | 'large'
@@ -19,10 +29,23 @@ export const SectionGeneric = ({
   identifier,
   title,
   blocks,
+  sharedOpeningDays,
   spacingTop = 'medium',
   spacingBottom = 'medium',
   containerWidth = 'medium',
 }: SectionGenericProps) => {
+  const localTextMapWithOpeningDays = (blocks || []).find((block) => {
+    const component = (block as { __component?: string }).__component
+    const days = (block as { openingDays?: unknown }).openingDays
+    return component === 'blocks.text-map-block' && Array.isArray(days)
+  }) as ({ openingDays?: OpeningDay[] } & DynamicBlock) | undefined
+
+  const openingDaysFromTextMap = localTextMapWithOpeningDays?.openingDays
+  const effectiveOpeningDays =
+    openingDaysFromTextMap && openingDaysFromTextMap.length > 0
+      ? openingDaysFromTextMap
+      : sharedOpeningDays
+
   const getContainerWidthClass = (
     width: 'small' | 'medium' | 'large' | 'full'
   ) => {
@@ -55,6 +78,24 @@ export const SectionGeneric = ({
       | undefined
 
     if (BlockComponent) {
+      const isReservationBlock = raw === 'blocks.reservation-block'
+      const reservationOwnOpeningDays = (block as { openingDays?: unknown })
+        .openingDays
+      const hasOwnOpeningDays =
+        Array.isArray(reservationOwnOpeningDays) &&
+        reservationOwnOpeningDays.length > 0
+      const blockProps =
+        isReservationBlock &&
+        Array.isArray(effectiveOpeningDays) &&
+        effectiveOpeningDays.length > 0
+          ? {
+              ...(block as Record<string, unknown>),
+              openingDays: hasOwnOpeningDays
+                ? reservationOwnOpeningDays
+                : effectiveOpeningDays,
+            }
+          : (block as Record<string, unknown>)
+
       // Lazy load CarouselBlock if not first block (above-the-fold optimization)
       const isCarousel = componentName === 'CarouselBlock'
       const shouldLazyLoad = isCarousel && index > 0
@@ -67,20 +108,13 @@ export const SectionGeneric = ({
                 <div className="h-72 bg-gray-100 animate-pulse rounded-lg" />
               }
             >
-              <BlockComponent
-                {...(block as unknown as Record<string, unknown>)}
-              />
+              <BlockComponent {...blockProps} />
             </React.Suspense>
           </div>
         )
       }
 
-      return (
-        <BlockComponent
-          key={index}
-          {...(block as unknown as Record<string, unknown>)}
-        />
-      )
+      return <BlockComponent key={index} {...blockProps} />
     }
 
     // Fallback placeholder (starter)
