@@ -245,7 +245,7 @@ export const Layout = async ({ children, locale }: LayoutProps) => {
       >
         {children}
       </main>
-      <Footer siteName={headerData?.title} />
+      <Footer siteName={headerData?.title} locale={locale} />
     </div>
   )
 }
