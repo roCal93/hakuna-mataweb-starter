@@ -15,12 +15,12 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@aws-sdk/client-sesv2": "^3.1005.0",
     "framer-motion": "^12.35.2",
     "js-cookie": "^3.0.5",
     "next": "16.1.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "resend": "^6.9.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

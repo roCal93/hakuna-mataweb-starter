@@ -1,4 +1,4 @@
-import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2'
+import { Resend } from 'resend'
 
 type SendEmailArgs = {
   from?: string
@@ -8,17 +8,11 @@ type SendEmailArgs = {
   replyTo?: string
 }
 
-const sesRegion = process.env.AWS_SES_REGION || process.env.AWS_REGION
-const defaultFrom = process.env.SES_FROM_EMAIL || process.env.MAIL_FROM_EMAIL
-
-const sesClient = sesRegion
-  ? new SESv2Client({
-      region: sesRegion,
-    })
-  : null
+const apiKey = process.env.RESEND_API_KEY
+const defaultFrom = process.env.RESEND_FROM_EMAIL || process.env.MAIL_FROM_EMAIL
 
 export function isEmailConfigured() {
-  return Boolean(sesClient && defaultFrom)
+  return Boolean(apiKey && defaultFrom)
 }
 
 export function getDefaultFromEmail() {
@@ -32,41 +26,30 @@ export async function sendEmail({
   html,
   replyTo,
 }: SendEmailArgs) {
-  if (!sesClient) {
-    throw new Error('AWS SES client is not configured.')
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY is not configured.')
   }
 
   const fromAddress = from || defaultFrom
   if (!fromAddress) {
-    throw new Error('SES_FROM_EMAIL or MAIL_FROM_EMAIL is missing.')
+    throw new Error('RESEND_FROM_EMAIL is missing.')
   }
 
   const toAddresses = Array.isArray(to) ? to : [to]
 
-  const result = await sesClient.send(
-    new SendEmailCommand({
-      FromEmailAddress: fromAddress,
-      Destination: {
-        ToAddresses: toAddresses,
-      },
-      ReplyToAddresses: replyTo ? [replyTo] : undefined,
-      ConfigurationSetName: process.env.SES_CONFIGURATION_SET || undefined,
-      Content: {
-        Simple: {
-          Subject: {
-            Data: subject,
-            Charset: 'UTF-8',
-          },
-          Body: {
-            Html: {
-              Data: html,
-              Charset: 'UTF-8',
-            },
-          },
-        },
-      },
-    })
-  )
+  const resend = new Resend(apiKey)
 
-  return result.MessageId
+  const { data, error } = await resend.emails.send({
+    from: fromAddress,
+    to: toAddresses,
+    subject,
+    html,
+    ...(replyTo ? { replyTo } : {}),
+  })
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data?.id
 }
