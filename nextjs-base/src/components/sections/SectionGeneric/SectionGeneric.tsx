@@ -133,7 +133,9 @@ export const SectionGeneric = ({
 
       // Add priority to the first ImageBlock of the first section (LCP optimization)
       const isLCPImage = index === firstImageBlockIndex
-      const finalProps = isLCPImage ? { ...blockProps, priority: true } : blockProps
+      const finalProps = isLCPImage
+        ? { ...blockProps, priority: true }
+        : blockProps
 
       return <BlockComponent key={index} {...finalProps} />
     }
