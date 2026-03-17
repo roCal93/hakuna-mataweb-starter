@@ -45,11 +45,15 @@ export default () => {
       return
     }
 
+    // Helper: check if a CSP directive string already contains an exact host token
+    const hasCloudinary = (directive: string) =>
+      /(^|\s)https:\/\/res\.cloudinary\.com(\s|$)/.test(directive)
+
     // Ensure img-src contains Cloudinary
     let newCsp = csp
     if (newCsp.includes('img-src')) {
       newCsp = newCsp.replace(/img-src([^;]*)/, (match: string, group: string) => {
-        if (match.includes('res.cloudinary.com')) return match
+        if (hasCloudinary(match)) return match
         return `img-src${group} https://res.cloudinary.com`
       })
     } else {
@@ -59,7 +63,7 @@ export default () => {
     // Ensure media-src contains Cloudinary (for videos)
     if (newCsp.includes('media-src')) {
       newCsp = newCsp.replace(/media-src([^;]*)/, (match: string, group: string) => {
-        if (match.includes('res.cloudinary.com')) return match
+        if (hasCloudinary(match)) return match
         return `media-src${group} https://res.cloudinary.com`
       })
     } else {
@@ -70,7 +74,7 @@ export default () => {
     // If object-src is 'none', replace it entirely (can't combine 'none' with other sources)
     if (newCsp.includes('object-src')) {
       newCsp = newCsp.replace(/object-src([^;]*)/, (match: string, group: string) => {
-        if (match.includes('res.cloudinary.com')) return match
+        if (hasCloudinary(match)) return match
         // If 'none' is present, replace the entire directive
         if (match.includes("'none'")) {
           return `object-src 'self' https://res.cloudinary.com`
