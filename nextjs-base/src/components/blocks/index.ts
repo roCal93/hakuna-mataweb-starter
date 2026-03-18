@@ -21,3 +21,4 @@ export const ContactFormBlock = () => null
 export const WorkBlock = () => null
 export const TimelineBlock = () => null
 export const BackgroundBlock = () => null
+export { default as BlankBlock } from './BlankBlock'

@@ -312,6 +312,22 @@ export default async function Page({
           blocks={section.blocks as DynamicBlock[]}
           sharedOpeningDays={sharedOpeningDays}
           containerWidth={normalizeContainerWidth(section.containerWidth)}
+          spacingTop={
+            section.spacingTop as
+              | 'none'
+              | 'small'
+              | 'medium'
+              | 'large'
+              | undefined
+          }
+          spacingBottom={
+            section.spacingBottom as
+              | 'none'
+              | 'small'
+              | 'medium'
+              | 'large'
+              | undefined
+          }
         />
       ))}
     </Layout>
