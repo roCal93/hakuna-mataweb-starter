@@ -8,9 +8,15 @@
   "attributes": {
     "size": {
       "type": "enumeration",
-      "enum": ["small", "medium", "large", "xlarge"],
+      "enum": [
+        "small",
+        "medium",
+        "large",
+        "xlarge"
+      ],
       "default": "medium",
       "required": true
     }
-  }
+  },
+  "config": {}
 }
