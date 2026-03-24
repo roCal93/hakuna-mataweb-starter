@@ -58,8 +58,12 @@ export const Footer = ({
             alt="Logo Hakuna Mataweb"
             width={30}
             height={25}
-            style={{ transform: 'rotate(21deg)' }}
-            className="opacity-80 hover:opacity-100 transition-opacity"
+            style={{
+              transform: 'rotate(21deg)',
+              width: '30px',
+              height: '25px',
+            }}
+            className="opacity-40"
           />
         </div>
       </div>
