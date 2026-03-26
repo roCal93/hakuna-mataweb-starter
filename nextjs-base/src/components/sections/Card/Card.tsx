@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { cleanImageUrl } from '@/lib/strapi'
+import { renderStrapiBlocks } from '@/lib/strapi-rich-text'
 import { StrapiBlock } from '@/types/strapi'
 
 type CardProps = {
@@ -35,42 +36,6 @@ export const Card = ({ title, subtitle, content, image }: CardProps) => {
   })
 
   const isImageOnly = !title && !subtitle && !hasVisibleContent && !!cleanImage
-
-  // Fonction pour rendre les blocs Strapi
-  const renderBlocks = (blocks: StrapiBlock[]) => {
-    return blocks.map((block, index) => {
-      switch (block.type) {
-        case 'paragraph':
-          return (
-            <p key={index} className="text-gray-600 mb-2 whitespace-pre-line">
-              {block.children?.map((child, childIndex) => {
-                if (child.type === 'text') {
-                  return <span key={childIndex}>{child.text}</span>
-                }
-                // Gérer d'autres types d'enfants si nécessaire (bold, italic, etc.)
-                return null
-              })}
-            </p>
-          )
-        case 'heading':
-          const level = block.level || 3
-          const HeadingTag = `h${level}` as keyof React.JSX.IntrinsicElements
-          return (
-            <HeadingTag key={index} className="text-gray-600 mb-2">
-              {block.children?.map((child, childIndex) => {
-                if (child.type === 'text') {
-                  return <span key={childIndex}>{child.text}</span>
-                }
-                return null
-              })}
-            </HeadingTag>
-          )
-        // Ajouter d'autres types de blocs si nécessaire
-        default:
-          return null
-      }
-    })
-  }
 
   return (
     <div
@@ -123,7 +88,12 @@ export const Card = ({ title, subtitle, content, image }: CardProps) => {
         </h4>
       )}
       {hasVisibleContent && (
-        <div className="mt-2 flex-grow">{renderBlocks(content || [])}</div>
+        <div className="mt-2 flex-grow">
+          {renderStrapiBlocks(content || [], {
+            textAlignmentClass: 'text-left',
+            textColorClass: 'text-gray-600',
+          })}
+        </div>
       )}
     </div>
   )
