@@ -17,7 +17,12 @@ const CarouselWorkCard = ({
   const imageUrl = cleanImageUrl(item.image?.url)
 
   return (
-    <div className="relative w-full h-72 overflow-hidden rounded-lg shadow-sm bg-white flex-shrink-0 select-none">
+    <div
+      className="group relative w-full h-72 overflow-hidden rounded-lg shadow-sm bg-white flex-shrink-0 select-none transition-shadow duration-200 hover:shadow-md focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+      role="article"
+      tabIndex={0}
+      aria-label={item.title}
+    >
       <div className="relative w-full aspect-[3/1] overflow-hidden flex items-center justify-center p-2">
         {imageUrl ? (
           <Image
@@ -28,13 +33,19 @@ const CarouselWorkCard = ({
             priority={isPriority}
             fetchPriority={isPriority ? 'high' : 'low'}
             loading={isPriority ? undefined : 'lazy'}
-            className="max-w-full max-h-full object-contain select-none pointer-events-none"
+            className="max-w-full max-h-full object-contain select-none pointer-events-none transition-transform duration-300 group-hover:scale-[1.02]"
             sizes="400px"
             draggable={false}
+            quality={85}
           />
         ) : (
           <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
             No image
+          </div>
+        )}
+        {item.featured && (
+          <div className="absolute top-2 right-2 bg-yellow-300 text-gray-900 px-2 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide">
+            Featured
           </div>
         )}
       </div>

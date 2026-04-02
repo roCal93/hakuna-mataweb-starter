@@ -23,6 +23,25 @@ export type StrapiRichNode = {
 
 const BREAK_TYPES = new Set(['hardBreak', 'lineBreak', 'break', 'hard_break'])
 
+const ALLOWED_TAGS = new Set([
+  'sup',
+  'sub',
+  'br',
+  'span',
+  'strong',
+  'em',
+  'u',
+  'i',
+  'b',
+])
+
+const sanitizeHtml = (html: string): string => {
+  return html.replace(/<([^>]+)>/g, (match, tagContent) => {
+    const tagName = tagContent.split(' ')[0].toLowerCase().replace('/', '')
+    return ALLOWED_TAGS.has(tagName) ? match : ''
+  })
+}
+
 export const getStrapiNodeText = (node: StrapiRichNode): string => {
   if (typeof node.text === 'string') return node.text
   if (typeof node.value === 'string') return node.value
@@ -61,6 +80,29 @@ const normalizeHref = (href: string) => {
   return href
 }
 
+const renderSupInText = (
+  text: string,
+  keyPrefix: string
+): React.ReactNode[] => {
+  const parts = text.split(/(<sup>.*?<\/sup>|<sub>.*?<\/sub>)/gi)
+
+  return parts.map((part, index) => {
+    const supMatch = part.match(/^<sup>(.*?)<\/sup>$/i)
+    if (supMatch) {
+      return <sup key={`${keyPrefix}-sup-${index}`}>{supMatch[1]}</sup>
+    }
+
+    const subMatch = part.match(/^<sub>(.*?)<\/sub>$/i)
+    if (subMatch) {
+      return <sub key={`${keyPrefix}-sub-${index}`}>{subMatch[1]}</sub>
+    }
+
+    return (
+      <React.Fragment key={`${keyPrefix}-txt-${index}`}>{part}</React.Fragment>
+    )
+  })
+}
+
 export const renderInlineNode = (
   node: StrapiRichNode,
   key: React.Key
@@ -69,6 +111,11 @@ export const renderInlineNode = (
   const type = node.type || 'text'
 
   if (BREAK_TYPES.has(type)) return <br key={key} />
+
+  if (type === 'html' && typeof node.value === 'string') {
+    const safe = sanitizeHtml(node.value)
+    return <span key={key} dangerouslySetInnerHTML={{ __html: safe }} />
+  }
 
   if (type === 'link' || type === 'hyperlink') {
     const hrefValue =
@@ -123,7 +170,7 @@ export const renderInlineNode = (
     const textWithBreaks = text.split(/\r?\n/).map((line, index) => (
       <React.Fragment key={index}>
         {index > 0 && <br />}
-        {line}
+        {renderSupInText(line, `${keyString}-line-${index}`)}
       </React.Fragment>
     ))
     return (
