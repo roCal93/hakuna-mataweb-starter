@@ -55,7 +55,9 @@
       "ajv": ">=8.18.0",
       "esbuild": ">=0.25.0",
       "markdown-it": ">=14.1.1",
-      "tmp": ">=0.2.4"
+      "tmp": ">=0.2.4",
+      "handlebars": ">=4.7.9",
+      "lodash": ">=4.17.21"
     },
     "onlyBuiltDependencies": [
       "@swc/core",
