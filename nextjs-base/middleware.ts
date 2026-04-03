@@ -56,7 +56,10 @@ function buildCsp(nonce: string): string {
     `frame-ancestors ${frameAncestors};`,
   ]
 
-  return directives.join(' ').replace(/\s{2,}/g, ' ').trim()
+  return directives
+    .join(' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
 }
 
 export function middleware(req: NextRequest) {
