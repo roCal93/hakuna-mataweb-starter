@@ -130,8 +130,6 @@ const CarouselBlock = ({
     setIsDragging(false)
   }
 
-  const duplicatedItems = [...workItems, ...workItems, ...workItems]
-
   return (
     <div className="relative w-full overflow-hidden my-8">
       <div
@@ -154,11 +152,33 @@ const CarouselBlock = ({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {duplicatedItems.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="w-[200px] flex-shrink-0">
+        {/* Set réel — seule instance indexée par les moteurs de recherche */}
+        {workItems.map((item, index) => (
+          <div key={`real-${item.id}`} className="w-[200px] flex-shrink-0">
             <CarouselWorkCard item={item} />
           </div>
         ))}
+        {/* Copies visuelles pour la boucle infinie — masquées aux robots et lecteurs d'écran */}
+        <div inert className="contents">
+          {workItems.map((item, index) => (
+            <div
+              key={`clone-a-${item.id}-${index}`}
+              className="w-[200px] flex-shrink-0"
+            >
+              <CarouselWorkCard item={item} />
+            </div>
+          ))}
+        </div>
+        <div inert className="contents">
+          {workItems.map((item, index) => (
+            <div
+              key={`clone-b-${item.id}-${index}`}
+              className="w-[200px] flex-shrink-0"
+            >
+              <CarouselWorkCard item={item} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

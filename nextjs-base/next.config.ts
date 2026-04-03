@@ -1,32 +1,5 @@
 import type { NextConfig } from 'next'
 
-function getAllowedOrigins() {
-  const allowedEnv =
-    process.env.ALLOWED_ORIGINS || process.env.NEXT_PUBLIC_ALLOWED_ORIGINS
-  const strapiOrigin =
-    process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
-  const set = new Set<string>()
-
-  if (allowedEnv) {
-    allowedEnv
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean)
-      .forEach((u) => set.add(u))
-  } else {
-    set.add(strapiOrigin)
-    if (!strapiOrigin.includes('localhost')) {
-      const host = strapiOrigin.replace(/^https?:\/\//, '').replace(/\/$/, '')
-      const base = host.replace(/^www\./, '')
-      set.add(`https://${base}`)
-      set.add(`https://www.${base}`)
-      set.add(`https://*.${base}`)
-    }
-  }
-
-  return Array.from(set)
-}
-
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -67,29 +40,10 @@ const nextConfig: NextConfig = {
 
   // Autoriser l'admin Strapi à intégrer le site en iframe pour la Preview
   async headers() {
-    const strapiOrigin =
-      process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
     const isProd = process.env.NODE_ENV === 'production'
 
-    // Note: we rely on CSP `frame-ancestors` for iframe control (X-Frame-Options
-    // cannot express multiple allowed origins and would break Strapi preview embeds).
-    //
-    // ⚠️ Security note: 'unsafe-inline' is kept for compatibility with Next.js inline scripts
-    // For production, consider implementing nonces or moving to Next.js App Router with CSP support
-    const csp = [
-      "default-src 'self';",
-      `img-src 'self' data: https: ${strapiOrigin};`,
-      `script-src 'self' 'unsafe-inline' https://vercel.live${isProd ? '' : " 'unsafe-eval'"};`,
-      "style-src 'self' 'unsafe-inline';",
-      `connect-src 'self' ${strapiOrigin} https://*.railway.app https://*.vercel.app;`,
-      "font-src 'self' data:;",
-      "object-src 'none';",
-      "base-uri 'self';",
-      "form-action 'self';",
-      'upgrade-insecure-requests;',
-      `frame-ancestors 'self' ${getAllowedOrigins().join(' ')};`,
-    ].join(' ')
-
+    // Note: Content-Security-Policy (avec nonce par requête) est géré dans middleware.ts
+    // pour remplacer 'unsafe-inline' par 'nonce-{nonce}' + 'strict-dynamic'.
     const securityHeaders: { key: string; value: string }[] = [
       {
         key: 'X-Content-Type-Options',
@@ -102,10 +56,6 @@ const nextConfig: NextConfig = {
       {
         key: 'Permissions-Policy',
         value: 'geolocation=(), microphone=(), camera=()',
-      },
-      {
-        key: 'Content-Security-Policy',
-        value: csp.replace(/\s{2,}/g, ' ').trim(),
       },
     ]
 
