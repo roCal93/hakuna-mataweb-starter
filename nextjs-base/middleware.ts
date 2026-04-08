@@ -4,6 +4,14 @@ import { locales, defaultLocale } from './src/lib/locales'
 
 export const runtime = 'edge'
 
+function normalizeOrigin(input: string): string | null {
+  try {
+    return new URL(input).origin
+  } catch {
+    return null
+  }
+}
+
 /** Replicate the allowed-origins logic so frame-ancestors stays accurate. */
 function getAllowedFrameAncestors(): string[] {
   const allowedEnv =
@@ -17,17 +25,21 @@ function getAllowedFrameAncestors(): string[] {
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean)
-      .forEach((u) => origins.add(u))
+      .forEach((u) => {
+        const origin = normalizeOrigin(u)
+        if (origin) origins.add(origin)
+      })
   } else {
-    origins.add(strapiOrigin)
-    if (!strapiOrigin.includes('localhost')) {
-      const host = strapiOrigin.replace(/^https?:\/\//, '').replace(/\/$/, '')
-      const base = host.replace(/^www\./, '')
-      origins.add(`https://${base}`)
-      origins.add(`https://www.${base}`)
-      origins.add(`https://*.${base}`)
-    }
+    const origin = normalizeOrigin(strapiOrigin)
+    if (origin) origins.add(origin)
   }
+
+  const siteOrigin = normalizeOrigin(
+    process.env.NEXT_PUBLIC_SITE_URL ||
+      process.env.SITE_URL ||
+      'http://localhost:3000'
+  )
+  if (siteOrigin) origins.add(siteOrigin)
 
   return Array.from(origins)
 }
@@ -39,15 +51,17 @@ function getAllowedFrameAncestors(): string[] {
 function buildCsp(nonce: string): string {
   const strapiOrigin =
     process.env.NEXT_PUBLIC_STRAPI_URL ?? 'http://localhost:1337'
+  const normalizedStrapiOrigin = normalizeOrigin(strapiOrigin) || strapiOrigin
   const isProd = process.env.NODE_ENV === 'production'
   const frameAncestors = ["'self'", ...getAllowedFrameAncestors()].join(' ')
 
   const directives = [
     "default-src 'self';",
-    `img-src 'self' data: https: ${strapiOrigin};`,
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://vercel.live${isProd ? '' : " 'unsafe-eval'"};`,
-    "style-src 'self' 'unsafe-inline';",
-    `connect-src 'self' ${strapiOrigin} https://*.railway.app https://*.vercel.app;`,
+    `img-src 'self' data: https://res.cloudinary.com ${normalizedStrapiOrigin};`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isProd ? '' : " 'unsafe-eval'"};`,
+    "style-src 'self';",
+    "style-src-attr 'unsafe-inline';",
+    `connect-src 'self' ${normalizedStrapiOrigin};`,
     "font-src 'self' data:;",
     "object-src 'none';",
     "base-uri 'self';",
@@ -65,6 +79,32 @@ function buildCsp(nonce: string): string {
 export function middleware(req: NextRequest) {
   try {
     const { pathname } = req.nextUrl
+
+    const isReservationPath =
+      pathname === '/reservation-page' || pathname.endsWith('/reservation-page')
+    if (req.method === 'GET' && isReservationPath) {
+      const sensitiveParams = [
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
+        'message',
+        'website',
+        'consent',
+      ]
+      const cleanedUrl = req.nextUrl.clone()
+      let removed = false
+      for (const key of sensitiveParams) {
+        if (cleanedUrl.searchParams.has(key)) {
+          cleanedUrl.searchParams.delete(key)
+          removed = true
+        }
+      }
+      if (removed) {
+        return NextResponse.redirect(cleanedUrl)
+      }
+    }
+
     const isRscOrPrefetchRequest =
       req.headers.get('rsc') === '1' ||
       req.headers.has('next-router-prefetch') ||
@@ -73,7 +113,7 @@ export function middleware(req: NextRequest) {
     // Ignore static assets, API and other non-page requests
     if (
       pathname.startsWith('/_next') ||
-      pathname.startsWith('/api') ||
+      pathname.startsWith('/api/') ||
       pathname.startsWith('/static') ||
       pathname.includes('.')
     ) {
@@ -115,6 +155,8 @@ export function middleware(req: NextRequest) {
         const cookieValue = `locale=${encodeURIComponent(locale)}; Path=/; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}${process.env.NODE_ENV === 'production' ? '; Secure; HttpOnly' : ''}`
         redirectRes.headers.set('set-cookie', cookieValue)
       }
+
+      redirectRes.headers.set('Content-Security-Policy', csp)
 
       return redirectRes
     }
@@ -164,5 +206,5 @@ export function middleware(req: NextRequest) {
 
 // Match all non-api and non-_next routes
 export const config = {
-  matcher: ['/((?!_next|api|static).*)'],
+  matcher: ['/((?!_next|api/|static).*)'],
 }

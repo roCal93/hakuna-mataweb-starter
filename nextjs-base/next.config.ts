@@ -1,5 +1,21 @@
 import type { NextConfig } from 'next'
 
+function normalizeOrigin(input: string): string | null {
+  try {
+    return new URL(input).origin
+  } catch {
+    return null
+  }
+}
+
+function getSiteOrigin(): string {
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.SITE_URL ||
+    'http://localhost:3000'
+  return normalizeOrigin(siteUrl) || 'http://localhost:3000'
+}
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -40,6 +56,10 @@ const nextConfig: NextConfig = {
 
   // Autoriser l'admin Strapi à intégrer le site en iframe pour la Preview
   async headers() {
+    const strapiOrigin =
+      process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
+    const siteOrigin = getSiteOrigin()
+    const normalizedStrapiOrigin = normalizeOrigin(strapiOrigin) || strapiOrigin
     const isProd = process.env.NODE_ENV === 'production'
 
     // Note: Content-Security-Policy (avec nonce par requête) est géré dans middleware.ts
@@ -57,6 +77,32 @@ const nextConfig: NextConfig = {
         key: 'Permissions-Policy',
         value: 'geolocation=(), microphone=(), camera=()',
       },
+      {
+        key: 'Cross-Origin-Resource-Policy',
+        value: 'same-origin',
+      },
+      {
+        key: 'Cross-Origin-Opener-Policy',
+        value: 'same-origin',
+      },
+      {
+        key: 'Content-Security-Policy',
+        value: [
+          "default-src 'self';",
+          `img-src 'self' data: https://res.cloudinary.com ${normalizedStrapiOrigin};`,
+          "style-src 'self';",
+          "style-src-attr 'unsafe-inline';",
+          `connect-src 'self' ${normalizedStrapiOrigin};`,
+          "font-src 'self' data:;",
+          "object-src 'none';",
+          "base-uri 'self';",
+          "form-action 'self';",
+          'upgrade-insecure-requests;',
+        ]
+          .join(' ')
+          .replace(/\s{2,}/g, ' ')
+          .trim(),
+      },
     ]
 
     if (isProd) {
@@ -67,6 +113,32 @@ const nextConfig: NextConfig = {
     }
 
     return [
+      {
+        source: '/robots.txt',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: siteOrigin,
+          },
+          {
+            key: 'Vary',
+            value: 'Origin',
+          },
+        ],
+      },
+      {
+        source: '/sitemap.xml',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: siteOrigin,
+          },
+          {
+            key: 'Vary',
+            value: 'Origin',
+          },
+        ],
+      },
       {
         source: '/(.*)',
         headers: securityHeaders,

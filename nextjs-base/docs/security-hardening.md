@@ -1,12 +1,14 @@
 # Security Hardening
 
-This document explains the API hardening included in the starter and how to configure it in production.
+This document explains the security hardening included in the starter and how to configure it in production.
 
 ## Scope
 
-The starter includes hardening for the public contact endpoint:
+The starter includes hardening for public endpoints and browser protections:
 
 - `src/app/api/contact/route.ts`
+- `middleware.ts`
+- `next.config.ts`
 
 It now uses shared security utilities:
 
@@ -14,6 +16,24 @@ It now uses shared security utilities:
 - `src/lib/rate-limit.ts`
 
 Client projects that add extra public write endpoints (for example reservation flows) should reuse the same utilities.
+
+## Browser and platform protections
+
+### Security headers
+
+Default headers are configured globally:
+
+- `Content-Security-Policy`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy`
+- `Permissions-Policy`
+- `Strict-Transport-Security` (production)
+
+`robots.txt` and `sitemap.xml` also get explicit `Access-Control-Allow-Origin` and `Vary: Origin` to avoid wildcard CORS defaults.
+
+### CSP and sensitive query cleanup
+
+`middleware.ts` enforces a request-level CSP and strips sensitive query parameters on reservation pages (e.g. `email`, `phone`, `message`) to avoid leaking personal data via URLs.
 
 ## Protections Implemented
 
@@ -68,6 +88,11 @@ Notes:
 2. Send request from unauthorized origin -> `403`.
 3. Exceed request limit quickly -> `429` with rate-limit headers.
 4. Ensure `X-RateLimit-Source: upstash` in production.
+5. Verify headers and CSP quickly with:
+
+```bash
+./tools/scripts/check-security-baseline.sh https://www.your-site.com --strict
+```
 
 ## Reuse In Variants / Client Projects
 
