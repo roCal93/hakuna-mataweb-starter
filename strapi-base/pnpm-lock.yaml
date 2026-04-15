@@ -26,8 +26,8 @@ importers:
         specifier: 5.41.1
         version: 5.41.1(17a9993da8121e210ecbb890656cf189)
       '@strapi/provider-upload-cloudinary':
-        specifier: 5.41.1
-        version: 5.41.1
+        specifier: 5.42.0
+        version: 5.42.0
       '@strapi/strapi':
         specifier: 5.41.1
         version: 5.41.1(@babel/runtime@7.29.2)(@codemirror/autocomplete@6.20.0)(@codemirror/language@6.12.3)(@codemirror/lint@6.9.2)(@codemirror/search@6.6.0)(@codemirror/state@6.6.0)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.41.0)(@emotion/is-prop-valid@1.4.0)(@swc/helpers@0.5.21)(@types/hoist-non-react-statics@3.3.7(@types/react@18.3.27))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(better-sqlite3@12.6.0)(codemirror@5.65.21)(esbuild@0.28.0)(koa@2.16.4)(pg@8.20.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(redux@4.2.1)(styled-components@6.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.46.1)(type-fest@4.41.0)
@@ -2039,8 +2039,8 @@ packages:
     resolution: {integrity: sha512-wEWO8soqsgDu+ZX1xZkxcLqJGLdMfA/sGTn6lumnQrVfQjG+zpLRaoRkX9137JQT1aNqPAhBIQla0+WCxMkH3A==}
     engines: {node: '>=20.0.0 <=24.x.x', npm: '>=6.0.0'}
 
-  '@strapi/provider-upload-cloudinary@5.41.1':
-    resolution: {integrity: sha512-6fIMCp2FSJ5jZDIVPYrLQJurBXzFCEGCGXX+pjJiPQETlH6+3i46+GOTRng1OXkNubaP6JIPUv4GyyaI6J+2oA==}
+  '@strapi/provider-upload-cloudinary@5.42.0':
+    resolution: {integrity: sha512-BDcJrREhE+J/K51VWq+S3e/4XCpupMaWHbo9tDCGkO4CzBrPh5N5WG1PJdBMj32sM0Su7F8Vmr9YncgEI20mfA==}
     engines: {node: '>=20.0.0 <=24.x.x', npm: '>=6.0.0'}
 
   '@strapi/provider-upload-local@5.41.1':
@@ -2094,6 +2094,10 @@ packages:
 
   '@strapi/utils@5.41.1':
     resolution: {integrity: sha512-NmjF+3igvF7gtSnu9vchzvZcaDgiRfPbRJsRg8bLWvn7UrWFmFMzWGNDywcHTXLbxXQZDUbc5eUpDDU0Q2zUgg==}
+    engines: {node: '>=20.0.0 <=24.x.x', npm: '>=6.0.0'}
+
+  '@strapi/utils@5.42.0':
+    resolution: {integrity: sha512-nbQcDtf7KhPKHcXAjy8er7ln195kpw9lnWlXn1HdDEOqmoToHPa0wUS1zmhXQLPc8/7kxFECXiHE+RPZYnwwmQ==}
     engines: {node: '>=20.0.0 <=24.x.x', npm: '>=6.0.0'}
 
   '@swc/core-darwin-arm64@1.15.24':
@@ -8930,9 +8934,9 @@ snapshots:
       '@strapi/utils': 5.41.1
       sendmail: 1.6.1
 
-  '@strapi/provider-upload-cloudinary@5.41.1':
+  '@strapi/provider-upload-cloudinary@5.42.0':
     dependencies:
-      '@strapi/utils': 5.41.1
+      '@strapi/utils': 5.42.0
       cloudinary: 2.9.0
       into-stream: 5.1.1
 
@@ -9260,6 +9264,19 @@ snapshots:
       - typescript
 
   '@strapi/utils@5.41.1':
+    dependencies:
+      '@sindresorhus/slugify': 1.1.0
+      date-fns: 2.30.0
+      execa: 5.1.1
+      http-errors: 2.0.0
+      lodash: 4.18.1
+      node-machine-id: 1.1.12
+      p-map: 4.0.0
+      preferred-pm: 3.1.3
+      yup: 0.32.9
+      zod: 3.25.67
+
+  '@strapi/utils@5.42.0':
     dependencies:
       '@sindresorhus/slugify': 1.1.0
       date-fns: 2.30.0
