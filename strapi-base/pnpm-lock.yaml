@@ -20,8 +20,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.41.1
-        version: 5.41.1(03d25bfcdc2ba5e7024593ad0de5ce2c)
+        specifier: 5.42.0
+        version: 5.42.0(03d25bfcdc2ba5e7024593ad0de5ce2c)
       '@strapi/plugin-users-permissions':
         specifier: 5.41.1
         version: 5.41.1(17a9993da8121e210ecbb890656cf189)
@@ -943,9 +943,6 @@ packages:
     resolution: {integrity: sha512-sYcHglGKTxGF+hQ6x67xDfkE9o+NhVlRHBqq6gLywaMc6CojK/5vFZByphdonKinYlMLkEkacm+HEse9HzwgTA==}
     engines: {node: '>= 12'}
     deprecated: Please upgrade to v15 or higher. All reported bugs in this version are fixed in newer releases, dependencies have been updated, and security has been improved.
-
-  '@lezer/common@1.5.1':
-    resolution: {integrity: sha512-6YRVG9vBkaY7p1IVxL4s44n5nUnaNnGM2/AckNgYOnxTG2kWh1vR8BMxPseWPjRNpb5VtXnMpeYAEAADoRV1Iw==}
 
   '@lezer/common@1.5.2':
     resolution: {integrity: sha512-sxQE460fPZyU3sdc8lafxiPwJHBzZRy/udNFynGQky1SePYBdhkBl1kOagA9uT3pxR8K09bOrmTUqA9wb/PjSQ==}
@@ -2014,8 +2011,8 @@ packages:
     resolution: {integrity: sha512-wDvE3MBh0ww6HdX0uv4TH+ucDU5vdKNRsHwLdsu7hsD5AffAcNMqMiL74bm8X9dWGeWZ05DJnIQRXDPAmXYefg==}
     engines: {node: '>=20.0.0 <=24.x.x', npm: '>=6.0.0'}
 
-  '@strapi/plugin-cloud@5.41.1':
-    resolution: {integrity: sha512-vIH0YUeqv4gp4oZhDy9y1aE7K28R6kEJB8BC6u/e2uMiQ8O/FuaeIB+NQbtp8FxdCRAJUGyxVvf7lGbG/5xPYg==}
+  '@strapi/plugin-cloud@5.42.0':
+    resolution: {integrity: sha512-SLg7k9PXqdbs7ZZwLxBBf5syvAkCVUGP39BA4w/T3aK2NlUKpw0B8Lx8ooG4t9UfHTkb7M/YyNogeK1TDCIKIg==}
     engines: {node: '>=20.0.0 <=24.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/admin': ^5.0.0
@@ -6772,7 +6769,7 @@ snapshots:
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
       '@codemirror/view': 6.41.0
-      '@lezer/common': 1.5.1
+      '@lezer/common': 1.5.2
 
   '@codemirror/lang-json@6.0.1':
     dependencies:
@@ -6783,7 +6780,7 @@ snapshots:
     dependencies:
       '@codemirror/state': 6.6.0
       '@codemirror/view': 6.41.0
-      '@lezer/common': 1.5.1
+      '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.8
       style-mod: 4.1.3
@@ -7317,23 +7314,21 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@lezer/common@1.5.1': {}
-
   '@lezer/common@1.5.2': {}
 
   '@lezer/highlight@1.2.3':
     dependencies:
-      '@lezer/common': 1.5.1
+      '@lezer/common': 1.5.2
 
   '@lezer/json@1.0.3':
     dependencies:
-      '@lezer/common': 1.5.1
+      '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.8
 
   '@lezer/lr@1.4.8':
     dependencies:
-      '@lezer/common': 1.5.1
+      '@lezer/common': 1.5.2
 
   '@marijn/find-cluster-break@1.0.2': {}
 
@@ -8853,7 +8848,7 @@ snapshots:
       qs: 6.15.0
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.41.1(03d25bfcdc2ba5e7024593ad0de5ce2c)':
+  '@strapi/plugin-cloud@5.42.0(03d25bfcdc2ba5e7024593ad0de5ce2c)':
     dependencies:
       '@strapi/admin': 5.41.1(@babel/runtime@7.29.2)(@codemirror/autocomplete@6.20.0)(@codemirror/language@6.12.3)(@codemirror/lint@6.9.2)(@codemirror/search@6.6.0)(@codemirror/state@6.6.0)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.41.0)(@emotion/is-prop-valid@1.4.0)(@strapi/data-transfer@5.41.1(@types/node@25.6.0)(better-sqlite3@12.6.0)(pg@8.20.0)(typescript@5.4.4))(@types/hoist-non-react-statics@3.3.7(@types/react@18.3.27))(@types/node@25.6.0)(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(better-sqlite3@12.6.0)(codemirror@5.65.21)(debug@4.3.4)(pg@8.20.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(redux@4.2.1)(styled-components@6.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/design-system': 2.2.0(@babel/runtime@7.29.2)(@codemirror/autocomplete@6.20.0)(@codemirror/language@6.12.3)(@codemirror/lint@6.9.2)(@codemirror/search@6.6.0)(@codemirror/state@6.6.0)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.41.0)(@strapi/icons@2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(codemirror@5.65.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
