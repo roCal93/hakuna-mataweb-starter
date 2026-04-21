@@ -153,7 +153,7 @@ const CarouselBlock = ({
         onTouchEnd={handleTouchEnd}
       >
         {/* Set réel — seule instance indexée par les moteurs de recherche */}
-        {workItems.map((item, index) => (
+        {workItems.map((item) => (
           <div key={`real-${item.id}`} className="w-[200px] flex-shrink-0">
             <CarouselWorkCard item={item} />
           </div>
