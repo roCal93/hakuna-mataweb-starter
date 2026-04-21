@@ -110,7 +110,9 @@ export function LanguageSwitcher({
 
   const canHover = React.useSyncExternalStore(
     () => () => {},
-    () => typeof window !== 'undefined' && !!window.matchMedia?.('(hover: hover)').matches,
+    () =>
+      typeof window !== 'undefined' &&
+      !!window.matchMedia?.('(hover: hover)').matches,
     () => false
   )
 
