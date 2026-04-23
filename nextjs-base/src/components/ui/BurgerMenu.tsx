@@ -166,7 +166,7 @@ export const BurgerMenu = ({
   }
 
   return (
-    <div ref={wrapperRef} className="relative min-[850px]:hidden">
+    <div ref={wrapperRef} className="relative min-[930px]:hidden">
       <button
         onClick={toggleMenu}
         className="relative flex justify-center items-center w-8 h-8 cursor-pointer group hover:bg-gray-100/60 hover:scale-105 transition transform duration-150"

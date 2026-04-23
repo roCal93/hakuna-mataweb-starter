@@ -294,14 +294,14 @@ export const Header = memo(
         id="site-header"
         role="banner"
         aria-label="Site header"
-        className="sticky top-0 z-50 backdrop-blur-sm bg-white/10 border-b border-gray-200 flex justify-center min-[850px]:justify-between items-center p-6 relative"
+        className="sticky top-0 z-50 backdrop-blur-sm bg-white/10 border-b border-gray-200 flex justify-center min-[930px]:justify-between items-center p-6 relative"
       >
         <Link
           href={`/${currentLocale}`}
           prefetch
           onClick={handleLogoClick}
           aria-label={`${title} - Return to homepage`}
-          className="flex-none min-[850px]:flex-1"
+          className="flex-none min-[930px]:flex-1"
         >
           {logo ? (
             <Image
@@ -309,13 +309,13 @@ export const Header = memo(
               alt={logo.alternativeText || title}
               width={logo.width || 180}
               height={logo.height || 60}
-              className="cursor-pointer mx-auto min-[850px]:mx-0"
+              className="cursor-pointer mx-auto min-[930px]:mx-0"
               priority
             />
           ) : (
-            <span className="text-5xl font-caveat cursor-pointer hover:text-gray-600 text-center mx-auto min-[850px]:text-left min-[850px]:mx-0">
+            <span className="text-5xl font-caveat cursor-pointer hover:text-gray-600 text-center mx-auto min-[930px]:text-left min-[930px]:mx-0">
               {title.split(' ').map((word, i) => (
-                <span key={i} className="block min-[850px]:inline">
+                <span key={i} className="block min-[930px]:inline">
                   {word}
                   {i < title.split(' ').length - 1 && ' '}
                 </span>
@@ -323,11 +323,11 @@ export const Header = memo(
             </span>
           )}
         </Link>
-        <div className="hidden min-[850px]:flex min-[850px]:absolute min-[850px]:top-1/2 min-[850px]:left-1/2 min-[850px]:-translate-x-1/2 min-[850px]:-translate-y-1/2 items-center">
+        <div className="hidden min-[930px]:flex min-[930px]:absolute min-[930px]:top-1/2 min-[930px]:left-1/2 min-[930px]:-translate-x-1/2 min-[930px]:-translate-y-1/2 items-center">
           <nav
             role="navigation"
             aria-label="Main navigation"
-            className="hidden min-[850px]:flex min-[850px]:items-center"
+            className="hidden min-[930px]:flex min-[930px]:items-center"
           >
             {links.map((link, index) => {
               const active = isActive(link.slug, link.isHome, link.anchor)
@@ -383,11 +383,11 @@ export const Header = memo(
           </nav>
         </div>
         {!hideLanguageSwitcher && (
-          <div className="hidden min-[850px]:block min-[850px]:ml-auto">
+          <div className="hidden min-[930px]:block min-[930px]:ml-auto">
             <LanguageSwitcher />
           </div>
         )}
-        <div className="min-[850px]:hidden absolute right-6">
+        <div className="min-[930px]:hidden absolute right-6">
           <BurgerMenu
             links={links}
             currentLocale={currentLocale}
