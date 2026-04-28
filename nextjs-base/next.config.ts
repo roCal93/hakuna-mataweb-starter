@@ -90,8 +90,9 @@ const nextConfig: NextConfig = {
         value: [
           "default-src 'self';",
           `img-src 'self' data: https://res.cloudinary.com ${normalizedStrapiOrigin};`,
-          "style-src 'self';",
+          "style-src 'self' 'unsafe-inline';",
           "style-src-attr 'unsafe-inline';",
+          "frame-src 'self' https://vercel.live;",
           `connect-src 'self' ${normalizedStrapiOrigin};`,
           "font-src 'self' data:;",
           "object-src 'none';",
