@@ -235,7 +235,7 @@ const renderListItems = (
 export const renderListBlock = (
   block: StrapiRichNode,
   key: React.Key,
-  listItemClassName = 'mb-2',
+  listItemClassName = 'mb-2 whitespace-pre-line',
   extraClassName?: string
 ): React.ReactNode => {
   const keyString = String(key)
@@ -299,7 +299,7 @@ export const renderStrapiBlocks = (
         return (
           <p
             key={index}
-            className={`${textColor} mb-4 ${options.textAlignmentClass}`}
+            className={`${textColor} mb-4 whitespace-pre-line ${options.textAlignmentClass}`}
           >
             {renderInlineNodes(getStrapiNodeChildren(block), `p-${index}`)}
           </p>
@@ -335,7 +335,7 @@ export const renderStrapiBlocks = (
         return (
           <blockquote
             key={index}
-            className={`mb-4 border-l-4 border-stone-300 pl-4 italic ${textColor} ${options.textAlignmentClass}`}
+            className={`mb-4 whitespace-pre-line border-l-4 border-stone-300 pl-4 italic ${textColor} ${options.textAlignmentClass}`}
           >
             {renderInlineNodes(getStrapiNodeChildren(block), `q-${index}`)}
           </blockquote>
