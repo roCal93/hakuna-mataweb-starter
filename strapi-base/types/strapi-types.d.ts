@@ -168,6 +168,7 @@ export interface Card {
   subtitle?: string;
   content?: StrapiBlock[];
   image?: StrapiMedia;
+  mobileImage?: StrapiMedia;
   locale?: string;
   localizations?: (Card & StrapiEntity)[];
 }
