@@ -251,6 +251,7 @@ export const BurgerMenu = ({
                   </React.Fragment>
                 )
               })}
+              {/* Keep this flag scoped to the language switcher only. */}
               {!hideLanguageSwitcher && (
                 <div className="py-4 border-t border-gray-200 flex justify-center">
                   <LanguageSwitcher

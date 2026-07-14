@@ -228,6 +228,7 @@ export const Header = memo(
               )}
             </Link>
 
+            {/* Keep this flag scoped to the language switcher only. */}
             {!hideLanguageSwitcher && (
               <div className="flex-none pr-6">
                 <LanguageSwitcher />
@@ -382,6 +383,7 @@ export const Header = memo(
             })}
           </nav>
         </div>
+        {/* Keep this flag scoped to the language switcher only. */}
         {!hideLanguageSwitcher && (
           <div className="hidden min-[930px]:block min-[930px]:ml-auto">
             <LanguageSwitcher />
