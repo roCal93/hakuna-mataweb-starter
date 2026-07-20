@@ -19,10 +19,8 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Vérifier le secret pour la sécurité
-  const secret =
-    request.headers.get('x-webhook-secret') ||
-    (typeof body.secret === 'string' ? body.secret : null)
+  // Vérifier le secret pour la sécurité (header uniquement, jamais depuis le body)
+  const secret = request.headers.get('x-webhook-secret')
   if (!secret || secret !== configuredSecret) {
     return NextResponse.json({ message: 'Invalid secret' }, { status: 401 })
   }

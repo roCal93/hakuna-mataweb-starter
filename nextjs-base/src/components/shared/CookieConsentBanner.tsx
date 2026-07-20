@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/Button'
 
 const CONSENT_COOKIE_NAME = 'cookie_consent'
 const ONE_YEAR = 60 * 60 * 24 * 365
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 function setConsentCookie(value: 'accepted' | 'rejected') {
-  document.cookie = `${CONSENT_COOKIE_NAME}=${value}; Path=/; Max-Age=${ONE_YEAR}; SameSite=Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`
+  document.cookie = `${CONSENT_COOKIE_NAME}=${value}; Path=/; Max-Age=${ONE_YEAR}; SameSite=Lax${IS_PRODUCTION ? '; Secure' : ''}`
 }
 
 export default function CookieConsentBanner() {
@@ -27,7 +28,7 @@ export default function CookieConsentBanner() {
         reject: 'Refuse',
       }
     : {
-        text: "Nous utilisons des cookies optionnels de mesure d'audience pour ameliorer le site. Vous pouvez accepter ou refuser ces cookies.",
+        text: "Nous utilisons des cookies optionnels de mesure d'audience pour améliorer le site. Vous pouvez accepter ou refuser ces cookies.",
         learnMore: 'Politique de confidentialité',
         learnMoreHref: '/fr/privacy-policy',
         accept: 'Accepter',
