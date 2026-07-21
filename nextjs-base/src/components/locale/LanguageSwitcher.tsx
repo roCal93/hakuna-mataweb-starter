@@ -144,12 +144,10 @@ export function LanguageSwitcher({
 
   const otherLocales = supportedLocales.filter((l) => l !== currentLocale)
 
-  const [canHover, setCanHover] = React.useState(false)
-  React.useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      setCanHover(window.matchMedia('(hover: hover)').matches)
-    }
-  }, [])
+  const canHover =
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(hover: hover)').matches
 
   const shouldReduceMotion = useReducedMotion()
   const isHorizontalDropdown = dropdownDirection !== 'down'
