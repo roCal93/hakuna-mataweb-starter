@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { Layout } from '@/components/layout'
 import { fetchAPI } from '@/lib/strapi'
 import { defaultLocale } from '@/lib/locales'
@@ -15,6 +16,13 @@ type PolicyResponse = {
 }
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: true,
+  },
+}
 
 export default async function PrivacyPolicyPage({
   params,
