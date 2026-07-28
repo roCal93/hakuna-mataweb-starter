@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { LanguageSwitcher } from '@/components/locale/LanguageSwitcher'
-import { scrollToAnchor } from '@/lib/anchor'
+import { getActiveAnchorId, scrollToAnchor } from '@/lib/anchor'
 
 interface ProcessedLink {
   slug: string
@@ -121,7 +121,12 @@ export const BurgerMenu = ({
         if (bestEntry && bestEntry.isIntersecting) {
           setCurrentHash(`#${bestEntry.target.id}`)
         } else {
-          setCurrentHash('')
+          const activeAnchor = getActiveAnchorId(anchors)
+          if (activeAnchor) {
+            setCurrentHash(`#${activeAnchor}`)
+          } else {
+            setCurrentHash('')
+          }
         }
       },
       { threshold: [0.25, 0.5, 0.75], rootMargin: '0px 0px -40% 0px' }

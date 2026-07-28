@@ -14,7 +14,11 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { BurgerMenu } from '@/components/ui/BurgerMenu'
 import { LanguageSwitcher } from '@/components/locale/LanguageSwitcher'
-import { scrollToAnchor, scrollToAnchorWithRetry } from '@/lib/anchor'
+import {
+  getActiveAnchorId,
+  scrollToAnchor,
+  scrollToAnchorWithRetry,
+} from '@/lib/anchor'
 import type { StrapiMedia, PageLink } from '@/types/strapi'
 import {
   defaultLocale as STATIC_DEFAULT_LOCALE,
@@ -153,17 +157,7 @@ export const Header = memo(
       }
 
       const checkActive = () => {
-        let found: string | null = null
-        for (const id of anchors) {
-          const el = document.getElementById(id)
-          if (!el) continue
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 150 && rect.bottom > 0) {
-            found = id
-            break
-          }
-        }
-        setActiveAnchor(found)
+        setActiveAnchor(getActiveAnchorId(anchors))
       }
 
       checkActive()
