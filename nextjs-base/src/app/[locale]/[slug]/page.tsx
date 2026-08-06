@@ -1,4 +1,5 @@
 import { createStrapiClient } from '@/lib/strapi-client'
+import { DEFAULT_STRAPI_URL } from '@/lib/constants'
 import { buildMetadata, type Hreflang } from '@/lib/seo'
 import { Layout } from '@/components/layout'
 import { Hero } from '@/components/sections/Hero'
@@ -55,7 +56,7 @@ const fetchPageData = async (
     : process.env.STRAPI_API_TOKEN
 
   const client = createStrapiClient({
-    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337',
+    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || DEFAULT_STRAPI_URL,
     apiToken,
   })
 
@@ -85,7 +86,7 @@ const fetchPageDataFallback = async (slug: string, isDraft: boolean) => {
     : process.env.STRAPI_API_TOKEN
 
   const client = createStrapiClient({
-    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337',
+    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || DEFAULT_STRAPI_URL,
     apiToken,
   })
 
@@ -148,7 +149,7 @@ export async function generateMetadata({
   const apiToken = process.env.STRAPI_API_TOKEN
 
   const client = createStrapiClient({
-    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337',
+    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || DEFAULT_STRAPI_URL,
     apiToken,
   })
   const res: PageCollectionResponse = await client.findMany('pages', {
@@ -304,19 +305,11 @@ export default async function Page({
           containerWidth={normalizeContainerWidth(section.containerWidth)}
           spacingTop={
             section.spacingTop as
-              | 'none'
-              | 'small'
-              | 'medium'
-              | 'large'
-              | undefined
+              'none' | 'small' | 'medium' | 'large' | undefined
           }
           spacingBottom={
             section.spacingBottom as
-              | 'none'
-              | 'small'
-              | 'medium'
-              | 'large'
-              | undefined
+              'none' | 'small' | 'medium' | 'large' | undefined
           }
         />
       ))}

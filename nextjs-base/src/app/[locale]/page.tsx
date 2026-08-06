@@ -1,4 +1,5 @@
 import { createStrapiClient } from '@/lib/strapi-client'
+import { DEFAULT_STRAPI_URL } from '@/lib/constants'
 import { getPageSEO } from '@/lib/seo'
 import { cleanImageUrl } from '@/lib/strapi'
 import { getHreflangAlternates } from '@/lib/hreflang'
@@ -46,7 +47,7 @@ const fetchHomePageData = async (locale: string, isDraft: boolean) => {
     : process.env.STRAPI_API_TOKEN
 
   const client = createStrapiClient({
-    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337',
+    apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || DEFAULT_STRAPI_URL,
     apiToken,
   })
 
@@ -277,19 +278,11 @@ export default async function HomeLocale({
           isFirstSection={sectionIndex === 0}
           spacingTop={
             section.spacingTop as
-              | 'none'
-              | 'small'
-              | 'medium'
-              | 'large'
-              | undefined
+              'none' | 'small' | 'medium' | 'large' | undefined
           }
           spacingBottom={
             section.spacingBottom as
-              | 'none'
-              | 'small'
-              | 'medium'
-              | 'large'
-              | undefined
+              'none' | 'small' | 'medium' | 'large' | undefined
           }
         />
       ))}

@@ -1,10 +1,14 @@
 import type { MetadataRoute } from 'next'
 import { createStrapiClient } from '@/lib/strapi-client'
+import { DEFAULT_STRAPI_URL } from '@/lib/constants'
 import type { Page } from '@/types/strapi'
 
 const buildAbsoluteUrl = (path = '/'): string => {
-  const base =
-    (process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || 'http://localhost:3000').replace(/\/$/, '')
+  const base = (
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.SITE_URL ||
+    'http://localhost:3000'
+  ).replace(/\/$/, '')
   if (!path.startsWith('/')) {
     path = `/${path}`
   }
@@ -13,7 +17,10 @@ const buildAbsoluteUrl = (path = '/'): string => {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
-    const client = createStrapiClient({ apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', apiToken: process.env.STRAPI_API_TOKEN })
+    const client = createStrapiClient({
+      apiUrl: process.env.NEXT_PUBLIC_STRAPI_URL || DEFAULT_STRAPI_URL,
+      apiToken: process.env.STRAPI_API_TOKEN,
+    })
     const res = await client.findMany<Page>('pages', { populate: '*' })
 
     const pages = (res?.data || []).filter((p: Page) => !p.noIndex)
