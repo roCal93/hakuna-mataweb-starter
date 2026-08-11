@@ -61,8 +61,8 @@ describe('getActiveAnchorId', () => {
   }
 
   afterEach(() => {
-    delete (globalThis as typeof globalThis & { document?: unknown }).document
-    delete (globalThis as typeof globalThis & { window?: unknown }).window
+    Reflect.deleteProperty(globalThis, 'document')
+    Reflect.deleteProperty(globalThis, 'window')
   })
 
   it('ne met pas en avant la section contact avant qu’elle ne soit atteinte', () => {

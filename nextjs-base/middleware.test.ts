@@ -1,11 +1,9 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { NextRequest } from 'next/server'
 import { middleware } from './middleware'
 
-const OLD_NODE_ENV = process.env.NODE_ENV
-
 afterEach(() => {
-  process.env.NODE_ENV = OLD_NODE_ENV
+  vi.unstubAllEnvs()
   delete process.env.NEXT_PUBLIC_STRAPI_URL
   delete process.env.NEXT_PUBLIC_SITE_URL
 })
@@ -135,13 +133,13 @@ describe('Content-Security-Policy header', () => {
   })
 
   it('includes unsafe-eval in dev and omits it in prod', () => {
-    process.env.NODE_ENV = 'development'
+    vi.stubEnv('NODE_ENV', 'development')
     const devRes = middleware(req('https://example.com/fr/about'))
     expect(devRes.headers.get('content-security-policy')).toContain(
       "'unsafe-eval'"
     )
 
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
     const prodRes = middleware(req('https://example.com/fr/about'))
     expect(prodRes.headers.get('content-security-policy')).not.toContain(
       "'unsafe-eval'"
