@@ -9,7 +9,8 @@ dist/
 
 # Strapi uploads & cache
 strapi-base/.tmp/
-strapi-base/public/uploads/
+strapi-base/public/uploads/*
+!strapi-base/public/uploads/.gitkeep
 strapi-base/build/
 strapi-base/.cache/
 
