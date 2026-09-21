@@ -1,20 +1,29 @@
 # Nixpacks config (Railway)
 # Fixes common Strapi admin build failures where SWC native bindings are missing
 # due to optional dependencies being omitted or the wrong Node version being used.
+# pnpm is pinned to the exact version declared in package.json (packageManager).
 
 [variables]
 NIXPACKS_NODE_VERSION = "22"
 NPM_CONFIG_OPTIONAL = "true"
 
+[phases.setup]
+nixPkgs = ["nodejs-22_x"]
+cmds = [
+  "corepack enable",
+  "corepack prepare pnpm@10.28.2 --activate",
+  "pnpm --version"
+]
+
 [phases.install]
 cmds = [
-  "npm install --include=optional"
+  "pnpm install --frozen-lockfile"
 ]
 
 [phases.build]
 cmds = [
-  "npm run build"
+  "pnpm run build"
 ]
 
 [start]
-cmd = "npm start"
+cmd = "pnpm start"
